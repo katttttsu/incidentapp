@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -80,17 +82,43 @@ public class IncidentController {
             }
         });
 
-        Map<String, Long> categoryCounts = new HashMap<>();
-        incidents.forEach(incident -> {
-            String category = incident.getCategory1() + " ／ " + incident.getCategory2();
-            categoryCounts.put(category, categoryCounts.getOrDefault(category, 0L) + 1);
-        });
+        // カテゴリーの集計
+        Map<String, Long> categoryCounts = incidents.stream()
+                .collect(Collectors.groupingBy(
+                        incident -> incident.getCategory1() + " ／ " + incident.getCategory2(),
+                        Collectors.counting()));
+
+        // レベルの集計
+        Map<String, Long> levelCounts = incidents.stream()
+                .collect(Collectors.groupingBy(IncidentEntity::getLevel, Collectors.counting()));
+
+        // 所属科の集計
+        Map<String, Long> departmentCounts = incidents.stream()
+                .collect(Collectors.groupingBy(IncidentEntity::getDepartment, Collectors.counting()));
+
+        // 職種の集計
+        Map<String, Long> jobCounts = incidents.stream()
+                .collect(Collectors.groupingBy(IncidentEntity::getJob, Collectors.counting()));
 
         model.addAttribute("incidents", incidents);
-        model.addAttribute("categoryCounts", categoryCounts);
+        model.addAttribute("categoryCounts", sortByValueDescending(categoryCounts));
+        model.addAttribute("levelCounts", sortByValueDescending(levelCounts));
+        model.addAttribute("departmentCounts", sortByValueDescending(departmentCounts));
+        model.addAttribute("jobCounts", sortByValueDescending(jobCounts));
         return "index";
     }
 
+    private Map<String, Long> sortByValueDescending(Map<String, Long> map) {
+        return map.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+    }
     @GetMapping("/searchIncidents")
     public String searchIncidents(
             @RequestParam(value = "year", required = false) Integer year,
