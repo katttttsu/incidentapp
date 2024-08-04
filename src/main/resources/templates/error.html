@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>エラー</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<header>
+    <a th:href="@{/}">IncidentApp</a>
+</header>
+
+<div class="page-title">
+    <h1>エラーが発生しました</h1>
+</div>
+
+<div class="error-info">
+    <h2>エラー詳細</h2>
+    <p th:text="'エラーコード: ' + ${status}"></p>
+    <p th:text="'エラーメッセージ: ' + ${error}"></p>
+    <p th:text="'メッセージ: ' + ${message}"></p>
+    <p th:text="'パス: ' + ${path}"></p>
+</div>
+
+<div class="error-actions">
+    <a th:href="@{/}">ホームに戻る</a>
+</div>
+</body>
+</html>

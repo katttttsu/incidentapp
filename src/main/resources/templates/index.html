@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <title>Title</title>
+    <script>
+        function confirmDelete(form) {
+            var password = prompt("管理者パスワードを入力してください:");
+            if (password !== null) {
+                form.adminPassword.value = password;
+                form.submit();
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+<header>
+    <a th:href="@{/}">IncidentApp</a>
+</header>
+
+<div class="page-title">
+    <h1>インシデントレポート一覧</h1>
+</div>
+<div class="search_form">
+    <form th:action="@{/searchIncidents}" method="get">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="year">年:</label>
+                <input type="number" id="year" name="year" placeholder="YYYY" />
+            </div>
+            <div class="form-group">
+                <label for="month">月:</label>
+                <input type="number" id="month" name="month" placeholder="MM" />
+            </div>
+            <div class="form-group">
+                <label for="department">所属科:</label>
+                <input type="text" id="department" name="department" />
+            </div>
+            <div class="form-group">
+                <label for="job">職種:</label>
+                <input type="text" id="job" name="job" />
+            </div>
+        </div>
+        <div class="button-row">
+            <button type="submit">検索</button>
+        </div>
+    </form>
+</div>
+<div class="create-link">
+    <a th:href="@{/incidentForm}">新規作成</a>
+</div>
+</div>
+
+<table class="incident-table">
+    <thead>
+    <tr>
+        <th>レベル</th>
+        <th>日付</th>
+        <th>分類</th>
+        <th>所属科</th>
+        <th>職種</th>
+        <th class="header-detail">編集</th>
+        <th class="header-delete">削除</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="incident : ${incidents}">
+        <td th:text="${incident.level}"></td>
+        <td th:text="${incident.date}"></td>
+        <td th:text="${incident.category1 + ' ／ ' + incident.category2}"></td>
+        <td th:text="${incident.department}"></td>
+        <td th:text="${incident.job}"></td>
+        <td>
+            <form th:action="@{/incidents/{id}(id=${incident.id})}" method="get">
+                <button type="submit">編集</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/incidents/{id}/delete(id=${incident.id})}" method="post" onsubmit="event.preventDefault(); confirmDelete(this);">
+                <input type="hidden" name="adminPassword" />
+                <button type="submit">削除</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
