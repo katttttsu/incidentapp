@@ -346,6 +346,10 @@ button[type="submit"]:hover {
   display: block;
   margin: 0 auto;
 }
+
+.totalling_top{
+  padding: 20px 0 30px 200px;
+}
 /********************************************
 インシデント詳細画面
 *********************************************/

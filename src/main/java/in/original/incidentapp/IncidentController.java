@@ -7,10 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class IncidentController {
@@ -73,7 +70,25 @@ public class IncidentController {
     @GetMapping("/")
     public String showIncidents(Model model) {
         LocalDate now = LocalDate.now();
-        return searchIncidents(now.getYear(), now.getMonthValue(), "", "", model);
+        List<IncidentEntity> incidents = getIncidents(now.getYear(), now.getMonthValue(), "", "");
+        incidents.forEach(incident -> {
+            if (incident.getCategory1() == null) {
+                incident.setCategory1("");
+            }
+            if (incident.getCategory2() == null) {
+                incident.setCategory2("");
+            }
+        });
+
+        Map<String, Long> categoryCounts = new HashMap<>();
+        incidents.forEach(incident -> {
+            String category = incident.getCategory1() + " ／ " + incident.getCategory2();
+            categoryCounts.put(category, categoryCounts.getOrDefault(category, 0L) + 1);
+        });
+
+        model.addAttribute("incidents", incidents);
+        model.addAttribute("categoryCounts", categoryCounts);
+        return "index";
     }
 
     @GetMapping("/searchIncidents")
@@ -150,5 +165,11 @@ public class IncidentController {
         }
         incidentMapper.delete(id);
         return "redirect:/";
+    }
+
+    private List<IncidentEntity> getIncidents(int year, int month, String department, String job) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+        return incidentRepository.findByCriteria(startDate, endDate, department, job);
     }
 }
