@@ -54,7 +54,7 @@
                 <input type="text" id="patientName" th:field="*{patientName}"><br><br>
                 <div class="age-container">
                     <label for="patientAge">年齢:</label>
-                    <input type="number" id="patientAge" th:field="*{patientAge}"><br><br>
+                    <input type="number" id="patientAge" th:field="*{patientAge}">歳<br><br>
                 </div>
             </div>
             <div class="form-section">
@@ -65,7 +65,7 @@
                 <input type="text" id="job" th:field="*{job}"><br><br>
                 <div class="service-container">
                     <label for="continuousService">勤続年数:</label>
-                    <input type="text" id="continuousService" th:field="*{continuousService}"><br><br>
+                    <input type="text" id="continuousService" th:field="*{continuousService}">年<br><br>
                 </div>
             </div>
         </div>
@@ -82,6 +82,7 @@
                             <option value="薬剤">薬剤</option>
                             <option value="食事">食事</option>
                             <option value="受付">受付</option>
+                            <option value="診察">診察</option>
                             <option value="検査・処置">検査・処置</option>
                             <option value="放射線">放射線</option>
                             <option value="リハビリ">リハビリ</option>
@@ -111,6 +112,7 @@
             <div class="form_suggestion">
                 <h2 class="column-title">AIによる提案</h2>
                 <textarea id="suggestion" th:field="*{suggestion}"></textarea>
+                <button type="button" onclick="generateSuggestion()">AI提案を生成</button>
             </div>
             <div class="form_countermeasure">
                 <h2 class="column-title">対策</h2>
@@ -144,6 +146,27 @@
             subCategorySelect.appendChild(option);
         }
     });
+
+    async function generateSuggestion() {
+        const situation = document.getElementById('situation').value;
+        const response = await fetch('/generateAISuggestion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ situation })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('suggestion').value = data.suggestion;
+        } else {
+            console.error('Network response was not ok');
+        }
+    }
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>

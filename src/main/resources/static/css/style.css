@@ -142,7 +142,7 @@ header {
 
 .age-container,
 .service-container {
-    margin-right: 70px;
+    margin-right: 50px;
 }
 
 .main_form {
@@ -293,7 +293,7 @@ button[type="submit"]:hover {
 .incident-table {
   margin: 0 auto;
   border-collapse: collapse;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .incident-table th, td {
@@ -338,6 +338,11 @@ button[type="submit"]:hover {
 .incident-table td button {
   display: block;
   margin: 0 auto;
+}
+
+.totalling_top{
+   text-align: center;
+   margin-bottom: 20px;
 }
 
 .chart-container {

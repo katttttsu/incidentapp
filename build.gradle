@@ -37,9 +37,19 @@ dependencies {
 	implementation 'org.openjfx:javafx-fxml:17.0.12'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.0' // Jackson dependency
 }
 
 javafx {
 	version = "17.0.12"
 	modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-Xlint:deprecation"
 }
