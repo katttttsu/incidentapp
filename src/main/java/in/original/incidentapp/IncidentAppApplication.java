@@ -8,6 +8,7 @@ import org.mybatis.spring.annotation.MapperScan;
 @MapperScan("in.original.incidentapp")
 public class IncidentAppApplication {
 	public static void main(String[] args) {
+
 		SpringApplication.run(IncidentAppApplication.class, args);
 	}
 }

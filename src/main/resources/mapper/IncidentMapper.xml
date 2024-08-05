@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="in.original.incidentapp.IncidentRepository">
+
+    <select id="findAll" resultType="in.original.incidentapp.IncidentData">
+        SELECT category, count FROM incident_data
+    </select>
+
+</mapper>
