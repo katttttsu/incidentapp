@@ -9,11 +9,21 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.*;
 
+import java.io.IOException;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+
 @Controller
 public class IncidentController {
 
     @Value("${admin.password}")
     private String adminPassword;
+
+    @Value("${openai.api.key}")
+    private String openaiApiKey;
 
     private final IncidentRepository incidentRepository;
     private final IncidentMapper incidentMapper;
@@ -35,7 +45,8 @@ public class IncidentController {
         subCategoryMap.put("外傷", Arrays.asList("熱傷", "擦過傷", "表皮剥離", "打撲", "骨折", "自傷行為", "その他"));
         subCategoryMap.put("薬剤", Arrays.asList("薬剤の過不足", "薬剤の入れ間違い", "薬袋の記入間違い", "配薬ミス", "患者間違い", "患者による与薬トラブル", "その他"));
         subCategoryMap.put("食事", Arrays.asList("患者間違い", "誤嚥・誤飲", "異物混入", "指示と食事内容の違い", "その他"));
-        subCategoryMap.put("受付", Arrays.asList("患者間違い", "カルテ作成ミス", "受診科登録ミス", "受付対応の不備", "電話対応", "その他"));
+        subCategoryMap.put("受付", Arrays.asList("患者間違い", "カルテ作成ミス", "受診科登録ミス", "受付対応の不備", "電話対応", "書類関係の誤り", "その他"));
+        subCategoryMap.put("診察", Arrays.asList("患者間違い", "不適切な処方", "不適切な処置", "書類関係の誤り", "検査オーダーミス", "その他"));
         subCategoryMap.put("検査・処置", Arrays.asList("患者間違い", "検体の採り間違い", "未採集", "不適切な前処置", "その他"));
         subCategoryMap.put("放射線", Arrays.asList("患者間違い", "部位間違い", "撮影条件の間違い", "撮影端末への入力ミス", "その他"));
         subCategoryMap.put("リハビリ", Arrays.asList("患者間違い", "部位間違い", "設定条件の間違い", "評価ミス", "その他"));
@@ -65,6 +76,40 @@ public class IncidentController {
                 incidentForm.getSuggestion(), incidentForm.getCountermeasure()
         );
         return "redirect:/";
+    }
+
+    @PostMapping("/generateAISuggestion")
+    @ResponseBody
+    public Map<String, String> generateAISuggestion(@RequestBody Map<String, String> request) {
+        String situation = request.get("situation");
+        String suggestion = getAIPrediction(situation);
+        Map<String, String> response = new HashMap<>();
+        response.put("suggestion", suggestion);
+        return response;
+    }
+
+    private String getAIPrediction(String situation) {
+        OkHttpClient client = new OkHttpClient();
+        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        String json = "{\"prompt\": \"" + situation + "\", \"max_tokens\": 50}";
+
+        okhttp3.RequestBody body = okhttp3.RequestBody.create(json, mediaType);
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/engines/davinci-codex/completions")
+                .post(body)
+                .addHeader("Authorization", "Bearer " + openaiApiKey)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                return responseBody;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "提案が取得できませんでした。";
     }
 
     @GetMapping("/")
@@ -115,7 +160,8 @@ public class IncidentController {
         subCategoryMap.put("外傷", Arrays.asList("熱傷", "擦過傷", "表皮剥離", "打撲", "骨折", "自傷行為", "その他"));
         subCategoryMap.put("薬剤", Arrays.asList("薬剤の過不足", "薬剤の入れ間違い", "薬袋の記入間違い", "持参薬鑑別関連", "配薬ミス", "副作用", "患者間違い", "患者による与薬トラブル", "その他"));
         subCategoryMap.put("食事", Arrays.asList("患者間違い", "誤嚥・誤飲", "異物混入", "指示と食事内容の違い", "その他"));
-        subCategoryMap.put("受付", Arrays.asList("患者間違い", "カルテ作成ミス", "受診科登録ミス", "受付対応の不備", "電話対応", "その他"));
+        subCategoryMap.put("受付", Arrays.asList("患者間違い", "カルテ作成ミス", "受診科登録ミス", "受付対応の不備", "電話対応", "書類関係の誤り", "その他"));
+        subCategoryMap.put("診察", Arrays.asList("患者間違い", "不適切な処方", "不適切な処置", "書類関係の誤り", "検査オーダーミス", "その他"));
         subCategoryMap.put("検査・処置", Arrays.asList("患者間違い", "検体の採り間違い", "未採集", "不適切な前処置", "その他"));
         subCategoryMap.put("放射線", Arrays.asList("患者間違い", "部位間違い", "撮影条件の間違い", "撮影端末への入力ミス", "その他"));
         subCategoryMap.put("リハビリ", Arrays.asList("患者間違い", "部位間違い", "設定条件の間違い", "評価ミス", "理学・作業療法時のトラブル", "その他"));
