@@ -7,42 +7,36 @@
     <script>
         function confirmDelete(form) {
             var password = prompt("管理者パスワードを入力してください:");
-            if (password !== null) {
+            if (password !== null && password !== "") {
                 form.adminPassword.value = password;
                 form.submit();
             }
         }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var now = new Date();
-            var currentYear = now.getFullYear();
-            var currentMonth = ("0" + (now.getMonth() + 1)).slice(-2);
-
-            document.getElementById("year").placeholder = currentYear;
-            document.getElementById("month").placeholder = currentMonth;
-        });
     </script>
 </head>
 
 <body>
 
 <header>
-    <a th:href="@{/}">IncidentApp</a>
+    <div class="header-container">
+        <a th:href="@{/}">IncidentApp</a>
+    </div>
 </header>
 
 <div class="page-title">
     <h1>インシデントレポート一覧</h1>
 </div>
+
 <div class="search_form">
     <form th:action="@{/searchIncidents}" method="get">
         <div class="form-row">
             <div class="form-group">
                 <label for="year">年:</label>
-                <input type="number" id="year" name="year" placeholder="YYYY" />
+                <input type="number" id="year" name="year" placeholder="YYYY" value="[[${#dates.yearOfToday()}]]" />
             </div>
             <div class="form-group">
                 <label for="month">月:</label>
-                <input type="number" id="month" name="month" placeholder="MM" />
+                <input type="number" id="month" name="month" placeholder="MM" value="[[${#dates.monthOfToday()}]]" />
             </div>
             <div class="form-group">
                 <label for="department">所属科:</label>
@@ -58,6 +52,7 @@
         </div>
     </form>
 </div>
+
 <div class="create-link">
     <a th:href="@{/incidentForm}">新規作成</a>
 </div>
@@ -96,59 +91,46 @@
     </tbody>
 </table>
 
-<div class="chart-container">
-    <div id="levelChartContainer" style="height: 370px;"></div>
-    <div id="categoryChartContainer" style="height: 370px;"></div>
-    <div id="departmentChartContainer" style="height: 370px;"></div>
-    <div id="jobChartContainer" style="height: 370px;"></div>
+<h2>インシデント集計</h2>
+<div id="charts" style="display: flex; justify-content: space-around;">
+    <div id="categoryChartContainer" style="height: 370px; width: 45%;"></div>
+    <div id="levelChartContainer" style="height: 370px; width: 45%;"></div>
+    <div id="departmentChartContainer" style="height: 370px; width: 45%;"></div>
+    <div id="jobChartContainer" style="height: 370px; width: 45%;"></div>
 </div>
+
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    function createDataPoints(data) {
-        return Object.keys(data).filter(function(key) {
-            return data[key] > 0;
-        }).map(function(key) {
-            return {
-                label: key,
-                y: data[key]
-            };
-        }).sort(function(a, b) {
-            return b.y - a.y; // 値が大きい順にソート
-        });
-    }
+    var categoryDataPoints = /*[[${categoryCounts}]]*/;
+    var levelDataPoints = /*[[${levelCounts}]]*/;
+    var departmentDataPoints = /*[[${departmentCounts}]]*/;
+    var jobDataPoints = /*[[${jobCounts}]]*/;
 
-    var levelCounts = /*[[${levelCounts}]]*/;
-    var categoryCounts = /*[[${categoryCounts}]]*/;
-    var departmentCounts = /*[[${departmentCounts}]]*/;
-    var jobCounts = /*[[${jobCounts}]]*/;
-
-    var categoryDataPoints = createDataPoints(categoryCounts);
-    var levelDataPoints = createDataPoints(levelCounts);
-    var departmentDataPoints = createDataPoints(departmentCounts);
-    var jobDataPoints = createDataPoints(jobCounts);
-
-    function renderChart(containerId, title, dataPoints) {
+    var createChart = function(containerId, title, dataPoints) {
         var chart = new CanvasJS.Chart(containerId, {
             animationEnabled: true,
             theme: "light2",
             title: {
-                text: title
+                text: title,
+                fontSize: 20 // 見出しのフォントサイズを小さくする
             },
             data: [{
                 type: "pie",
                 startAngle: 270,
                 indexLabel: "{label} - {y}",
-                dataPoints: dataPoints
+                dataPoints: Object.keys(dataPoints).map(function(key) {
+                    return { label: key, y: dataPoints[key] };
+                })
             }]
         });
         chart.render();
-    }
-    
-    renderChart("levelChartContainer", "インシデントレベル別件数", levelDataPoints);
-    renderChart("categoryChartContainer", "インシデントカテゴリー別件数", categoryDataPoints);
-    renderChart("departmentChartContainer", "所属科別件数", departmentDataPoints);
-    renderChart("jobChartContainer", "職種別件数", jobDataPoints);
+    };
+
+    createChart("categoryChartContainer", "インシデントカテゴリー別件数", categoryDataPoints);
+    createChart("levelChartContainer", "レベル別件数", levelDataPoints);
+    createChart("departmentChartContainer", "部署別件数", departmentDataPoints);
+    createChart("jobChartContainer", "職種別件数", jobDataPoints);
     /*]]>*/
 </script>
 </body>

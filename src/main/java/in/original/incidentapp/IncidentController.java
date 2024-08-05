@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -73,52 +71,13 @@ public class IncidentController {
     public String showIncidents(Model model) {
         LocalDate now = LocalDate.now();
         List<IncidentEntity> incidents = getIncidents(now.getYear(), now.getMonthValue(), "", "");
-        incidents.forEach(incident -> {
-            if (incident.getCategory1() == null) {
-                incident.setCategory1("");
-            }
-            if (incident.getCategory2() == null) {
-                incident.setCategory2("");
-            }
-        });
-
-        // カテゴリーの集計
-        Map<String, Long> categoryCounts = incidents.stream()
-                .collect(Collectors.groupingBy(
-                        incident -> incident.getCategory1() + " ／ " + incident.getCategory2(),
-                        Collectors.counting()));
-
-        // レベルの集計
-        Map<String, Long> levelCounts = incidents.stream()
-                .collect(Collectors.groupingBy(IncidentEntity::getLevel, Collectors.counting()));
-
-        // 所属科の集計
-        Map<String, Long> departmentCounts = incidents.stream()
-                .collect(Collectors.groupingBy(IncidentEntity::getDepartment, Collectors.counting()));
-
-        // 職種の集計
-        Map<String, Long> jobCounts = incidents.stream()
-                .collect(Collectors.groupingBy(IncidentEntity::getJob, Collectors.counting()));
-
         model.addAttribute("incidents", incidents);
-        model.addAttribute("categoryCounts", sortByValueDescending(categoryCounts));
-        model.addAttribute("levelCounts", sortByValueDescending(levelCounts));
-        model.addAttribute("departmentCounts", sortByValueDescending(departmentCounts));
-        model.addAttribute("jobCounts", sortByValueDescending(jobCounts));
+
+        addGraphDataToModel(model, incidents);
+
         return "index";
     }
 
-    private Map<String, Long> sortByValueDescending(Map<String, Long> map) {
-        return map.entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
-    }
     @GetMapping("/searchIncidents")
     public String searchIncidents(
             @RequestParam(value = "year", required = false) Integer year,
@@ -139,6 +98,8 @@ public class IncidentController {
 
         List<IncidentEntity> incidents = incidentRepository.findByCriteria(startDate, endDate, department, job);
         model.addAttribute("incidents", incidents);
+
+        addGraphDataToModel(model, incidents);
 
         return "index";
     }
@@ -195,9 +156,52 @@ public class IncidentController {
         return "redirect:/";
     }
 
-    private List<IncidentEntity> getIncidents(int year, int month, String department, String job) {
+    private void addGraphDataToModel(Model model, List<IncidentEntity> incidents) {
+        model.addAttribute("categoryCounts", getCategoryCounts(incidents));
+        model.addAttribute("levelCounts", getLevelCounts(incidents));
+        model.addAttribute("departmentCounts", getDepartmentCounts(incidents));
+        model.addAttribute("jobCounts", getJobCounts(incidents));
+    }
+
+    public List<IncidentEntity> getIncidents(int year, int month, String department, String job) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.plusMonths(1).minusDays(1);
         return incidentRepository.findByCriteria(startDate, endDate, department, job);
+    }
+
+    public Map<String, Integer> getCategoryCounts(List<IncidentEntity> incidents) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (IncidentEntity incident : incidents) {
+            String category = incident.getCategory1() + " ／ " + incident.getCategory2();
+            counts.put(category, counts.getOrDefault(category, 0) + 1);
+        }
+        return counts;
+    }
+
+    public Map<String, Integer> getLevelCounts(List<IncidentEntity> incidents) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (IncidentEntity incident : incidents) {
+            String level = incident.getLevel();
+            counts.put(level, counts.getOrDefault(level, 0) + 1);
+        }
+        return counts;
+    }
+
+    public Map<String, Integer> getDepartmentCounts(List<IncidentEntity> incidents) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (IncidentEntity incident : incidents) {
+            String department = incident.getDepartment();
+            counts.put(department, counts.getOrDefault(department, 0) + 1);
+        }
+        return counts;
+    }
+
+    public Map<String, Integer> getJobCounts(List<IncidentEntity> incidents) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (IncidentEntity incident : incidents) {
+            String job = incident.getJob();
+            counts.put(job, counts.getOrDefault(job, 0) + 1);
+        }
+        return counts;
     }
 }
