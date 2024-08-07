@@ -24,11 +24,9 @@ public class IncidentMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // データの作成
         List<IncidentData> dataList = incidentRepository.findAll();
         System.out.println("データリスト: " + dataList);
 
-        // 円グラフの作成
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (IncidentData data : dataList) {
             pieChartData.add(new PieChart.Data(data.getCategory2(), data.getCount()));
@@ -37,13 +35,10 @@ public class IncidentMain extends Application {
         PieChart pieChart = new PieChart(pieChartData);
         pieChart.setTitle("インシデントデータの集計");
 
-        // レイアウトの作成
         VBox vbox = new VBox(pieChart);
 
-        // シーンの作成
         Scene scene = new Scene(vbox, 800, 600);
 
-        // ステージの設定
         primaryStage.setScene(scene);
         primaryStage.setTitle("インシデントデータの集計");
         primaryStage.show();

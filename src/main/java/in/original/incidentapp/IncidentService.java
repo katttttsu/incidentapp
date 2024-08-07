@@ -18,19 +18,16 @@ public class IncidentService {
     }
     public Map<String, Integer> getCategoryCounts(List<IncidentEntity> incidents) {
         Map<String, Integer> counts = new HashMap<>();
-        // categoriesの初期化と集計処理
         return counts;
     }
 
     public Map<String, Integer> getLevelCounts(List<IncidentEntity> incidents) {
         Map<String, Integer> counts = new HashMap<>();
-        // levelsの初期化と集計処理
         return counts;
     }
 
     public Map<String, Integer> getDepartmentCounts(List<IncidentEntity> incidents) {
         Map<String, Integer> counts = new HashMap<>();
-        // departmentsの初期化と集計処理
         return counts;
     }
 

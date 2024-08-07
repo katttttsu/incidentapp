@@ -110,9 +110,11 @@
                 <textarea id="cause" th:field="*{cause}"></textarea>
             </div>
             <div class="form_suggestion">
-                <h2 class="column-title">AIによる提案</h2>
-                <textarea id="suggestion" th:field="*{suggestion}"></textarea>
-                <button type="button" onclick="generateSuggestion()">AI提案を生成</button>
+                <div class="form_suggestion_title">
+                    <h2 class="column-title">AIによる提案</h2>
+                    <button type="button" onclick="generateAISuggestion()">AI提案を生成</button>
+                </div>
+                <textarea id="suggestion" th:field="*{suggestion}" readonly></textarea>
             </div>
             <div class="form_countermeasure">
                 <h2 class="column-title">対策</h2>
@@ -127,6 +129,7 @@
 
 <script th:inline="javascript">
     var subCategoryMap = /*[[${subCategoryMap}]]*/ {};
+
     document.getElementById('category1').addEventListener('change', function () {
         var mainCategory = this.value;
         var subCategorySelect = document.getElementById('category2');
@@ -147,22 +150,24 @@
         }
     });
 
-    async function generateSuggestion() {
-        const situation = document.getElementById('situation').value;
-        const response = await fetch('/generateAISuggestion', {
+    function generateAISuggestion() {
+        var causeValue = document.getElementById("cause").value;
+
+        fetch('/generateAISuggestion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ situation })
+            body: JSON.stringify({ cause: causeValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("AIからの提案: " + data.suggestion);
+            document.getElementById("suggestion").value = data.suggestion;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
-
-        if (response.ok) {
-            const data = await response.json();
-            document.getElementById('suggestion').value = data.suggestion;
-        } else {
-            console.error('Network response was not ok');
-        }
     }
 </script>
 </body>
