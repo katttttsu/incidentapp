@@ -5,8 +5,6 @@ public class IncidentData {
     private String category2;
     private int count;
 
-    // getters and setters
-
     public IncidentData(String category1, String category2, int count) {
         this.category1 = category1;
         this.category2 = category2;

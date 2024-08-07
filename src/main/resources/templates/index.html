@@ -93,8 +93,8 @@
 
 <h2 class="totalling_top">インシデント集計</h2>
 <div id="charts" style="display: flex; justify-content: space-around;">
-    <div id="categoryChartContainer" style="height: 370px; width: 45%;"></div>
     <div id="levelChartContainer" style="height: 370px; width: 45%;"></div>
+    <div id="categoryChartContainer" style="height: 370px; width: 45%;"></div>
     <div id="departmentChartContainer" style="height: 370px; width: 45%;"></div>
     <div id="jobChartContainer" style="height: 370px; width: 45%;"></div>
 </div>
@@ -113,7 +113,7 @@
             theme: "light2",
             title: {
                 text: title,
-                fontSize: 20 // 見出しのフォントサイズを小さくする
+                fontSize: 20
             },
             data: [{
                 type: "pie",
@@ -127,8 +127,8 @@
         chart.render();
     };
 
-    createChart("categoryChartContainer", "インシデントカテゴリー別件数", categoryDataPoints);
     createChart("levelChartContainer", "レベル別件数", levelDataPoints);
+    createChart("categoryChartContainer", "インシデントカテゴリー別件数", categoryDataPoints);
     createChart("departmentChartContainer", "部署別件数", departmentDataPoints);
     createChart("jobChartContainer", "職種別件数", jobDataPoints);
     /*]]>*/

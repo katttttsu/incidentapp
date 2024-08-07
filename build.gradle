@@ -2,8 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
-	id 'application'
 	id 'org.openjfx.javafxplugin' version '0.0.13'
+
 }
 
 group = 'in.original'
@@ -19,7 +19,7 @@ repositories {
 	gradlePluginPortal()
 }
 
-application {
+springBoot {
 	mainClass = 'in.original.incidentapp.IncidentAppApplication'
 }
 
@@ -36,13 +36,15 @@ dependencies {
 	implementation 'org.openjfx:javafx-controls:17.0.12'
 	implementation 'org.openjfx:javafx-fxml:17.0.12'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0'
-	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.0' // Jackson dependency
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:3.9.0'
+	implementation 'org.json:json:20210307'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
 }
 
 javafx {
@@ -52,4 +54,9 @@ javafx {
 
 tasks.withType(JavaCompile) {
 	options.compilerArgs << "-Xlint:deprecation"
+	options.encoding = 'UTF-8'
+}
+
+test {
+	useJUnitPlatform()
 }
