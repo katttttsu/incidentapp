@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: incidentapp
+    env: docker
+    repo: https://github.com/yourusername/your-repo
+    branch: main
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: JAVA_OPTS
+        value: "-Xmx512m"
+    plan: free
