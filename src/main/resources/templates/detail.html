@@ -74,8 +74,8 @@
                 <h3>カテゴリー</h3>
                 <div class="category_form">
                     <div>
-                        <label for="category1">大分類:</label>
-                        <select id="category1" name="category1" th:field="*{category1}" required="required" onchange="updateSubCategories()">
+                        <label for="largeCategory">大分類:</label>
+                        <select id="largeCategory" name="largeCategory" th:field="*{largeCategory}" required="required" onchange="updateSubCategories()">
                             <option value="">選択してください</option>
                             <option value="転倒・転落">転倒・転落</option>
                             <option value="外傷">外傷</option>
@@ -93,9 +93,9 @@
                         </select>
                     </div>
                     <div>
-                        <label for="category2">小分類:</label>
-                        <select id="category2" name="category2" th:field="*{category2}" required="required">
-                            <option th:each="subCategory : ${subCategoryMap[incident.category1]}" th:value="${subCategory}" th:text="${subCategory}" th:selected="${subCategory} == ${incident.category2}"></option>
+                        <label for="smallCategory">小分類:</label>
+                        <select id="smallCategory" name="smallCategory" th:field="*{smallCategory}" required="required">
+                            <option th:each="subCategory : ${subCategoryMap[incident.largeCategory]}" th:value="${subCategory}" th:text="${subCategory}" th:selected="${subCategory} == ${incident.smallCategory}"></option>
                         </select>
                     </div>
                 </div>
@@ -130,9 +130,9 @@
 <script th:inline="javascript">
     var subCategoryMap = /*[[${subCategoryMap}]]*/ {};
 
-    document.getElementById('category1').addEventListener('change', function () {
+    document.getElementById('largeCategory').addEventListener('change', function () {
         var mainCategory = this.value;
-        var subCategorySelect = document.getElementById('category2');
+        var subCategorySelect = document.getElementById('smallCategory');
         subCategorySelect.innerHTML = '';
 
         if (mainCategory && subCategoryMap[mainCategory]) {

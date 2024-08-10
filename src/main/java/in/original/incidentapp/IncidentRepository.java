@@ -15,7 +15,7 @@ public interface IncidentRepository {
     @Select("SELECT * FROM incidents WHERE id = #{id}")
     Optional<IncidentEntity> findById(long id);
 
-    @Insert("INSERT INTO incidents (level, date, time, place, patientId, patientName, patientAge, department, job, continuousService, category1, category2, situation, cause, suggestion, countermeasure) VALUES (#{level}, #{date}, #{time}, #{place}, #{patientId}, #{patientName}, #{patientAge}, #{department}, #{job}, #{continuousService}, #{category1}, #{category2}, #{situation}, #{cause}, #{suggestion}, #{countermeasure})")
+    @Insert("INSERT INTO incidents (level, date, time, place, patientId, patientName, patientAge, department, job, continuousService, largeCategory, smallCategory, situation, cause, suggestion, countermeasure) VALUES (#{level}, #{date}, #{time}, #{place}, #{patientId}, #{patientName}, #{patientAge}, #{department}, #{job}, #{continuousService}, #{largeCategory}, #{smallCategory}, #{situation}, #{cause}, #{suggestion}, #{countermeasure})")
     void insert(
             @Param("level") String level,
             @Param("date") LocalDate date,
@@ -27,15 +27,15 @@ public interface IncidentRepository {
             @Param("department") String department,
             @Param("job") String job,
             @Param("continuousService") String continuousService,
-            @Param("category1") String category1,
-            @Param("category2") String category2,
+            @Param("largeCategory") String largeCategory,
+            @Param("smallCategory") String smallCategory,
             @Param("situation") String situation,
             @Param("cause") String cause,
             @Param("suggestion") String suggestion,
             @Param("countermeasure") String countermeasure
     );
 
-    @Update("UPDATE incidents SET level = #{level}, date = #{date}, time = #{time}, place = #{place}, patientId = #{patientId}, patientName = #{patientName}, patientAge = #{patientAge}, department = #{department}, job = #{job}, continuousService = #{continuousService}, category1 = #{category1}, category2 = #{category2}, situation = #{situation}, cause = #{cause}, suggestion = #{suggestion}, countermeasure = #{countermeasure} WHERE id = #{id}")
+    @Update("UPDATE incidents SET level = #{level}, date = #{date}, time = #{time}, place = #{place}, patientId = #{patientId}, patientName = #{patientName}, patientAge = #{patientAge}, department = #{department}, job = #{job}, continuousService = #{continuousService}, largeCategory = #{largeCategory}, smallCategory = #{smallCategory}, situation = #{situation}, cause = #{cause}, suggestion = #{suggestion}, countermeasure = #{countermeasure} WHERE id = #{id}")
     void update(IncidentEntity incident);
 
     @Delete("DELETE FROM incidents WHERE id = #{id}")
