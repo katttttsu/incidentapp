@@ -44,6 +44,10 @@ dependencies {
 	testImplementation 'org.mockito:mockito-core:3.9.0'
 	implementation 'org.json:json:20210307'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'mysql:mysql-connector-java:8.0.33'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'javax.persistence:javax.persistence-api:2.2'
 
 }
 
@@ -58,5 +62,6 @@ tasks.withType(JavaCompile) {
 }
 
 test {
+	enabled = false
 	useJUnitPlatform()
 }

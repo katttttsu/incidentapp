@@ -29,7 +29,7 @@ public class IncidentMain extends Application {
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (IncidentData data : dataList) {
-            pieChartData.add(new PieChart.Data(data.getCategory2(), data.getCount()));
+            pieChartData.add(new PieChart.Data(data.getSmallCategory(), data.getCount()));
         }
 
         PieChart pieChart = new PieChart(pieChartData);

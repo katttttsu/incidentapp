@@ -72,7 +72,7 @@ public class IncidentController {
                 incidentForm.getPatientAge(),
                 incidentForm.getDepartment(), incidentForm.getJob(),
                 incidentForm.getContinuousService(),
-                incidentForm.getCategory1(), incidentForm.getCategory2(),
+                incidentForm.getLargeCategory(), incidentForm.getSmallCategory(),
                 incidentForm.getSituation(), incidentForm.getCause(),
                 incidentForm.getSuggestion(), incidentForm.getCountermeasure()
         );
@@ -219,7 +219,7 @@ public class IncidentController {
                 incidentForm.getPatientAge(),
                 incidentForm.getDepartment(), incidentForm.getJob(),
                 incidentForm.getContinuousService(),
-                incidentForm.getCategory1(), incidentForm.getCategory2(),
+                incidentForm.getLargeCategory(), incidentForm.getSmallCategory(),
                 incidentForm.getSituation(), incidentForm.getCause(),
                 incidentForm.getSuggestion(), incidentForm.getCountermeasure()
         );
@@ -230,7 +230,7 @@ public class IncidentController {
     public String deleteIncident(@PathVariable long id, @RequestParam("adminPassword") String inputPassword, Model model) {
         if (!adminPassword.equals(inputPassword)) {
             model.addAttribute("errorMessage", "管理者パスワードが間違っています");
-            return "error";
+            return "redirect:/";
         }
         incidentMapper.delete(id);
         return "redirect:/";
@@ -252,7 +252,7 @@ public class IncidentController {
     public Map<String, Integer> getCategoryCounts(List<IncidentEntity> incidents) {
         Map<String, Integer> counts = new HashMap<>();
         for (IncidentEntity incident : incidents) {
-            String category = incident.getCategory1() + " ／ " + incident.getCategory2();
+            String category = incident.getLargeCategory() + " ／ " + incident.getSmallCategory();
             counts.put(category, counts.getOrDefault(category, 0) + 1);
         }
         return counts;

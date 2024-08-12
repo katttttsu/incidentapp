@@ -16,8 +16,8 @@ public class IncidentForm {
     private String department;
     private String job;
     private String continuousService;;
-    private String category1;
-    private String category2;
+    private String largeCategory;
+    private String smallCategory;
     private String customSubCategory;
     private String situation;
     private String cause;
@@ -116,20 +116,20 @@ public class IncidentForm {
         this.continuousService = continuousService;
     }
 
-    public String getCategory1() {
-        return category1;
+    public String getLargeCategory() {
+        return largeCategory;
     }
 
-    public void setCategory1(String category1) {
-        this.category1 = category1;
+    public void setLargeCategory(String largeCategory) {
+        this.largeCategory = largeCategory;
     }
 
-    public String getCategory2() {
-        return category2;
+    public String getSmallCategory() {
+        return smallCategory;
     }
 
-    public void setCategory2(String category2) {
-        this.category2 = category2;
+    public void setSmallCategory(String smallCategory) {
+        this.smallCategory = smallCategory;
     }
 
     public String getCustomSubCategory() {
