@@ -1,4 +1,4 @@
-# ** IncidentApp**
+# IncidentApp
 
 このプロジェクトは、AWS Elastic Beanstalk 環境にデプロイされた Java アプリケーション「IncidentApp」です。このアプリケーションは、JavaFX を使用して作成され、MySQL データベースと接続しています。
 
@@ -80,5 +80,5 @@ AWS Elastic Beanstalkによるデプロイ。
 - (none, since this is a standalone table)
 
 ## 画面遷移図
-　https://gyazo.com/5f9b0e4219d7712df23744155e84cee4
+[![Image from Gyazo](https://i.gyazo.com/5f9b0e4219d7712df23744155e84cee4.png)](https://gyazo.com/5f9b0e4219d7712df23744155e84cee4)
 
