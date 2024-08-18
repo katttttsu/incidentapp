@@ -1,12 +1,19 @@
 package in.original.incidentapp;
 
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "incidents")
 public class IncidentEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String level;
     private LocalDate date;
@@ -21,13 +28,13 @@ public class IncidentEntity {
     private String largeCategory;
     private String smallCategory;
     private String customSubCategory;
+
     private String situation;
     private String cause;
     private String suggestion;
     private String countermeasure;
 
     public IncidentEntity() {}
-
     public Long getId() {
         return id;
     }
@@ -140,7 +147,6 @@ public class IncidentEntity {
         this.customSubCategory = customSubCategory;
     }
 
-
     public String getSituation() {
         return situation;
     }
@@ -173,4 +179,3 @@ public class IncidentEntity {
         this.countermeasure = countermeasure;
     }
 }
-
