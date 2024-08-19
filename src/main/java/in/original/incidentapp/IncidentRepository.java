@@ -58,4 +58,7 @@ public interface IncidentRepository {
     @Select("SELECT COUNT(*) FROM incidents WHERE date BETWEEN #{startDate} AND #{endDate}")
     long countByDateBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    @Delete("DELETE FROM incidents")
+    void deleteAll();
+
 }
