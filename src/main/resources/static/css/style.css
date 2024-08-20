@@ -416,6 +416,55 @@ button[type="button"]:hover {
    background-color: white;
 }
 
+/********************************************
+トップページ画面
+*********************************************/
+.top_page {
+    padding: 20px;
+    text-align: center;
+}
+
+.top_page_upper {
+    flex: 1;
+    margin-bottom: 50px;
+}
+
+.top_page_upper img {
+    max-width: 150%;
+    height: auto;
+    border: 1px solid #ccc;
+}
+
+.top_page_menu {
+    flex: 1;
+    margin: 0 auto;
+}
+
+.top_page_menu h2 {
+    font-size: 24px;
+    margin: 20px;
+}
+
+.top_page_menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.top_page_menu ul li {
+    margin-bottom: 10px;
+}
+
+.top_page_menu ul li a {
+    text-decoration: none;
+    font-size: 20px;
+    color: #007BFF;
+    transition: color 0.3s ease;
+}
+
+.top_page_menu ul li a:hover {
+    color: #0056b3;
+}
+
 
 /********************************************
 error画面

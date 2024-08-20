@@ -37,6 +37,11 @@ public class IncidentController {
         this.incidentService = incidentService;
     }
 
+    @GetMapping("/")
+    public String showTopPage() {
+        return "topPage";
+    }
+
     @GetMapping("/incidentForm")
     public String showIncidentForm(Model model) {
         model.addAttribute("incidentForm", new IncidentForm());
@@ -146,7 +151,8 @@ public class IncidentController {
         return "提案が取得できませんでした: 不明なエラーが発生しました。";
     }
 
-    @GetMapping("/")
+
+    @GetMapping("/index")
     public String showIncidents(Model model) {
         LocalDate now = LocalDate.now();
         List<IncidentEntity> incidents = getIncidents(now.getYear(), now.getMonthValue(), "", "");
@@ -181,6 +187,12 @@ public class IncidentController {
         addGraphDataToModel(model, incidents);
 
         return "index";
+    }
+
+    @GetMapping("/annualSummary")
+    public String showAnnualSummary(Model model) {
+        
+    return "annualSummary";
     }
 
     @GetMapping("/incidents/{id}")
