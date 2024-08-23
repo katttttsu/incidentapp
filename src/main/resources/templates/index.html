@@ -73,7 +73,7 @@
     <tr th:each="incident : ${incidents}">
         <td th:text="${incident.level}"></td>
         <td th:text="${incident.date}"></td>
-        <td th:text="${incident.largeCategory + ' ／ ' + incident.smallCategory}"></td>
+        <td th:text="${incident.category + ' ／ ' + incident.segment}"></td>
         <td th:text="${incident.department}"></td>
         <td th:text="${incident.job}"></td>
         <td>

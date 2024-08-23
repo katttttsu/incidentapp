@@ -174,7 +174,7 @@ textarea {
 }
 
 textarea {
-    height: 180px;
+    height: 220px;
     resize: vertical;
 }
 
@@ -438,34 +438,111 @@ button[type="button"]:hover {
 .top_page_menu {
     flex: 1;
     margin: 0 auto;
+    width: 220px;
 }
 
-.top_page_menu h2 {
-    font-size: 24px;
-    margin: 20px;
+.top_page_menu h1 {
+    font-size: 32px;
+    margin: 30px;
 }
 
 .top_page_menu ul {
     list-style-type: none;
     padding: 0;
+    text-align: left
 }
 
 .top_page_menu ul li {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: left
 }
 
 .top_page_menu ul li a {
     text-decoration: none;
     font-size: 20px;
-    color: #007BFF;
+    color: blue;
     transition: color 0.3s ease;
 }
 
 .top_page_menu ul li a:hover {
-    color: #0056b3;
+    color: red;
 }
 
+/********************************************
+年次集計画面
+*********************************************/
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
 
+.summary-table {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    margin-left: 50px;
+    width: 80%;
+}
+
+.summary-table th, .summary-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    width: auto;
+}
+
+.summary-table th:nth-child(2),
+.summary-table td:nth-child(2),
+.summary-table th:nth-child(3),
+.summary-table td:nth-child(3),
+.summary-table th:nth-child(4),
+.summary-table td:nth-child(4),
+.summary-table th:nth-child(5),
+.summary-table td:nth-child(5),
+.summary-table th:nth-child(6),
+.summary-table td:nth-child(6),
+.summary-table th:nth-child(7),
+.summary-table td:nth-child(7),
+.summary-table th:nth-child(8),
+.summary-table td:nth-child(8)
+{
+    width: calc(80% / 14);
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.form-row_summary {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.form-group_summary {
+    margin-right: 10px;
+}
+
+input[type="number"] {
+    width: 220px;
+}
+
+.button-row_summary {
+  display: flex;
+  justify-content: center;
+}
+
+.search-button {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-button:hover {
+    background-color: #f0f0f0;
+}
 /********************************************
 error画面
 *********************************************/

@@ -1,10 +1,7 @@
 package in.original.incidentapp;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -14,24 +11,39 @@ public class IncidentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "level")
     private String level;
+    @Column(name = "date")
     private LocalDate date;
+    @Column(name = "time")
     private LocalTime time;
+    @Column(name = "place")
     private String place;
-    private Long patientId;
-    private String patientName;
-    private Integer patientAge;
+    @Column(name = "number")
+    private Long number;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "age")
+    private Integer age;
+    @Column(name = "department")
     private String department;
+    @Column(name = "job")
     private String job;
-    private String continuousService;
-    private String largeCategory;
-    private String smallCategory;
-    private String customSubCategory;
-
+    @Column(name = "continuation")
+    private String continuation;
+    @Column(name = "category")
+    private String category;
+    @Column(name = "segment")
+    private String segment;
+    @Column(name = "situation")
     private String situation;
+    @Column(name = "cause")
     private String cause;
+    @Column(name = "suggestion")
     private String suggestion;
+    @Column(name = "countermeasure")
     private String countermeasure;
 
     public IncidentEntity() {}
@@ -75,28 +87,28 @@ public class IncidentEntity {
         this.place = place;
     }
 
-    public Long getPatientId() {
-        return patientId;
+    public Long getNumber() {
+        return number;
     }
 
-    public void setPatientId(Long patientId) {
-        this.patientId = patientId;
+    public void setNumber(Long number) {
+        this.number = number;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public String getName() {
+        return name;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getPatientAge() {
-        return patientAge;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setPatientAge(Integer patientAge) {
-        this.patientAge = patientAge;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public String getDepartment() {
@@ -115,36 +127,28 @@ public class IncidentEntity {
         this.job = job;
     }
 
-    public String getContinuousService() {
-        return continuousService;
+    public String getContinuation() {
+        return continuation;
     }
 
-    public void setContinuousService(String continuousService) {
-        this.continuousService = continuousService;
+    public void setContinuation(String continuation) {
+        this.continuation = continuation;
     }
 
-    public String getLargeCategory() {
-        return largeCategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setLargeCategory(String largeCategory) {
-        this.largeCategory = largeCategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getSmallCategory() {
-        return smallCategory;
+    public String getSegment() {
+        return segment;
     }
 
-    public void setSmallCategory(String smallCategory) {
-        this.smallCategory = smallCategory;
-    }
-
-    public String getCustomSubCategory() {
-        return customSubCategory;
-    }
-
-    public void setCustomSubCategory(String customSubCategory) {
-        this.customSubCategory = customSubCategory;
+    public void setSegment(String segment) {
+        this.segment = segment;
     }
 
     public String getSituation() {
@@ -178,4 +182,20 @@ public class IncidentEntity {
     public void setCountermeasure(String countermeasure) {
         this.countermeasure = countermeasure;
     }
+
+    private LocalDate incidentDate;
+
+    public LocalDate getIncidentDate() {
+        return incidentDate;
+    }
+
+    public void setIncidentDate(LocalDate incidentDate) {
+        this.incidentDate = incidentDate;
+    }
+
+    public String getMonth() {
+        return incidentDate != null ? String.valueOf(incidentDate.getMonthValue()) : null;
+    }
+
+
 }

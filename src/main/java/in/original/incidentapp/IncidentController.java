@@ -69,19 +69,41 @@ public class IncidentController {
 
     @PostMapping("/incidents")
     public String createIncident(@ModelAttribute IncidentForm incidentForm) {
-        incidentMapper.insert(
-                incidentForm.getLevel(),
-                incidentForm.getDate(), incidentForm.getTime(),
-                incidentForm.getPlace(),
-                incidentForm.getPatientId(), incidentForm.getPatientName(),
-                incidentForm.getPatientAge(),
-                incidentForm.getDepartment(), incidentForm.getJob(),
-                incidentForm.getContinuousService(),
-                incidentForm.getLargeCategory(), incidentForm.getSmallCategory(),
-                incidentForm.getSituation(), incidentForm.getCause(),
-                incidentForm.getSuggestion(), incidentForm.getCountermeasure()
-        );
-        return "redirect:/";
+        if (incidentForm.getId() == null) {
+            incidentMapper.insert(
+                    incidentForm.getLevel(),
+                    incidentForm.getDate(), incidentForm.getTime(),
+                    incidentForm.getPlace(), incidentForm.getNumber(),
+                    incidentForm.getName(),
+                    incidentForm.getAge(),
+                    incidentForm.getDepartment(), incidentForm.getJob(),
+                    incidentForm.getContinuation(),
+                    incidentForm.getCategory(), incidentForm.getSegment(),
+                    incidentForm.getSituation(), incidentForm.getCause(),
+                    incidentForm.getSuggestion(), incidentForm.getCountermeasure()
+            );
+        } else {
+            incidentMapper.update(
+                    incidentForm.getId(),
+                    incidentForm.getLevel(),
+                    incidentForm.getDate(),
+                    incidentForm.getTime(),
+                    incidentForm.getPlace(),
+                    incidentForm.getNumber(),
+                    incidentForm.getName(),
+                    incidentForm.getAge(),
+                    incidentForm.getDepartment(),
+                    incidentForm.getJob(),
+                    incidentForm.getContinuation(),
+                    incidentForm.getCategory(),
+                    incidentForm.getSegment(),
+                    incidentForm.getSituation(),
+                    incidentForm.getCause(),
+                    incidentForm.getSuggestion(),
+                    incidentForm.getCountermeasure()
+            );
+        }
+        return "redirect:/index";
     }
 
     @PostMapping("/generateAISuggestion")
@@ -190,10 +212,41 @@ public class IncidentController {
     }
 
     @GetMapping("/annualSummary")
-    public String showAnnualSummary(Model model) {
-        
-    return "annualSummary";
+    public String showAnnualSummary(
+            @RequestParam(value = "year", required = false) Integer year,
+            Model model) {
+
+        if (year == null || year == 0) {
+            year = LocalDate.now().getYear();
+        }
+
+        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+
+        model.addAttribute("levelData", incidentService.getLevelCounts(incidents));
+        model.addAttribute("categoryData", incidentService.getCategoryCounts(incidents));
+        model.addAttribute("departmentData", incidentService.getDepartmentCounts(incidents));
+        model.addAttribute("jobData", incidentService.getJobCounts(incidents));
+
+        return "annualSummary";
     }
+
+    @GetMapping("/SearchAnnualSummaries")
+    public String searchAnnualSummary(
+            @RequestParam(value = "year", required = false) Integer year,
+            Model model) {
+
+        if (year == null || year == 0) {
+            year = LocalDate.now().getYear();
+        }
+
+        model.addAttribute("levelData", incidentService.countIncidentsByLevel(year));
+        model.addAttribute("categoryData", incidentService.countIncidentsByCategory(year));
+        model.addAttribute("departmentData", incidentService.countIncidentsByDepartment(year));
+        model.addAttribute("jobData", incidentService.countIncidentsByJob(year));
+
+        return "annualSummary";
+    }
+
 
     @GetMapping("/incidents/{id}")
     public String incidentDetail(@PathVariable long id, Model model) {
@@ -228,25 +281,25 @@ public class IncidentController {
                 id, incidentForm.getLevel(),
                 incidentForm.getDate(), incidentForm.getTime(),
                 incidentForm.getPlace(),
-                incidentForm.getPatientId(), incidentForm.getPatientName(),
-                incidentForm.getPatientAge(),
+                incidentForm.getId(), incidentForm.getName(),
+                incidentForm.getAge(),
                 incidentForm.getDepartment(), incidentForm.getJob(),
-                incidentForm.getContinuousService(),
-                incidentForm.getLargeCategory(), incidentForm.getSmallCategory(),
+                incidentForm.getContinuation(),
+                incidentForm.getCategory(), incidentForm.getSegment(),
                 incidentForm.getSituation(), incidentForm.getCause(),
                 incidentForm.getSuggestion(), incidentForm.getCountermeasure()
         );
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @PostMapping("/incidents/{id}/delete")
     public String deleteIncident(@PathVariable long id, @RequestParam("adminPassword") String inputPassword, Model model) {
         if (!adminPassword.equals(inputPassword)) {
             model.addAttribute("errorMessage", "管理者パスワードが間違っています");
-            return "redirect:/";
+            return "redirect:/index";
         }
         incidentMapper.delete(id);
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     private void addGraphDataToModel(Model model, List<IncidentEntity> incidents) {
@@ -265,7 +318,7 @@ public class IncidentController {
     public Map<String, Integer> getCategoryCounts(List<IncidentEntity> incidents) {
         Map<String, Integer> counts = new HashMap<>();
         for (IncidentEntity incident : incidents) {
-            String category = incident.getLargeCategory() + " ／ " + incident.getSmallCategory();
+            String category = incident.getCategory() + " ／ " + incident.getSegment();
             counts.put(category, counts.getOrDefault(category, 0) + 1);
         }
         return counts;
@@ -276,6 +329,8 @@ public class IncidentController {
         for (IncidentEntity incident : incidents) {
             String level = incident.getLevel();
             counts.put(level, counts.getOrDefault(level, 0) + 1);
+            Integer month = incident.getDate().getMonthValue();
+
         }
         return counts;
     }

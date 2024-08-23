@@ -22,7 +22,7 @@
         <div class="side_form">
             <div class="form-section">
                 <h3>レベル</h3>
-                <select id="text" th:field="*{level}" required="required">
+                <select id="level" th:field="*{level}" required="required">
                     <option value="">選択してください</option>
                     <option value="0">0</option>
                     <option value="1">1</option>
@@ -46,80 +46,111 @@
             </div>
             <div class="form-section">
                 <h3>患者情報</h3>
-                <label for="patientId">患者ID:</label>
-                <input type="text" id="patientId" th:field="*{patientId}"><br><br>
-                <label for="patientName">患者氏名:</label>
-                <input type="text" id="patientName" th:field="*{patientName}"><br><br>
+                <label for="number">カルテ番号:</label>
+                <input type="text" id="number" th:field="*{number}"><br><br>
+                <label for="name">患者氏名:</label>
+                <input type="text" id="name" th:field="*{name}"><br><br>
                 <div class="age-container">
-                    <label for="patientAge">年齢:</label>
-                    <input type="number" id="patientAge" th:field="*{patientAge}"> 歳<br><br>
+                    <label for="age">年齢:</label>
+                    <input type="number" id="age" th:field="*{age}"> 歳<br><br>
                 </div>
             </div>
             <div class="form-section">
                 <h3>報告者情報</h3>
                 <label for="department">所属科:</label>
-                <input type="text" id="department" th:field="*{department}"><br><br>
+                <select id="department" th:field="*{department}" required="required">
+                    <option value="">選択してください</option>
+                    <option value="整形外科">整形外科</option>
+                    <option value="形成外科">形成外科</option>
+                    <option value="外科">外科</option>
+                    <option value="皮膚科">皮膚科</option>
+                    <option value="循環器内科">循環器内科</option>
+                    <option value="呼吸器外科">呼吸器外科</option>
+                    <option value="消火器内科">消火器内科</option>
+                    <option value="脳神経外科">脳神経外科</option>
+                    <option value="泌尿器科">泌尿器科</option>
+                    <option value="眼科">眼科</option>
+                    <option value="麻酔科">麻酔科</option>
+                    <option value="放射線科">放射線科</option>
+                    <option value="リハビリテーション科">リハビリテーション科</option>
+                    <option value="薬剤部">薬剤部</option>
+                    <option value="医療技術部">医療技術部</option>
+                    <option value="看護部">看護部</option>
+                    <option value="事務・総務">事務・総務</option>
+                    <option value="その他">その他</option>
+                </select><br><br>
                 <label for="job">職種:</label>
-                <input type="text" id="job" th:field="*{job}"><br><br>
-                <div class="service-container">
-                    <label for="continuousService">勤続年数:</label>
-                    <input type="text" id="continuousService" th:field="*{continuousService}"> 年<br><br>
+                <select id="job" th:field="*{job}" required="required">
+                    <option value="">選択してください</option>
+                    <option value="医師">医師</option>
+                    <option value="看護師">看護師</option>
+                    <option value="薬剤師">薬剤師</option>
+                    <option value="理学療法士">理学療法士</option>
+                    <option value="作業療法士">作業療法士</option>
+                    <option value="視能訓練士">視能訓練士</option>
+                    <option value="臨床検査技師">臨床検査技師</option>
+                    <option value="臨床工学技士">臨床工学技士</option>
+                    <option value="診療放射線技師">診療放射線技師</option>
+                    <option value="看護補助者">看護補助者</option>
+                    <option value="事務員">事務員</option>
+                    <option value="その他">その他</option>
+                </select><br><br>
+                    <label for="continuation">勤続年数:</label>
+                    <input type="text" id="continuation" th:field="*{continuation}"> 年<br><br>
                 </div>
             </div>
-        </div>
-        <div class="vertical-line"></div> <!-- 垂直線の追加 -->
-        <div class="main_form">
-            <div class="form-section_category">
-                <h3>カテゴリー</h3>
-                <div class="category_form">
-                    <div>
-                        <label for="largeCategory">大分類:</label>
-                        <select id="largeCategory" name="largeCategory" th:field="*{largeCategory}" required="required" onchange="updateSubCategories()">
-                            <option value="">選択してください</option>
-                            <option value="転倒・転落">転倒・転落</option>
-                            <option value="外傷">外傷</option>
-                            <option value="薬剤">薬剤</option>
-                            <option value="食事">食事</option>
-                            <option value="受付">受付</option>
-                            <option value="診察">診察</option>
-                            <option value="検査・処置">検査・処置</option>
-                            <option value="放射線">放射線</option>
-                            <option value="リハビリ">リハビリ</option>
-                            <option value="機器操作">機器操作</option>
-                            <option value="チューブ・カテーテル">チューブ・カテーテル</option>
-                            <option value="その他">その他</option>
-                        </select>
+            <div class="main_form">
+                <div class="form-section_category">
+                    <h3>カテゴリー</h3>
+                    <div class="category_form">
+                        <div>
+                            <label for="category">大分類:</label>
+                            <select id="category" name="category" th:field="*{category}" required="required" onchange="updateSubCategories()">
+                                <option value="">選択してください</option>
+                                <option value="転倒・転落">転倒・転落</option>
+                                <option value="外傷">外傷</option>
+                                <option value="薬剤">薬剤</option>
+                                <option value="食事">食事</option>
+                                <option value="受付">受付</option>
+                                <option value="診察">診察</option>
+                                <option value="検査・処置">検査・処置</option>
+                                <option value="放射線">放射線</option>
+                                <option value="リハビリ">リハビリ</option>
+                                <option value="機器操作">機器操作</option>
+                                <option value="チューブ・カテーテル">チューブ・カテーテル</option>
+                                <option value="その他">その他</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="segment">小分類:</label>
+                            <select id="segment" name="segment" th:field="*{segment}" required="required" onchange="updateSubCategories()">
+                                <option value="">選択してください</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label for="smallCategory">小分類:</label>
-                        <select id="smallCategory" name="smallCategory" th:field="*{smallCategory}" required="required" onchange="updateSubCategories()">
-                            <option value="">選択してください</option>
-                        </select>
+                </div>
+                <div class="form_situation">
+                    <h2 class="column-title">状況・対応</h2>
+                    <textarea id="situation" th:field="*{situation}"></textarea>
+                </div>
+                <div class="form_cause">
+                    <h2 class="column-title">原因</h2>
+                    <textarea id="cause" th:field="*{cause}"></textarea>
+                </div>
+                <div class="form_suggestion">
+                    <div class="form_suggestion_title">
+                        <h2 class="column-title">AIによる提案</h2>
+                        <button type="button" onclick="generateAISuggestion()">AI提案を生成</button>
                     </div>
+                    <textarea id="suggestion" th:field="*{suggestion}" readonly></textarea>
                 </div>
-            </div>
-            <div class="form_situation">
-                <h2 class="column-title">状況・対応</h2>
-                <textarea id="situation" th:field="*{situation}"></textarea>
-            </div>
-
-            <div class="form_cause">
-                <h2 class="column-title">原因</h2>
-                <textarea id="cause" th:field="*{cause}"></textarea>
-            </div>
-            <div class="form_suggestion">
-                <div class="form_suggestion_title">
-                    <h2 class="column-title">AIによる提案</h2>
-                    <button type="button" onclick="generateAISuggestion()">AI提案を生成</button>
+                <div class="form_countermeasure">
+                    <h2 class="column-title">対策</h2>
+                    <textarea id="countermeasure" th:field="*{countermeasure}"></textarea>
                 </div>
-                <textarea id="suggestion" th:field="*{suggestion}" readonly></textarea>
-            </div>
-            <div class="form_countermeasure">
-                <h2 class="column-title">対策</h2>
-                <textarea id="countermeasure" th:field="*{countermeasure}"></textarea>
-            </div>
-            <div class="form_submit">
-                <button type="submit">作成</button>
+                <div class="form_submit">
+                    <button type="submit">作成</button>
+                </div>
             </div>
         </div>
     </div>
@@ -128,9 +159,9 @@
 <script th:inline="javascript">
     var subCategoryMap = /*[[${subCategoryMap}]]*/ {};
 
-    document.getElementById('largeCategory').addEventListener('change', function () {
+    document.getElementById('category').addEventListener('change', function () {
         var mainCategory = this.value;
-        var subCategorySelect = document.getElementById('smallCategory');
+        var subCategorySelect = document.getElementById('segment');
         subCategorySelect.innerHTML = '';
 
         if (mainCategory && subCategoryMap[mainCategory]) {

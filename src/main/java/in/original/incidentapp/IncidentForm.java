@@ -10,14 +10,14 @@ public class IncidentForm {
     private LocalDate date;
     private LocalTime time;
     private String place;
-    private Long patientId;
-    private String patientName;
-    private Integer patientAge;
+    private Long number;
+    private String name;
+    private Integer age;
     private String department;
     private String job;
-    private String continuousService;;
-    private String largeCategory;
-    private String smallCategory;
+    private String continuation;;
+    private String category;
+    private String segment;
     private String customSubCategory;
     private String situation;
     private String cause;
@@ -68,28 +68,28 @@ public class IncidentForm {
         this.place = place;
     }
 
-    public Long getPatientId() {
-        return patientId;
+    public Long getNumber() {
+        return number;
     }
 
-    public void setPatientId(Long patientId) {
-        this.patientId = patientId;
+    public void setNumber(Long number) {
+        this.number = number;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public String getName() {
+        return name;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getPatientAge() {
-        return patientAge;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setPatientAge(Integer patientAge) {
-        this.patientAge = patientAge;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public String getDepartment() {
@@ -108,28 +108,28 @@ public class IncidentForm {
         this.job = job;
     }
 
-    public String getContinuousService() {
-        return continuousService;
+    public String getContinuation() {
+        return continuation;
     }
 
-    public void setContinuousService(String continuousService) {
-        this.continuousService = continuousService;
+    public void setContinuation(String continuation) {
+        this.continuation = continuation;
     }
 
-    public String getLargeCategory() {
-        return largeCategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setLargeCategory(String largeCategory) {
-        this.largeCategory = largeCategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getSmallCategory() {
-        return smallCategory;
+    public String getSegment() {
+        return segment;
     }
 
-    public void setSmallCategory(String smallCategory) {
-        this.smallCategory = smallCategory;
+    public void setSegment(String segment) {
+        this.segment = segment;
     }
 
     public String getCustomSubCategory() {
