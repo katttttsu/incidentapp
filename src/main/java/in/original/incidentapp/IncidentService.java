@@ -9,8 +9,6 @@ import java.util.*;
 @Service
 public class IncidentService {
 
-
-
     @Autowired
     private IncidentRepository incidentRepository;
 
@@ -59,49 +57,29 @@ public class IncidentService {
     private List<String> departments = Arrays.asList("整形外科", "形成外科", "外科", "皮膚科", "循環器内科", "呼吸器内科", "呼吸器外科", "消火器内科", "脳神経外科", "泌尿器科", "眼科", "麻酔科", "放射線科", "リハビリテーション科", "薬剤部", "医療技術部", "看護部", "その他");
     private List<String> jobs = Arrays.asList("医師", "看護師", "薬剤師", "理学療法士", "作業療法士", "視能訓練士", "臨床検査技師", "臨床工学技士", "診療放射線技師", "看護補助者", "事務員", "その他");
 
-    public List<IncidentData> countIncidentsByCriteria(int year) {
-        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
-        Map<String, IncidentData> dataMap = new HashMap<>();
-
-        for (String level : levels) {
-            for (String category : categories) {
-                for (String department : departments) {
-                    for (String job : jobs) {
-                        String key = level + "-" + category + "-" + department + "-" + job;
-                        dataMap.put(key, new IncidentData(level, category, department, job, 0));
-                    }
-                }
-            }
-        }
-
-        for (IncidentEntity incident : incidents) {
-            String key = incident.getLevel() + "-" + incident.getCategory() + "-" + incident.getDepartment() + "-" + incident.getJob();
-            IncidentData data = dataMap.get(key);
-            if (data != null) {
-                data.setCount(data.getCount() + 1);
-            }
-        }
-
-        return new ArrayList<>(dataMap.values());
-    }
-
     public Map<String, Map<Integer, Integer>> countIncidentsByLevel(int year) {
         List<IncidentEntity> incidents = incidentRepository.findByYear(year);
         Map<String, Map<Integer, Integer>> levelData = new HashMap<>();
 
+        // 全てのレベルに対して、全ての月を初期化
         for (String level : levels) {
-            levelData.put(level, new HashMap<>());
+            Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
-                levelData.get(level).put(month, 0);
+                monthData.put(month, 0);  // 各月を0で初期化
             }
+            levelData.put(level, monthData);
         }
 
+        // インシデントのデータを集計
         for (IncidentEntity incident : incidents) {
             String level = incident.getLevel();
             int month = incident.getDate().getMonthValue();
-            levelData.get(level).put(month, levelData.get(level).get(month) + 1);
+            if (levelData.containsKey(level)) {
+                levelData.get(level).put(month, levelData.get(level).get(month) + 1);
+            }
         }
 
+        System.out.println("Final levelData: " + levelData); // ここでデバッグログを追加
         return levelData;
     }
 
@@ -110,41 +88,43 @@ public class IncidentService {
         Map<String, Map<Integer, Integer>> categoryData = new HashMap<>();
 
         for (String category : categories) {
-            categoryData.put(category, new HashMap<>());
+            Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
-                categoryData.get(category).put(month, 0);
+                monthData.put(month, 0);
             }
+            categoryData.put(category, monthData);
         }
 
         for (IncidentEntity incident : incidents) {
             String category = incident.getCategory();
             int month = incident.getDate().getMonthValue();
-            categoryData.get(category).put(month, categoryData.get(category).get(month) + 1);
+            if (categoryData.containsKey(category)) {
+                categoryData.get(category).put(month, categoryData.get(category).get(month) + 1);
+            }
         }
 
         return categoryData;
     }
+
 
     public Map<String, Map<Integer, Integer>> countIncidentsByDepartment(int year) {
         List<IncidentEntity> incidents = incidentRepository.findByYear(year);
         Map<String, Map<Integer, Integer>> departmentData = new HashMap<>();
 
         for (String department : departments) {
-            departmentData.put(department, new HashMap<>());
+            Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
-                departmentData.get(department).put(month, 0);
+                monthData.put(month, 0);
             }
+            departmentData.put(department, monthData);
         }
 
         for (IncidentEntity incident : incidents) {
             String department = incident.getDepartment();
             int month = incident.getDate().getMonthValue();
-
-            if (department == null || !departmentData.containsKey(department)) {
-                department = "その他";
+            if (departmentData.containsKey(department)) {
+                departmentData.get(department).put(month, departmentData.get(department).get(month) + 1);
             }
-
-            departmentData.get(department).put(month, departmentData.get(department).get(month) + 1);
         }
 
         return departmentData;
@@ -155,24 +135,21 @@ public class IncidentService {
         Map<String, Map<Integer, Integer>> jobData = new HashMap<>();
 
         for (String job : jobs) {
-            jobData.put(job, new HashMap<>());
+            Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
-                jobData.get(job).put(month, 0);
+                monthData.put(month, 0);
             }
+            jobData.put(job, monthData);
         }
 
         for (IncidentEntity incident : incidents) {
             String job = incident.getJob();
             int month = incident.getDate().getMonthValue();
-
-            if (job == null || !jobData.containsKey(job)) {
-                job = "その他";
+            if (jobData.containsKey(job)) {
+                jobData.get(job).put(month, jobData.get(job).get(month) + 1);
             }
-
-            jobData.get(job).put(month, jobData.get(job).get(month) + 1);
         }
 
         return jobData;
     }
-
 }

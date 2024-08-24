@@ -20,6 +20,44 @@ import java.nio.charset.StandardCharsets;
 @Controller
 public class IncidentController {
 
+    @Autowired
+    private IncidentService incidentService;
+
+    @GetMapping("/annualSummary")
+    public String showAnnualSummary(Model model) {
+        int year = LocalDate.now().getYear();
+        Map<String, Map<Integer, Integer>> levelData = incidentService.countIncidentsByLevel(year);
+        Map<String, Map<Integer, Integer>> categoryData = incidentService.countIncidentsByCategory(year);
+        Map<String, Map<Integer, Integer>> departmentData = incidentService.countIncidentsByDepartment(year);
+        Map<String, Map<Integer, Integer>> jobData = incidentService.countIncidentsByJob(year);
+        System.out.println("Final levelData: " + levelData);
+
+        model.addAttribute("levelData", levelData);
+        model.addAttribute("categoryData", categoryData);
+        model.addAttribute("departmentData", departmentData);
+        model.addAttribute("jobData", jobData);
+
+
+        return "annualSummary";
+    }
+
+    @GetMapping("/SearchAnnualSummaries")
+    public String searchAnnualSummary(
+            @RequestParam(value = "year", required = false) Integer year,
+            Model model) {
+
+        if (year == null || year == 0) {
+            year = LocalDate.now().getYear();
+        }
+
+        model.addAttribute("levelData", incidentService.countIncidentsByLevel(year));
+        model.addAttribute("categoryData", incidentService.countIncidentsByCategory(year));
+        model.addAttribute("departmentData", incidentService.countIncidentsByDepartment(year));
+        model.addAttribute("jobData", incidentService.countIncidentsByJob(year));
+
+        return "annualSummary";
+    }
+
     @Value("${admin.password}")
     private String adminPassword;
 
@@ -28,7 +66,6 @@ public class IncidentController {
 
     private final IncidentRepository incidentRepository;
     private final IncidentMapper incidentMapper;
-    private final IncidentService incidentService;
 
     @Autowired
     public IncidentController(IncidentRepository incidentRepository, IncidentMapper incidentMapper, IncidentService incidentService) {
@@ -210,43 +247,6 @@ public class IncidentController {
 
         return "index";
     }
-
-    @GetMapping("/annualSummary")
-    public String showAnnualSummary(
-            @RequestParam(value = "year", required = false) Integer year,
-            Model model) {
-
-        if (year == null || year == 0) {
-            year = LocalDate.now().getYear();
-        }
-
-        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
-
-        model.addAttribute("levelData", incidentService.getLevelCounts(incidents));
-        model.addAttribute("categoryData", incidentService.getCategoryCounts(incidents));
-        model.addAttribute("departmentData", incidentService.getDepartmentCounts(incidents));
-        model.addAttribute("jobData", incidentService.getJobCounts(incidents));
-
-        return "annualSummary";
-    }
-
-    @GetMapping("/SearchAnnualSummaries")
-    public String searchAnnualSummary(
-            @RequestParam(value = "year", required = false) Integer year,
-            Model model) {
-
-        if (year == null || year == 0) {
-            year = LocalDate.now().getYear();
-        }
-
-        model.addAttribute("levelData", incidentService.countIncidentsByLevel(year));
-        model.addAttribute("categoryData", incidentService.countIncidentsByCategory(year));
-        model.addAttribute("departmentData", incidentService.countIncidentsByDepartment(year));
-        model.addAttribute("jobData", incidentService.countIncidentsByJob(year));
-
-        return "annualSummary";
-    }
-
 
     @GetMapping("/incidents/{id}")
     public String incidentDetail(@PathVariable long id, Model model) {

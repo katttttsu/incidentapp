@@ -31,45 +31,35 @@
     <thead>
     <tr>
         <th>レベル</th>
-        <th th:each="month : ${#numbers.sequence(1, 12)}" th:text="${month} + '月'"></th>
+        <th>1月</th>
+        <th>2月</th>
+        <th>3月</th>
+        <th>4月</th>
+        <th>5月</th>
+        <th>6月</th>
+        <th>7月</th>
+        <th>8月</th>
+        <th>9月</th>
+        <th>10月</th>
+        <th>11月</th>
+        <th>12月</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>0</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${levelData['0'] != null && levelData['0'][month] != null ? levelData['0'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${levelData['1'] != null && levelData['1'][month] != null ? levelData['1'][month] : 0}"></td>
-
-    </tr>
-    <tr>
-        <td>2</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${levelData['2'] != null && levelData['2'][month] != null ? levelData['2'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>3a</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${levelData['3a'] != null && levelData['3a'][month] != null ? levelData['3a'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>3b</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${levelData['3b'] != null && levelData['3b'][month] != null ? levelData['3b'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>4</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${levelData['4'] != null && levelData['4'][month] != null ? levelData['4'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${levelData['5'] != null && levelData['5'][month] != null ? levelData['5'][month] : 0}"></td>
+    <tr th:each="entry : ${levelData}">
+        <td th:text="${entry.key}"></td>
+        <td th:text="${entry.value[1]}"></td>
+        <td th:text="${entry.value[2]}"></td>
+        <td th:text="${entry.value[3]}"></td>
+        <td th:text="${entry.value[4]}"></td>
+        <td th:text="${entry.value[5]}"></td>
+        <td th:text="${entry.value[6]}"></td>
+        <td th:text="${entry.value[7]}"></td>
+        <td th:text="${entry.value[8]}"></td>
+        <td th:text="${entry.value[9]}"></td>
+        <td th:text="${entry.value[10]}"></td>
+        <td th:text="${entry.value[11]}"></td>
+        <td th:text="${entry.value[12]}"></td>
     </tr>
     </tbody>
 </table>
@@ -79,79 +69,35 @@
     <thead>
     <tr>
         <th>カテゴリー</th>
-        <th th:each="month : ${#numbers.sequence(1, 12)}" th:text="${month} + '月'"></th>
+        <th>1月</th>
+        <th>2月</th>
+        <th>3月</th>
+        <th>4月</th>
+        <th>5月</th>
+        <th>6月</th>
+        <th>7月</th>
+        <th>8月</th>
+        <th>9月</th>
+        <th>10月</th>
+        <th>11月</th>
+        <th>12月</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>転倒・転落</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['転倒・転落'] != null && categoryData['転倒・転落'][month] != null ? categoryData['転倒・転落'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>外傷</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['外傷'] != null && categoryData['外傷'][month] != null ? categoryData['外傷'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>薬剤</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['薬剤'] != null && categoryData['薬剤'][month] != null ? categoryData['薬剤'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>食事</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['食事'] != null && categoryData['食事'][month] != null ? categoryData['食事'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>受付</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['受付'] != null && categoryData['受付'][month] != null ? categoryData['受付'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>診察</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['診察'] != null && categoryData['診察'][month] != null ? categoryData['診察'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>検査・処置</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['検査・処置'] != null && categoryData['検査・処置'][month] != null ? categoryData['検査・処置'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>放射線</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['放射線'] != null && categoryData['放射線'][month] != null ? categoryData['放射線'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>リハビリ</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['リハビリ'] != null && categoryData['リハビリ'][month] != null ? categoryData['リハビリ'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>機器操作</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['機器操作'] != null && categoryData['機器操作'][month] != null ? categoryData['機器操作'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>チューブ・カテーテル</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['チューブ・カテーテル'] != null && categoryData['チューブ・カテーテル'][month] != null ? categoryData['チューブ・カテーテル'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>輸液ルート</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['輸液ルート'] != null && categoryData['輸液ルート'][month] != null ? categoryData['輸液ルート'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>手術</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['手術'] != null && categoryData['手術'][month] != null ? categoryData['手術'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>その他</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${categoryData['その他'] != null && categoryData['その他'][month] != null ? categoryData['その他'][month] : 0}"></td>
+    <tr th:each="entry : ${categoryData}">
+        <td th:text="${entry.key}"></td>
+        <td th:text="${entry.value[1]}"></td>
+        <td th:text="${entry.value[2]}"></td>
+        <td th:text="${entry.value[3]}"></td>
+        <td th:text="${entry.value[4]}"></td>
+        <td th:text="${entry.value[5]}"></td>
+        <td th:text="${entry.value[6]}"></td>
+        <td th:text="${entry.value[7]}"></td>
+        <td th:text="${entry.value[8]}"></td>
+        <td th:text="${entry.value[9]}"></td>
+        <td th:text="${entry.value[10]}"></td>
+        <td th:text="${entry.value[11]}"></td>
+        <td th:text="${entry.value[12]}"></td>
     </tr>
     </tbody>
 </table>
@@ -161,104 +107,35 @@
     <thead>
     <tr>
         <th>所属科</th>
-        <th th:each="month : ${#numbers.sequence(1, 12)}" th:text="${month} + '月'"></th>
+        <th>1月</th>
+        <th>2月</th>
+        <th>3月</th>
+        <th>4月</th>
+        <th>5月</th>
+        <th>6月</th>
+        <th>7月</th>
+        <th>8月</th>
+        <th>9月</th>
+        <th>10月</th>
+        <th>11月</th>
+        <th>12月</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>整形外科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['整形外科'] != null && departmentData['整形外科'][month] != null ? departmentData['整形外科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>形成外科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['形成外科'] != null && departmentData['形成外科'][month] != null ? departmentData['形成外科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>外科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['外科'] != null && departmentData['外科'][month] != null ? departmentData['外科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>皮膚科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['皮膚科'] != null && departmentData['皮膚科'][month] != null ? departmentData['皮膚科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>循環器内科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['循環器内科'] != null && departmentData['循環器内科'][month] != null ? departmentData['循環器内科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>呼吸器内科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['呼吸器内科'] != null && departmentData['呼吸器内科'][month] != null ? departmentData['呼吸器内科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>呼吸器外科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['呼吸器外科'] != null && departmentData['呼吸器外科'][month] != null ? departmentData['呼吸器外科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>消化器内科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['消化器内科'] != null && departmentData['消化器内科'][month] != null ? departmentData['消化器内科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>脳神経外科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['脳神経外科'] != null && departmentData['脳神経外科'][month] != null ? departmentData['脳神経外科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>泌尿器科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['泌尿器科'] != null && departmentData['泌尿器科'][month] != null ? departmentData['泌尿器科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>眼科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['眼科'] != null && departmentData['眼科'][month] != null ? departmentData['眼科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>麻酔科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['麻酔科'] != null && departmentData['麻酔科'][month] != null ? departmentData['麻酔科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>放射線科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['放射線科'] != null && departmentData['放射線科'][month] != null ? departmentData['放射線科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>リハビリテーション科</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['リハビリテーション科'] != null && departmentData['リハビリテーション科'][month] != null ? departmentData['リハビリテーション科'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>薬剤部</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['薬剤部'] != null && departmentData['薬剤部'][month] != null ? departmentData['薬剤部'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>医療技術部</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['医療技術部'] != null && departmentData['医療技術部'][month] != null ? departmentData['医療技術部'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>看護部</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['看護部'] != null && departmentData['看護部'][month] != null ? departmentData['看護部'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>事務・総務</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['事務・総務'] != null && departmentData['事務・総務'][month] != null ? departmentData['事務・総務'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>その他</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${departmentData['その他'] != null && departmentData['その他'][month] != null ? departmentData['その他'][month] : 0}"></td>
+    <tr th:each="entry : ${departmentData}">
+        <td th:text="${entry.key}"></td>
+        <td th:text="${entry.value[1]}"></td>
+        <td th:text="${entry.value[2]}"></td>
+        <td th:text="${entry.value[3]}"></td>
+        <td th:text="${entry.value[4]}"></td>
+        <td th:text="${entry.value[5]}"></td>
+        <td th:text="${entry.value[6]}"></td>
+        <td th:text="${entry.value[7]}"></td>
+        <td th:text="${entry.value[8]}"></td>
+        <td th:text="${entry.value[9]}"></td>
+        <td th:text="${entry.value[10]}"></td>
+        <td th:text="${entry.value[11]}"></td>
+        <td th:text="${entry.value[12]}"></td>
     </tr>
     </tbody>
 </table>
@@ -268,69 +145,35 @@
     <thead>
     <tr>
         <th>職種</th>
-        <th th:each="month : ${#numbers.sequence(1, 12)}" th:text="${month} + '月'"></th>
+        <th>1月</th>
+        <th>2月</th>
+        <th>3月</th>
+        <th>4月</th>
+        <th>5月</th>
+        <th>6月</th>
+        <th>7月</th>
+        <th>8月</th>
+        <th>9月</th>
+        <th>10月</th>
+        <th>11月</th>
+        <th>12月</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>医師</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['医師'] != null && jobData['医師'][month] != null ? jobData['医師'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>看護師</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['看護師'] != null && jobData['看護師'][month] != null ? jobData['看護師'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>薬剤師</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['薬剤師'] != null && jobData['薬剤師'][month] != null ? jobData['薬剤師'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>理学療法士</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['理学療法士'] != null && jobData['理学療法士'][month] != null ? jobData['理学療法士'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>作業療法士</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['作業療法士'] != null && jobData['作業療法士'][month] != null ? jobData['作業療法士'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>視能訓練士</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['視能訓練士'] != null && jobData['視能訓練士'][month] != null ? jobData['視能訓練士'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>臨床検査技師</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['臨床検査技師'] != null && jobData['臨床検査技師'][month] != null ? jobData['臨床検査技師'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>臨床工学技士</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['臨床工学技士'] != null && jobData['臨床工学技士'][month] != null ? jobData['臨床工学技士'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>診療放射線技師</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['診療放射線技師'] != null && jobData['診療放射線技師'][month] != null ? jobData['診療放射線技師'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>看護補助者</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['看護補助者'] != null && jobData['看護補助者'][month] != null ? jobData['看護補助者'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>事務員</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['事務員'] != null && jobData['事務員'][month] != null ? jobData['事務員'][month] : 0}"></td>
-    </tr>
-    <tr>
-        <td>その他</td>
-        <td th:each="month : ${#numbers.sequence(1, 12)}"
-            th:text="${jobData['その他'] != null && jobData['その他'][month] != null ? jobData['その他'][month] : 0}"></td>
+    <tr th:each="entry : ${jobData}">
+        <td th:text="${entry.key}"></td>
+        <td th:text="${entry.value[1]}"></td>
+        <td th:text="${entry.value[2]}"></td>
+        <td th:text="${entry.value[3]}"></td>
+        <td th:text="${entry.value[4]}"></td>
+        <td th:text="${entry.value[5]}"></td>
+        <td th:text="${entry.value[6]}"></td>
+        <td th:text="${entry.value[7]}"></td>
+        <td th:text="${entry.value[8]}"></td>
+        <td th:text="${entry.value[9]}"></td>
+        <td th:text="${entry.value[10]}"></td>
+        <td th:text="${entry.value[11]}"></td>
+        <td th:text="${entry.value[12]}"></td>
     </tr>
     </tbody>
 </table>

@@ -95,109 +95,112 @@
                     <option value="事務員">事務員</option>
                     <option value="その他">その他</option>
                 </select><br><br>
+                <div class="continuationage-container">
                     <label for="continuation">勤続年数:</label>
-                    <input type="text" id="continuation" th:field="*{continuation}"> 年<br><br>
+                    <input type="number" id="continuation" th:field="*{continuation}"> 年<br><br>
                 </div>
             </div>
-            <div class="main_form">
-                <div class="form-section_category">
-                    <h3>カテゴリー</h3>
-                    <div class="category_form">
-                        <div>
-                            <label for="category">大分類:</label>
-                            <select id="category" name="category" th:field="*{category}" required="required" onchange="updateSubCategories()">
-                                <option value="">選択してください</option>
-                                <option value="転倒・転落">転倒・転落</option>
-                                <option value="外傷">外傷</option>
-                                <option value="薬剤">薬剤</option>
-                                <option value="食事">食事</option>
-                                <option value="受付">受付</option>
-                                <option value="診察">診察</option>
-                                <option value="検査・処置">検査・処置</option>
-                                <option value="放射線">放射線</option>
-                                <option value="リハビリ">リハビリ</option>
-                                <option value="機器操作">機器操作</option>
-                                <option value="チューブ・カテーテル">チューブ・カテーテル</option>
-                                <option value="その他">その他</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="segment">小分類:</label>
-                            <select id="segment" name="segment" th:field="*{segment}" required="required" onchange="updateSubCategories()">
-                                <option value="">選択してください</option>
-                            </select>
-                        </div>
+        </div>
+        <div class="main_form">
+            <div class="form-section_category">
+                <h3>カテゴリー</h3>
+                <div class="category_form">
+                    <div>
+                        <label for="category">大分類:</label>
+                        <select id="category" name="category" th:field="*{category}" required="required" onchange="updateSubCategories()">
+                            <option value="">選択してください</option>
+                            <option value="転倒・転落">転倒・転落</option>
+                            <option value="外傷">外傷</option>
+                            <option value="薬剤">薬剤</option>
+                            <option value="食事">食事</option>
+                            <option value="受付">受付</option>
+                            <option value="診察">診察</option>
+                            <option value="検査・処置">検査・処置</option>
+                            <option value="放射線">放射線</option>
+                            <option value="リハビリ">リハビリ</option>
+                            <option value="機器操作">機器操作</option>
+                            <option value="チューブ・カテーテル">チューブ・カテーテル</option>
+                            <option value="輸液ルート">輸液ルート</option>
+                            <option value="手術">手術</option>
+                            <option value="その他">その他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="segment">小分類:</label>
+                        <select id="segment" name="segment" th:field="*{segment}" required="required" onchange="updateSubCategories()">
+                            <option value="">選択してください</option>
+                        </select>
                     </div>
                 </div>
-                <div class="form_situation">
-                    <h2 class="column-title">状況・対応</h2>
-                    <textarea id="situation" th:field="*{situation}"></textarea>
+            </div>
+            <div class="form_situation">
+                <h2 class="column-title">状況・対応</h2>
+                <textarea id="situation" th:field="*{situation}"></textarea>
+            </div>
+            <div class="form_cause">
+                <h2 class="column-title">原因</h2>
+                <textarea id="cause" th:field="*{cause}"></textarea>
+            </div>
+            <div class="form_suggestion">
+                <div class="form_suggestion_title">
+                    <h2 class="column-title">AIによる提案</h2>
+                    <button type="button" onclick="generateAISuggestion()">AI提案を生成</button>
                 </div>
-                <div class="form_cause">
-                    <h2 class="column-title">原因</h2>
-                    <textarea id="cause" th:field="*{cause}"></textarea>
-                </div>
-                <div class="form_suggestion">
-                    <div class="form_suggestion_title">
-                        <h2 class="column-title">AIによる提案</h2>
-                        <button type="button" onclick="generateAISuggestion()">AI提案を生成</button>
-                    </div>
-                    <textarea id="suggestion" th:field="*{suggestion}" readonly></textarea>
-                </div>
-                <div class="form_countermeasure">
-                    <h2 class="column-title">対策</h2>
-                    <textarea id="countermeasure" th:field="*{countermeasure}"></textarea>
-                </div>
-                <div class="form_submit">
-                    <button type="submit">作成</button>
-                </div>
+                <textarea id="suggestion" th:field="*{suggestion}" readonly></textarea>
+            </div>
+            <div class="form_countermeasure">
+                <h2 class="column-title">対策</h2>
+                <textarea id="countermeasure" th:field="*{countermeasure}"></textarea>
+            </div>
+            <div class="form_submit">
+                <button type="submit">作成</button>
             </div>
         </div>
     </div>
 </form>
 
 <script th:inline="javascript">
-    var subCategoryMap = /*[[${subCategoryMap}]]*/ {};
+var subCategoryMap = /*[[${subCategoryMap}]]*/ {};
 
-    document.getElementById('category').addEventListener('change', function () {
-        var mainCategory = this.value;
-        var subCategorySelect = document.getElementById('segment');
-        subCategorySelect.innerHTML = '';
+document.getElementById('category').addEventListener('change', function () {
+    var mainCategory = this.value;
+    var subCategorySelect = document.getElementById('segment');
+    subCategorySelect.innerHTML = '';
 
-        if (mainCategory && subCategoryMap[mainCategory]) {
-            subCategoryMap[mainCategory].forEach(function(subCategory) {
-                var option = document.createElement('option');
-                option.value = subCategory;
-                option.textContent = subCategory;
-                subCategorySelect.appendChild(option);
-            });
-        } else {
+    if (mainCategory && subCategoryMap[mainCategory]) {
+        subCategoryMap[mainCategory].forEach(function(subCategory) {
             var option = document.createElement('option');
-            option.value = '';
-            option.textContent = '選択してください';
+            option.value = subCategory;
+            option.textContent = subCategory;
             subCategorySelect.appendChild(option);
-        }
-    });
-
-    function generateAISuggestion() {
-        var causeValue = document.getElementById("cause").value;
-
-        fetch('/generateAISuggestion', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ cause: causeValue })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert("AIからの提案: " + data.suggestion);
-            document.getElementById("suggestion").value = data.suggestion;
-        })
-        .catch((error) => {
-            console.error('Error:', error);
         });
+    } else {
+        var option = document.createElement('option');
+        option.value = '';
+        option.textContent = '選択してください';
+        subCategorySelect.appendChild(option);
     }
+});
+
+function generateAISuggestion() {
+    var causeValue = document.getElementById("cause").value;
+
+    fetch('/generateAISuggestion', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cause: causeValue })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("AIからの提案: " + data.suggestion);
+        document.getElementById("suggestion").value = data.suggestion;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 </script>
 </body>
 </html>

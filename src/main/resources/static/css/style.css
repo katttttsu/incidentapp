@@ -140,7 +140,7 @@ header {
 }
 
 .age-container,
-.service-container {
+.continuation-container {
     margin-right: 100px;
 }
 
@@ -426,7 +426,7 @@ button[type="button"]:hover {
 
 .top_page_upper {
     flex: 1;
-    margin-bottom: 50px;
+    margin: 50px 0;
 }
 
 .top_page_upper img {

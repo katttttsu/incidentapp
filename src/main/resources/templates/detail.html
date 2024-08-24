@@ -97,8 +97,10 @@
                     <option value="事務員">事務員</option>
                     <option value="その他">その他</option>
                 </select><br><br>
-                <label for="continuation">勤続年数:</label>
-                <input type="text" id="continuation" th:field="*{continuation}"> 年<br><br>
+                <div class="continuationage-container">
+                    <label for="continuation">勤続年数:</label>
+                    <input type="number" id="continuation" th:field="*{continuation}"> 年<br><br>
+                </div>
             </div>
         </div>
         <div class="main_form">
@@ -120,6 +122,8 @@
                             <option value="リハビリ">リハビリ</option>
                             <option value="機器操作">機器操作</option>
                             <option value="チューブ・カテーテル">チューブ・カテーテル</option>
+                            <option value="輸液ルート">輸液ルート</option>
+                            <option value="手術">手術</option>
                             <option value="その他">その他</option>
                         </select>
                     </div>
