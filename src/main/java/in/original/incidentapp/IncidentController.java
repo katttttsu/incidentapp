@@ -30,13 +30,13 @@ public class IncidentController {
         Map<String, Map<Integer, Integer>> categoryData = incidentService.countIncidentsByCategory(year);
         Map<String, Map<Integer, Integer>> departmentData = incidentService.countIncidentsByDepartment(year);
         Map<String, Map<Integer, Integer>> jobData = incidentService.countIncidentsByJob(year);
-        System.out.println("Final levelData: " + levelData);
+        int annualTotal = incidentService.getAnnualTotal(year);
 
         model.addAttribute("levelData", levelData);
         model.addAttribute("categoryData", categoryData);
         model.addAttribute("departmentData", departmentData);
         model.addAttribute("jobData", jobData);
-
+        model.addAttribute("annualTotal", annualTotal);
 
         return "annualSummary";
     }
@@ -49,11 +49,13 @@ public class IncidentController {
         if (year == null || year == 0) {
             year = LocalDate.now().getYear();
         }
+        int annualTotal = incidentService.getAnnualTotal(year);
 
         model.addAttribute("levelData", incidentService.countIncidentsByLevel(year));
         model.addAttribute("categoryData", incidentService.countIncidentsByCategory(year));
         model.addAttribute("departmentData", incidentService.countIncidentsByDepartment(year));
         model.addAttribute("jobData", incidentService.countIncidentsByJob(year));
+        model.addAttribute("annualTotal", annualTotal);
 
         return "annualSummary";
     }

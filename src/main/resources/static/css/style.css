@@ -515,7 +515,7 @@ tr:nth-child(even) {
 .form-row_summary {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 70px;
 }
 
 .form-group_summary {

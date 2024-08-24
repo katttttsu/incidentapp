@@ -12,6 +12,11 @@ public class IncidentService {
     @Autowired
     private IncidentRepository incidentRepository;
 
+    public int getAnnualTotal(int year) {
+        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+        return incidents.size();
+    }
+
     public List<IncidentData> findAll() {
         return incidentRepository.findAll();
     }
@@ -61,7 +66,6 @@ public class IncidentService {
         List<IncidentEntity> incidents = incidentRepository.findByYear(year);
         Map<String, Map<Integer, Integer>> levelData = new HashMap<>();
 
-        // 全てのレベルに対して、全ての月を初期化
         for (String level : levels) {
             Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
@@ -70,7 +74,6 @@ public class IncidentService {
             levelData.put(level, monthData);
         }
 
-        // インシデントのデータを集計
         for (IncidentEntity incident : incidents) {
             String level = incident.getLevel();
             int month = incident.getDate().getMonthValue();
