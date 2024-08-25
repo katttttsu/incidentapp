@@ -21,11 +21,11 @@
             <input type="number" id="year" name="year" placeholder="YYYY" value="[[${#dates.yearOfToday()}]]" />
         </div>
         <div class="button-row_summary">
-            <button type="submit" class="search-button">検索</button>
+            <button type="submit" class="search-btn">検索</button>
         </div>
     </div>
 </form>
-<h2>年間のインシデント合計：<span th:text="${(annualTotal)/4}"></span>件</h2><br><br>
+<h1>年間のインシデント合計：<span th:text="${(annualTotal)/4}"></span>件</h1><br><br>
 <h2>レベル別インシデント件数</h2><br>
 <table class="summary-table">
     <thead>

@@ -280,7 +280,7 @@ button[type="button"]:hover {
 
 .search_form button {
   color: black;
-  font-size: 12px;
+  font-size: 16px;
   background-color: white;
   width: 100px;
   align-self: center;
@@ -488,24 +488,26 @@ body {
     padding: 8px;
     text-align: center;
     width: auto;
+    font-size: 20px;
 }
 
-.summary-table th:nth-child(2),
+.summary-table th:nth-child(1),
+.summary-table th:nth-child(1),
 .summary-table td:nth-child(2),
 .summary-table th:nth-child(3),
-.summary-table td:nth-child(3),
-.summary-table th:nth-child(4),
 .summary-table td:nth-child(4),
 .summary-table th:nth-child(5),
-.summary-table td:nth-child(5),
-.summary-table th:nth-child(6),
 .summary-table td:nth-child(6),
 .summary-table th:nth-child(7),
-.summary-table td:nth-child(7),
-.summary-table th:nth-child(8),
-.summary-table td:nth-child(8)
+.summary-table td:nth-child(8),
+.summary-table th:nth-child(9),
+.summary-table td:nth-child(10),
+.summary-table th:nth-child(11),
+.summary-table td:nth-child(12),
+.summary-table th:nth-child(13),
+.summary-table th:nth-child(14),
 {
-    width: calc(80% / 14);
+    width: calc(80% / 15);
 }
 
 tr:nth-child(even) {
@@ -531,17 +533,17 @@ input[type="number"] {
   justify-content: center;
 }
 
-.search-button {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 14px;
+.search-btn {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+    padding: 0px 30px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
 }
 
-.search-button:hover {
-    background-color: #f0f0f0;
+.search-btn:hover {
+    background-color: #45a049 !important;
 }
 /********************************************
 error画面

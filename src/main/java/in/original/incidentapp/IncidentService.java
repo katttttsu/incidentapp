@@ -64,10 +64,11 @@ public class IncidentService {
 
     public Map<String, Map<Integer, Integer>> countIncidentsByLevel(int year) {
         List<IncidentEntity> incidents = incidentRepository.findByYear(year);
-        Map<String, Map<Integer, Integer>> levelData = new HashMap<>();
+        Map<String, Map<Integer, Integer>> levelData = new LinkedHashMap<>();
 
+        List<String> levels = Arrays.asList("0", "1", "2", "3a", "3b", "4", "5");
         for (String level : levels) {
-            Map<Integer, Integer> monthData = new HashMap<>();
+            Map<Integer, Integer> monthData = new LinkedHashMap<>();
             for (int month = 1; month <= 12; month++) {
                 monthData.put(month, 0);
             }
@@ -85,10 +86,12 @@ public class IncidentService {
         return levelData;
     }
 
+
     public Map<String, Map<Integer, Integer>> countIncidentsByCategory(int year) {
         List<IncidentEntity> incidents = incidentRepository.findByYear(year);
-        Map<String, Map<Integer, Integer>> categoryData = new HashMap<>();
+        Map<String, Map<Integer, Integer>> categoryData = new LinkedHashMap<>();
 
+        List<String> categories= Arrays.asList("転倒・転落", "外傷", "薬剤", "食事", "受付", "診察", "検査・処置", "放射線", "リハビリ", "機器操作", "チューブ・カテーテル", "輸液ルート", "手術", "その他");
         for (String category : categories) {
             Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
@@ -111,8 +114,9 @@ public class IncidentService {
 
     public Map<String, Map<Integer, Integer>> countIncidentsByDepartment(int year) {
         List<IncidentEntity> incidents = incidentRepository.findByYear(year);
-        Map<String, Map<Integer, Integer>> departmentData = new HashMap<>();
+        Map<String, Map<Integer, Integer>> departmentData = new LinkedHashMap<>();
 
+        List<String> departments = Arrays.asList("整形外科", "形成外科", "外科", "皮膚科", "循環器内科", "呼吸器内科", "呼吸器外科", "消火器内科", "脳神経外科", "泌尿器科", "眼科", "麻酔科", "放射線科", "リハビリテーション科", "薬剤部", "医療技術部", "看護部", "その他");
         for (String department : departments) {
             Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
@@ -134,8 +138,9 @@ public class IncidentService {
 
     public Map<String, Map<Integer, Integer>> countIncidentsByJob(int year) {
         List<IncidentEntity> incidents = incidentRepository.findByYear(year);
-        Map<String, Map<Integer, Integer>> jobData = new HashMap<>();
+        Map<String, Map<Integer, Integer>> jobData = new LinkedHashMap<>();
 
+        List<String> jobs = Arrays.asList("医師", "看護師", "薬剤師", "理学療法士", "作業療法士", "視能訓練士", "臨床検査技師", "臨床工学技士", "診療放射線技師", "看護補助者", "事務員", "その他");
         for (String job : jobs) {
             Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {

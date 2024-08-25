@@ -63,7 +63,6 @@ public class IncidentController {
         if (year == null || year == 0) {
             year = LocalDate.now().getYear();
         }
-        
         Map<String, Integer> levelTotals = incidentService.getLevelTotals(year);
         Map<String, Integer> categoryTotals = incidentService.getCategoryTotals(year);
         Map<String, Integer> departmentTotals = incidentService.getDepartmentTotals(year);
