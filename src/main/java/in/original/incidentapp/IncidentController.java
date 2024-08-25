@@ -26,17 +26,31 @@ public class IncidentController {
     @GetMapping("/annualSummary")
     public String showAnnualSummary(Model model) {
         int year = LocalDate.now().getYear();
+
         Map<String, Map<Integer, Integer>> levelData = incidentService.countIncidentsByLevel(year);
         Map<String, Map<Integer, Integer>> categoryData = incidentService.countIncidentsByCategory(year);
         Map<String, Map<Integer, Integer>> departmentData = incidentService.countIncidentsByDepartment(year);
         Map<String, Map<Integer, Integer>> jobData = incidentService.countIncidentsByJob(year);
-        int annualTotal = incidentService.getAnnualTotal(year);
+
+        Map<String, Integer> levelTotals = incidentService.getLevelTotals(year);
+        Map<String, Integer> categoryTotals = incidentService.getCategoryTotals(year);
+        Map<String, Integer> departmentTotals = incidentService.getDepartmentTotals(year);
+        Map<String, Integer> jobTotals = incidentService.getJobTotals(year);
 
         model.addAttribute("levelData", levelData);
+        model.addAttribute("levelTotals", levelTotals);
         model.addAttribute("categoryData", categoryData);
+        model.addAttribute("categoryTotals", categoryTotals);
         model.addAttribute("departmentData", departmentData);
+        model.addAttribute("departmentTotals", departmentTotals);
         model.addAttribute("jobData", jobData);
-        model.addAttribute("annualTotal", annualTotal);
+        model.addAttribute("jobTotals", jobTotals);
+
+        int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                categoryTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                departmentTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                jobTotals.values().stream().mapToInt(Integer::intValue).sum();
+        model.addAttribute("annualTotal", totalAnnualSum);
 
         return "annualSummary";
     }
@@ -49,13 +63,26 @@ public class IncidentController {
         if (year == null || year == 0) {
             year = LocalDate.now().getYear();
         }
-        int annualTotal = incidentService.getAnnualTotal(year);
+        
+        Map<String, Integer> levelTotals = incidentService.getLevelTotals(year);
+        Map<String, Integer> categoryTotals = incidentService.getCategoryTotals(year);
+        Map<String, Integer> departmentTotals = incidentService.getDepartmentTotals(year);
+        Map<String, Integer> jobTotals = incidentService.getJobTotals(year);
 
         model.addAttribute("levelData", incidentService.countIncidentsByLevel(year));
+        model.addAttribute("levelTotals", levelTotals);
         model.addAttribute("categoryData", incidentService.countIncidentsByCategory(year));
+        model.addAttribute("categoryTotals", categoryTotals);
         model.addAttribute("departmentData", incidentService.countIncidentsByDepartment(year));
+        model.addAttribute("departmentTotals", departmentTotals);
         model.addAttribute("jobData", incidentService.countIncidentsByJob(year));
-        model.addAttribute("annualTotal", annualTotal);
+        model.addAttribute("jobTotals", jobTotals);
+
+        int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                categoryTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                departmentTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                jobTotals.values().stream().mapToInt(Integer::intValue).sum();
+        model.addAttribute("annualTotal", totalAnnualSum);
 
         return "annualSummary";
     }
@@ -354,4 +381,5 @@ public class IncidentController {
         }
         return counts;
     }
+
 }

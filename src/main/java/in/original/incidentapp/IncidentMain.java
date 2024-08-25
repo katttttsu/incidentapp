@@ -25,7 +25,6 @@ public class IncidentMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         List<IncidentData> dataList = incidentRepository.findAll();
-        System.out.println("データリスト: " + dataList);
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (IncidentData data : dataList) {

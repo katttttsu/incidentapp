@@ -69,7 +69,7 @@ public class IncidentService {
         for (String level : levels) {
             Map<Integer, Integer> monthData = new HashMap<>();
             for (int month = 1; month <= 12; month++) {
-                monthData.put(month, 0);  // 各月を0で初期化
+                monthData.put(month, 0);
             }
             levelData.put(level, monthData);
         }
@@ -82,7 +82,6 @@ public class IncidentService {
             }
         }
 
-        System.out.println("Final levelData: " + levelData); // ここでデバッグログを追加
         return levelData;
     }
 
@@ -154,5 +153,73 @@ public class IncidentService {
         }
 
         return jobData;
+    }
+
+    public Map<String, Integer> getLevelTotals(int year) {
+        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+        Map<String, Integer> levelTotals = new HashMap<>();
+
+        List<String> levels = Arrays.asList("0", "1", "2", "3a", "3b", "4", "5");
+        for (String level : levels) {
+            levelTotals.put(level, 0);
+        }
+
+        for (IncidentEntity incident : incidents) {
+            String level = incident.getLevel();
+            levelTotals.put(level, levelTotals.getOrDefault(level, 0) + 1);
+        }
+
+        return levelTotals;
+    }
+
+    public Map<String, Integer> getCategoryTotals(int year) {
+        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+        Map<String, Integer> categoryTotals = new HashMap<>();
+
+        List<String> categories = Arrays.asList("転倒・転落", "外傷", "薬剤", "食事", "受付", "診察", "検査・処置", "放射線", "リハビリ", "機器操作", "チューブ・カテーテル", "輸液ルート", "手術", "その他");
+        for (String category : categories) {
+            categoryTotals.put(category, 0);
+        }
+
+        for (IncidentEntity incident : incidents) {
+            String category = incident.getCategory();
+            categoryTotals.put(category, categoryTotals.getOrDefault(category, 0) + 1);
+        }
+
+        return categoryTotals;
+    }
+
+    public Map<String, Integer> getDepartmentTotals(int year) {
+        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+        Map<String, Integer> departmentTotals = new HashMap<>();
+
+        List<String> departments = Arrays.asList("整形外科", "形成外科", "外科", "皮膚科", "循環器内科", "呼吸器内科", "呼吸器外科", "消火器内科", "脳神経外科", "泌尿器科", "眼科", "麻酔科", "放射線科", "リハビリテーション科", "薬剤部", "医療技術部", "看護部", "その他");
+        for (String department : departments) {
+            departmentTotals.put(department, 0);
+        }
+
+        for (IncidentEntity incident : incidents) {
+            String department = incident.getDepartment();
+            departmentTotals.put(department, departmentTotals.getOrDefault(department, 0) + 1);
+        }
+
+        return departmentTotals;
+    }
+
+    public Map<String, Integer> getJobTotals(int year) {
+        List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+        Map<String, Integer> jobTotals = new HashMap<>();
+
+        List<String> jobs = Arrays.asList("医師", "看護師", "薬剤師", "理学療法士", "作業療法士", "視能訓練士", "臨床検査技師", "臨床工学技士", "診療放射線技師", "看護補助者", "事務員", "その他");
+        for (String job : jobs) {
+            jobTotals.put(job, 0);
+        }
+
+        for (IncidentEntity incident : incidents) {
+            String job = incident.getJob();
+            jobTotals.put(job, jobTotals.getOrDefault(job, 0) + 1);
+        }
+
+        return jobTotals;
     }
 }

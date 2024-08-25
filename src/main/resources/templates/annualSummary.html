@@ -25,8 +25,8 @@
         </div>
     </div>
 </form>
-<h2>年間のインシデント合計：<span th:text="${annualTotal}"></span>件</h2><br><br>
-<h2>レベル別インシデント件数</h2>
+<h2>年間のインシデント合計：<span th:text="${(annualTotal)/4}"></span>件</h2><br><br>
+<h2>レベル別インシデント件数</h2><br>
 <table class="summary-table">
     <thead>
     <tr>
@@ -43,28 +43,30 @@
         <th>10月</th>
         <th>11月</th>
         <th>12月</th>
+        <th>合計</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="entry : ${levelData}">
         <td th:text="${entry.key}"></td>
-        <td th:text="${entry.value[1]}"></td>
-        <td th:text="${entry.value[2]}"></td>
-        <td th:text="${entry.value[3]}"></td>
-        <td th:text="${entry.value[4]}"></td>
-        <td th:text="${entry.value[5]}"></td>
-        <td th:text="${entry.value[6]}"></td>
-        <td th:text="${entry.value[7]}"></td>
-        <td th:text="${entry.value[8]}"></td>
-        <td th:text="${entry.value[9]}"></td>
-        <td th:text="${entry.value[10]}"></td>
-        <td th:text="${entry.value[11]}"></td>
-        <td th:text="${entry.value[12]}"></td>
+        <td th:text="${entry.value[1]} ?: 0"></td>
+        <td th:text="${entry.value[2]} ?: 0"></td>
+        <td th:text="${entry.value[3]} ?: 0"></td>
+        <td th:text="${entry.value[4]} ?: 0"></td>
+        <td th:text="${entry.value[5]} ?: 0"></td>
+        <td th:text="${entry.value[6]} ?: 0"></td>
+        <td th:text="${entry.value[7]} ?: 0"></td>
+        <td th:text="${entry.value[8]} ?: 0"></td>
+        <td th:text="${entry.value[9]} ?: 0"></td>
+        <td th:text="${entry.value[10]} ?: 0"></td>
+        <td th:text="${entry.value[11]} ?: 0"></td>
+        <td th:text="${entry.value[12]} ?: 0"></td>
+        <td th:text="${levelTotals != null ? levelTotals.get(entry.key) : 0}"></td>
     </tr>
     </tbody>
 </table>
 
-<h2>カテゴリー別インシデント件数</h2>
+<h2>カテゴリー別インシデント件数</h2><br>
 <table class="summary-table">
     <thead>
     <tr>
@@ -81,6 +83,7 @@
         <th>10月</th>
         <th>11月</th>
         <th>12月</th>
+        <th>合計</th>
     </tr>
     </thead>
     <tbody>
@@ -98,11 +101,12 @@
         <td th:text="${entry.value[10]}"></td>
         <td th:text="${entry.value[11]}"></td>
         <td th:text="${entry.value[12]}"></td>
+        <td th:text="${categoryTotals != null ? categoryTotals[entry.key] : 0}"></td>
     </tr>
     </tbody>
 </table>
 
-<h2>所属科別インシデント件数</h2>
+<h2>所属科別インシデント件数</h2><br>
 <table class="summary-table">
     <thead>
     <tr>
@@ -119,6 +123,7 @@
         <th>10月</th>
         <th>11月</th>
         <th>12月</th>
+        <th>合計</th>
     </tr>
     </thead>
     <tbody>
@@ -136,11 +141,12 @@
         <td th:text="${entry.value[10]}"></td>
         <td th:text="${entry.value[11]}"></td>
         <td th:text="${entry.value[12]}"></td>
+        <td th:text="${departmentTotals != null ? departmentTotals[entry.key] : 0}"></td>
     </tr>
     </tbody>
 </table>
 
-<h2>職種別インシデント件数</h2>
+<h2>職種別インシデント件数</h2><br>
 <table class="summary-table">
     <thead>
     <tr>
@@ -157,6 +163,7 @@
         <th>10月</th>
         <th>11月</th>
         <th>12月</th>
+        <th>合計</th>
     </tr>
     </thead>
     <tbody>
@@ -174,6 +181,7 @@
         <td th:text="${entry.value[10]}"></td>
         <td th:text="${entry.value[11]}"></td>
         <td th:text="${entry.value[12]}"></td>
+        <td th:text="${jobTotals != null ? jobTotals[entry.key] : 0}"></td>
     </tr>
     </tbody>
 </table>
