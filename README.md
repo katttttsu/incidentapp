@@ -82,5 +82,5 @@ AWS Elastic Beanstalkによるデプロイ。
 - (none, since this is a standalone table)
 
 ## 画面遷移図
-[![Image from Gyazo](https://i.gyazo.com/ab9f06fbff163c47cbc5c99cf90b9b2c.png)](https://gyazo.com/ab9f06fbff163c47cbc5c99cf90b9b2c)
+[![Image from Gyazo](https://i.gyazo.com/869a7872c8cb5b36f9990871aa0c451d.png)](https://gyazo.com/869a7872c8cb5b36f9990871aa0c451d)
 
