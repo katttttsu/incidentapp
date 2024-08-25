@@ -30,14 +30,14 @@ public class IncidentRepositoryTest {
         incident.setDate(LocalDate.of(2024, 8, 1));
         incident.setTime(LocalTime.of(12, 0));
         incident.setPlace("500病室");
-        incident.setPatientId((long) 1);
-        incident.setPatientName("テスト");
-        incident.setPatientAge(65);
+        incident.setNumber((long) 1);
+        incident.setName("テスト");
+        incident.setAge(65);
         incident.setDepartment("5階病棟");
         incident.setJob("看護師");
-        incident.setContinuousService("5");
-        incident.setLargeCategory("転倒・転落");
-        incident.setSmallCategory("転倒");
+        incident.setContinuation("5");
+        incident.setCategory("転倒・転落");
+        incident.setSegment("転倒");
         incident.setSituation("患者が滑って転んだ");
         incident.setCause("靴下で移動しようとしていた");
         incident.setSuggestion("靴をしっかり履く");
@@ -45,15 +45,15 @@ public class IncidentRepositoryTest {
 
         incidentRepository.insert(
                 incident.getLevel(), incident.getDate(), incident.getTime(), incident.getPlace(),
-                incident.getPatientId(), incident.getPatientName(), incident.getPatientAge(),
-                incident.getDepartment(), incident.getJob(), incident.getContinuousService(),
-                incident.getLargeCategory(), incident.getSmallCategory(), incident.getSituation(),
+                incident.getNumber(), incident.getName(), incident.getAge(),
+                incident.getDepartment(), incident.getJob(), incident.getContinuation(),
+                incident.getCategory(), incident.getSegment(), incident.getSituation(),
                 incident.getCause(), incident.getSuggestion(), incident.getCountermeasure()
         );
 
         Optional<IncidentEntity> foundIncident = incidentRepository.findById((long) 1);
         assertTrue(foundIncident.isPresent());
-        assertEquals("Test", foundIncident.get().getPatientName());
+        assertEquals("Test", foundIncident.get().getName());
     }
 
     @Test

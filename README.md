@@ -58,24 +58,24 @@ AWS Elastic Beanstalkによるデプロイ。
 
 ## IncidentApp データベース設計
 ### incidents テーブル
-| Colum              | Type    | Options                     |
-|--------------------|---------| --------------------------- |
-| level              | int     | null: false                 |
-| date               | date    | null: false                 |
-| time               | time    | null: false                 |
-| place              | Varchar | null: false                 |
-| patient_id         | Varchar | null: false                 |
-| patient_name       | Varchar | null: false                 |
-| patient_age        | int     | null: false                 |
-| department         | Varchar | null: false                 |
-| job                | Varchar | null: false                 |
-| continuous_service | int     | null: false                 |
-| large_category     | Varchar | null: false                 |
-| samll_category     | Varchar | null: false                 |
-| situation          | text    | null: false                 |
-| cause              | text    | null: false                 |
-| suggestion         | text    |                             |
-| countermeasure     | text    |                             |
+| Colum          | Type    | Options                     |
+|----------------|---------| --------------------------- |
+| level          | int     | null: false                 |
+| date           | date    | null: false                 |
+| time           | time    | null: false                 |
+| place          | Varchar | null: false                 |
+| number         | Varchar | null: false                 |
+| name           | Varchar | null: false                 |
+| age            | int     | null: false                 |
+| department     | Varchar | null: false                 |
+| job            | Varchar | null: false                 |
+| continuation   | int     | null: false                 |
+| category       | Varchar | null: false                 |
+| segment        | Varchar | null: false                 |
+| situation      | text    | null: false                 |
+| cause          | text    | null: false                 |
+| suggestion     | text    |                             |
+| countermeasure | text    |                             |
 
 ### Association
 - (none, since this is a standalone table)

@@ -16,41 +16,41 @@ public interface IncidentMapper {
     @Select("SELECT * FROM incidents WHERE id = #{id}")
     IncidentEntity findById(Long id);
 
-    @Insert("INSERT INTO incidents (level, date, time, place, patientId, patientName, patientAge, department, job, continuousService, largeCategory, smallCategory, situation, cause, suggestion, countermeasure) VALUES (#{level}, #{date}, #{time}, #{place}, #{patientId}, #{patientName}, #{patientAge}, #{department}, #{job}, #{continuousService}, #{largeCategory}, #{smallCategory}, #{situation}, #{cause}, #{suggestion}, #{countermeasure})")
+    @Insert("INSERT INTO incidents (level, date, time, place, number, name, age, department, job, continuation, category, segment, situation, cause, suggestion, countermeasure) VALUES (#{level}, #{date}, #{time}, #{place}, #{number}, #{name}, #{age}, #{department}, #{job}, #{continuation}, #{category}, #{segment}, #{situation}, #{cause}, #{suggestion}, #{countermeasure})")
     void insert(
             @Param("level") String level,
             @Param("date") LocalDate date,
             @Param("time") LocalTime time,
             @Param("place") String place,
-            @Param("patientId") long patientId,
-            @Param("patientName") String patientName,
-            @Param("patientAge") int patientAge,
+            @Param("number") long number,
+            @Param("name") String name,
+            @Param("age") int age,
             @Param("department") String department,
             @Param("job") String job,
-            @Param("continuousService") String continuousService,
-            @Param("largeCategory") String largeCategory,
-            @Param("smallCategory") String smallCategory,
+            @Param("continuation") String continuation,
+            @Param("category") String category,
+            @Param("segment") String segment,
             @Param("situation") String situation,
             @Param("cause") String cause,
             @Param("suggestion") String suggestion,
             @Param("countermeasure") String countermeasure
     );
 
-    @Update("UPDATE incidents SET level = #{level}, date = #{date}, time = #{time}, place = #{place}, patientId = #{patientId}, patientName = #{patientName}, patientAge = #{patientAge}, department = #{department}, job = #{job}, continuousService = #{continuousService}, largeCategory = #{largeCategory}, smallCategory = #{smallCategory}, situation = #{situation}, cause = #{cause}, suggestion = #{suggestion}, countermeasure = #{countermeasure} WHERE id = #{id}")
+    @Update("UPDATE incidents SET level = #{level}, date = #{date}, time = #{time}, place = #{place}, number = #{number}, name = #{name}, age = #{age}, department = #{department}, job = #{job}, continuation = #{continuation}, category = #{category}, segment= #{segment}, situation = #{situation}, cause = #{cause}, suggestion = #{suggestion}, countermeasure = #{countermeasure} WHERE id = #{id}")
     void update(
             @Param("id") long id,
             @Param("level") String level,
             @Param("date") LocalDate date,
             @Param("time") LocalTime time,
             @Param("place") String place,
-            @Param("patientId") long patientId,
-            @Param("patientName") String patientName,
-            @Param("patientAge") int patientAge,
+            @Param("number") long number,
+            @Param("name") String name,
+            @Param("age") int age,
             @Param("department") String department,
             @Param("job") String job,
-            @Param("continuousService") String continuousService,
-            @Param("largeCategory") String largeCategory,
-            @Param("smallCategory") String smallCategory,
+            @Param("continuation") String continuation,
+            @Param("category") String category,
+            @Param("segment") String segment,
             @Param("situation") String situation,
             @Param("cause") String cause,
             @Param("suggestion") String suggestion,

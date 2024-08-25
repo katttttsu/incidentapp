@@ -140,7 +140,7 @@ header {
 }
 
 .age-container,
-.service-container {
+.continuation-container {
     margin-right: 100px;
 }
 
@@ -174,7 +174,7 @@ textarea {
 }
 
 textarea {
-    height: 180px;
+    height: 220px;
     resize: vertical;
 }
 
@@ -280,7 +280,7 @@ button[type="button"]:hover {
 
 .search_form button {
   color: black;
-  font-size: 12px;
+  font-size: 16px;
   background-color: white;
   width: 100px;
   align-self: center;
@@ -416,7 +416,135 @@ button[type="button"]:hover {
    background-color: white;
 }
 
+/********************************************
+トップページ画面
+*********************************************/
+.top_page {
+    padding: 20px;
+    text-align: center;
+}
 
+.top_page_upper {
+    flex: 1;
+    margin: 50px 0;
+}
+
+.top_page_upper img {
+    max-width: 150%;
+    height: auto;
+    border: 1px solid #ccc;
+}
+
+.top_page_menu {
+    flex: 1;
+    margin: 0 auto;
+    width: 220px;
+}
+
+.top_page_menu h1 {
+    font-size: 32px;
+    margin: 30px;
+}
+
+.top_page_menu ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left
+}
+
+.top_page_menu ul li {
+    margin-bottom: 20px;
+    text-align: left
+}
+
+.top_page_menu ul li a {
+    text-decoration: none;
+    font-size: 20px;
+    color: blue;
+    transition: color 0.3s ease;
+}
+
+.top_page_menu ul li a:hover {
+    color: red;
+}
+
+/********************************************
+年次集計画面
+*********************************************/
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.summary-table {
+    border-collapse: collapse;
+    margin-bottom: 50px;
+    margin-left: 120px;
+    width: 80%;
+}
+
+.summary-table th, .summary-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    width: auto;
+    font-size: 20px;
+}
+
+.summary-table th:nth-child(1),
+.summary-table th:nth-child(1),
+.summary-table td:nth-child(2),
+.summary-table th:nth-child(3),
+.summary-table td:nth-child(4),
+.summary-table th:nth-child(5),
+.summary-table td:nth-child(6),
+.summary-table th:nth-child(7),
+.summary-table td:nth-child(8),
+.summary-table th:nth-child(9),
+.summary-table td:nth-child(10),
+.summary-table th:nth-child(11),
+.summary-table td:nth-child(12),
+.summary-table th:nth-child(13),
+.summary-table th:nth-child(14),
+{
+    width: calc(80% / 15);
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.form-row_summary {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 70px;
+}
+
+.form-group_summary {
+    margin-right: 10px;
+}
+
+input[type="number"] {
+    width: 220px;
+}
+
+.button-row_summary {
+  display: flex;
+  justify-content: center;
+}
+
+.search-btn {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+    padding: 0px 30px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+}
+
+.search-btn:hover {
+    background-color: #45a049 !important;
+}
 /********************************************
 error画面
 *********************************************/

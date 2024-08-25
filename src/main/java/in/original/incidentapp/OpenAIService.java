@@ -18,6 +18,5 @@ public class OpenAIService {
         if (apiKey == null || apiKey.isEmpty()) {
             throw new IllegalArgumentException("APIキーが設定されていません。");
         }
-        System.out.println("APIキー: " + apiKey);
     }
 }

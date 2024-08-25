@@ -20,6 +20,72 @@ import java.nio.charset.StandardCharsets;
 @Controller
 public class IncidentController {
 
+    @Autowired
+    private IncidentService incidentService;
+
+    @GetMapping("/annualSummary")
+    public String showAnnualSummary(Model model) {
+        int year = LocalDate.now().getYear();
+
+        Map<String, Map<Integer, Integer>> levelData = incidentService.countIncidentsByLevel(year);
+        Map<String, Map<Integer, Integer>> categoryData = incidentService.countIncidentsByCategory(year);
+        Map<String, Map<Integer, Integer>> departmentData = incidentService.countIncidentsByDepartment(year);
+        Map<String, Map<Integer, Integer>> jobData = incidentService.countIncidentsByJob(year);
+
+        Map<String, Integer> levelTotals = incidentService.getLevelTotals(year);
+        Map<String, Integer> categoryTotals = incidentService.getCategoryTotals(year);
+        Map<String, Integer> departmentTotals = incidentService.getDepartmentTotals(year);
+        Map<String, Integer> jobTotals = incidentService.getJobTotals(year);
+
+        model.addAttribute("levelData", levelData);
+        model.addAttribute("levelTotals", levelTotals);
+        model.addAttribute("categoryData", categoryData);
+        model.addAttribute("categoryTotals", categoryTotals);
+        model.addAttribute("departmentData", departmentData);
+        model.addAttribute("departmentTotals", departmentTotals);
+        model.addAttribute("jobData", jobData);
+        model.addAttribute("jobTotals", jobTotals);
+
+        int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                categoryTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                departmentTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                jobTotals.values().stream().mapToInt(Integer::intValue).sum();
+        model.addAttribute("annualTotal", totalAnnualSum);
+
+        return "annualSummary";
+    }
+
+    @GetMapping("/SearchAnnualSummaries")
+    public String searchAnnualSummary(
+            @RequestParam(value = "year", required = false) Integer year,
+            Model model) {
+
+        if (year == null || year == 0) {
+            year = LocalDate.now().getYear();
+        }
+        Map<String, Integer> levelTotals = incidentService.getLevelTotals(year);
+        Map<String, Integer> categoryTotals = incidentService.getCategoryTotals(year);
+        Map<String, Integer> departmentTotals = incidentService.getDepartmentTotals(year);
+        Map<String, Integer> jobTotals = incidentService.getJobTotals(year);
+
+        model.addAttribute("levelData", incidentService.countIncidentsByLevel(year));
+        model.addAttribute("levelTotals", levelTotals);
+        model.addAttribute("categoryData", incidentService.countIncidentsByCategory(year));
+        model.addAttribute("categoryTotals", categoryTotals);
+        model.addAttribute("departmentData", incidentService.countIncidentsByDepartment(year));
+        model.addAttribute("departmentTotals", departmentTotals);
+        model.addAttribute("jobData", incidentService.countIncidentsByJob(year));
+        model.addAttribute("jobTotals", jobTotals);
+
+        int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                categoryTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                departmentTotals.values().stream().mapToInt(Integer::intValue).sum() +
+                jobTotals.values().stream().mapToInt(Integer::intValue).sum();
+        model.addAttribute("annualTotal", totalAnnualSum);
+
+        return "annualSummary";
+    }
+
     @Value("${admin.password}")
     private String adminPassword;
 
@@ -28,13 +94,17 @@ public class IncidentController {
 
     private final IncidentRepository incidentRepository;
     private final IncidentMapper incidentMapper;
-    private final IncidentService incidentService;
 
     @Autowired
     public IncidentController(IncidentRepository incidentRepository, IncidentMapper incidentMapper, IncidentService incidentService) {
         this.incidentRepository = incidentRepository;
         this.incidentMapper = incidentMapper;
         this.incidentService = incidentService;
+    }
+
+    @GetMapping("/")
+    public String showTopPage() {
+        return "topPage";
     }
 
     @GetMapping("/incidentForm")
@@ -64,19 +134,41 @@ public class IncidentController {
 
     @PostMapping("/incidents")
     public String createIncident(@ModelAttribute IncidentForm incidentForm) {
-        incidentMapper.insert(
-                incidentForm.getLevel(),
-                incidentForm.getDate(), incidentForm.getTime(),
-                incidentForm.getPlace(),
-                incidentForm.getPatientId(), incidentForm.getPatientName(),
-                incidentForm.getPatientAge(),
-                incidentForm.getDepartment(), incidentForm.getJob(),
-                incidentForm.getContinuousService(),
-                incidentForm.getLargeCategory(), incidentForm.getSmallCategory(),
-                incidentForm.getSituation(), incidentForm.getCause(),
-                incidentForm.getSuggestion(), incidentForm.getCountermeasure()
-        );
-        return "redirect:/";
+        if (incidentForm.getId() == null) {
+            incidentMapper.insert(
+                    incidentForm.getLevel(),
+                    incidentForm.getDate(), incidentForm.getTime(),
+                    incidentForm.getPlace(), incidentForm.getNumber(),
+                    incidentForm.getName(),
+                    incidentForm.getAge(),
+                    incidentForm.getDepartment(), incidentForm.getJob(),
+                    incidentForm.getContinuation(),
+                    incidentForm.getCategory(), incidentForm.getSegment(),
+                    incidentForm.getSituation(), incidentForm.getCause(),
+                    incidentForm.getSuggestion(), incidentForm.getCountermeasure()
+            );
+        } else {
+            incidentMapper.update(
+                    incidentForm.getId(),
+                    incidentForm.getLevel(),
+                    incidentForm.getDate(),
+                    incidentForm.getTime(),
+                    incidentForm.getPlace(),
+                    incidentForm.getNumber(),
+                    incidentForm.getName(),
+                    incidentForm.getAge(),
+                    incidentForm.getDepartment(),
+                    incidentForm.getJob(),
+                    incidentForm.getContinuation(),
+                    incidentForm.getCategory(),
+                    incidentForm.getSegment(),
+                    incidentForm.getSituation(),
+                    incidentForm.getCause(),
+                    incidentForm.getSuggestion(),
+                    incidentForm.getCountermeasure()
+            );
+        }
+        return "redirect:/index";
     }
 
     @PostMapping("/generateAISuggestion")
@@ -146,7 +238,8 @@ public class IncidentController {
         return "提案が取得できませんでした: 不明なエラーが発生しました。";
     }
 
-    @GetMapping("/")
+
+    @GetMapping("/index")
     public String showIncidents(Model model) {
         LocalDate now = LocalDate.now();
         List<IncidentEntity> incidents = getIncidents(now.getYear(), now.getMonthValue(), "", "");
@@ -216,25 +309,25 @@ public class IncidentController {
                 id, incidentForm.getLevel(),
                 incidentForm.getDate(), incidentForm.getTime(),
                 incidentForm.getPlace(),
-                incidentForm.getPatientId(), incidentForm.getPatientName(),
-                incidentForm.getPatientAge(),
+                incidentForm.getId(), incidentForm.getName(),
+                incidentForm.getAge(),
                 incidentForm.getDepartment(), incidentForm.getJob(),
-                incidentForm.getContinuousService(),
-                incidentForm.getLargeCategory(), incidentForm.getSmallCategory(),
+                incidentForm.getContinuation(),
+                incidentForm.getCategory(), incidentForm.getSegment(),
                 incidentForm.getSituation(), incidentForm.getCause(),
                 incidentForm.getSuggestion(), incidentForm.getCountermeasure()
         );
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @PostMapping("/incidents/{id}/delete")
     public String deleteIncident(@PathVariable long id, @RequestParam("adminPassword") String inputPassword, Model model) {
         if (!adminPassword.equals(inputPassword)) {
             model.addAttribute("errorMessage", "管理者パスワードが間違っています");
-            return "redirect:/";
+            return "redirect:/index";
         }
         incidentMapper.delete(id);
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     private void addGraphDataToModel(Model model, List<IncidentEntity> incidents) {
@@ -253,7 +346,7 @@ public class IncidentController {
     public Map<String, Integer> getCategoryCounts(List<IncidentEntity> incidents) {
         Map<String, Integer> counts = new HashMap<>();
         for (IncidentEntity incident : incidents) {
-            String category = incident.getLargeCategory() + " ／ " + incident.getSmallCategory();
+            String category = incident.getCategory() + " ／ " + incident.getSegment();
             counts.put(category, counts.getOrDefault(category, 0) + 1);
         }
         return counts;
@@ -264,6 +357,8 @@ public class IncidentController {
         for (IncidentEntity incident : incidents) {
             String level = incident.getLevel();
             counts.put(level, counts.getOrDefault(level, 0) + 1);
+            Integer month = incident.getDate().getMonthValue();
+
         }
         return counts;
     }
@@ -285,4 +380,5 @@ public class IncidentController {
         }
         return counts;
     }
+
 }

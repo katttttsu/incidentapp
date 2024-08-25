@@ -1,30 +1,50 @@
 package in.original.incidentapp;
 
 public class IncidentData {
-    private String largeCategory;
-    private String smallCategory;
+    private String category;
+    private String segment;
+    private String department;
+    private String job;
     private int count;
 
-    public IncidentData(String largeCategory, String smallCategory, int count) {
-        this.largeCategory = largeCategory;
-        this.smallCategory = smallCategory;
+    public IncidentData(String category, String segment, String department, String job, int count) {
+        this.category = category;
+        this.segment = segment;
+        this.department = department;
+        this.job = job;
         this.count = count;
     }
 
-    public String getLargeCategory() {
-        return largeCategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setLargeCategory(String largeCategory) {
-        this.largeCategory = largeCategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getSmallCategory() {
-        return smallCategory;
+    public String getSegment() {
+        return segment;
     }
 
-    public void setSmallCategory(String smallCategory) {
-        this.smallCategory = smallCategory;
+    public void setSegment(String segment) {
+        this.segment= segment;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 
     public int getCount() {

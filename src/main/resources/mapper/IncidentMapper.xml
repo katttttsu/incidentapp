@@ -6,7 +6,9 @@
 <mapper namespace="in.original.incidentapp.IncidentRepository">
 
     <select id="findAll" resultType="in.original.incidentapp.IncidentData">
-        SELECT category, count FROM incident_data
+        SELECT level, YEAR(date) as year, MONTH(date) as month, date, category, segment, department, job
+        FROM incident_data
+        WHERE YEAR(date) = #{year}
     </select>
 
 </mapper>

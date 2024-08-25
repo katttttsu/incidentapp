@@ -29,19 +29,19 @@ class IncidentServiceTest {
     @Test
     void testFindAll() {
         List<IncidentData> mockData = Arrays.asList(
-                new IncidentData("LargeCategory", "SmallCategory", 10),
-                new IncidentData("LargeCategory", "SmallCategory", 20)
+                new IncidentData("Category", "Segment", 10,2024),
+                new IncidentData("Category", "Segment", 20,2024)
         );
 
         when(incidentRepository.findAll()).thenReturn(mockData);
 
         List<IncidentData> result = incidentService.findAll();
         assertEquals(2, result.size());
-        assertEquals("LargeCategory", result.get(0).getLargeCategory());
-        assertEquals("SmallCategory", result.get(0).getSmallCategory());
+        assertEquals("Category", result.get(0).getCategory());
+        assertEquals("Segment", result.get(0).getSegment());
         assertEquals(10, result.get(0).getCount());
-        assertEquals("LargeCategory", result.get(1).getLargeCategory());
-        assertEquals("SmallCategory", result.get(1).getSmallCategory());
+        assertEquals("Category", result.get(1).getCategory());
+        assertEquals("Segment", result.get(1).getSegment());
         assertEquals(20, result.get(1).getCount());
     }
 
