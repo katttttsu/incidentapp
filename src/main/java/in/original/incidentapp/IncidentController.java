@@ -124,7 +124,7 @@ public class IncidentController {
         subCategoryMap.put("機器操作", Arrays.asList("操作ミス", "故障・不具合", "電源の入れ忘れ", "設定条件の間違い", "その他"));
         subCategoryMap.put("チューブ・カテーテル", Arrays.asList("自己抜去", "自然抜去", "漏れ", "留置固定部障害", "その他"));
         subCategoryMap.put("輸液ルート", Arrays.asList("自己抜去", "接続の緩み", "三方活栓の方向間違い", "クランプの開閉", "その他"));
-        subCategoryMap.put("手術", Arrays.asList("患者間違い", "部位間違い", "連絡ミス", "機具の不足・調整ミス"));
+        subCategoryMap.put("手術", Arrays.asList("患者間違い", "部位間違い", "連絡ミス", "機具の不足・調整ミス", "ガーゼカウント", "その他"));
         subCategoryMap.put("その他", Arrays.asList("離院", "患者間トラブル", "その他"));
 
         model.addAttribute("mainCategories", subCategoryMap.keySet());
@@ -295,7 +295,7 @@ public class IncidentController {
         subCategoryMap.put("機器操作", Arrays.asList("操作ミス", "故障・不具合", "電源の入れ忘れ", "設定条件の間違い", "その他"));
         subCategoryMap.put("チューブ・カテーテル", Arrays.asList("自己抜去", "自然抜去", "漏れ", "留置固定部障害", "その他"));
         subCategoryMap.put("輸液ルート", Arrays.asList("自己抜去", "接続の緩み", "三方活栓の方向間違い", "クランプの開閉", "その他"));
-        subCategoryMap.put("手術", Arrays.asList("患者間違い", "部位間違い", "連絡ミス", "機具の不足・調整ミス"));
+        subCategoryMap.put("手術", Arrays.asList("患者間違い", "部位間違い", "連絡ミス", "機具の不足・調整ミス", "ガーゼカウント", "その他"));
         subCategoryMap.put("その他", Arrays.asList("離院", "患者間トラブル", "その他"));
 
 
