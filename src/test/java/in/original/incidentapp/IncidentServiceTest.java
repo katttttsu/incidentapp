@@ -29,8 +29,9 @@ class IncidentServiceTest {
     @Test
     void testFindAll() {
         List<IncidentData> mockData = Arrays.asList(
-                new IncidentData("Category", "Segment", 10,2024),
-                new IncidentData("Category", "Segment", 20,2024)
+                new IncidentData("Category", "Segment", "Department", "Job", 10),
+                new IncidentData("Category", "Segment", "Department", "Job", 20)
+
         );
 
         when(incidentRepository.findAll()).thenReturn(mockData);
