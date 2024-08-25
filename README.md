@@ -47,7 +47,7 @@ Docker（開発用）\
 MySQL（開発用）
 
 ### 7.動作方法
-[http://incidentapp-env.eba-y4zaacyt.ap-northeast-1.elasticbeanstalk.com \
+http://IncidentApp-env-1.eba-y4zaacyt.ap-northeast-1.elasticbeanstalk.com  \
 上記URLにアクセスする事で動作できます。
 
 
