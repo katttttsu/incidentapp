@@ -14,7 +14,7 @@ private final IncidentRepository incidentRepository;\
 private final IncidentMapper incidentMapper;\
 @Value アノテーションを使用して、アプリケーションのプロパティファイル (application.properties) から値を取得する。これには管理者パスワードとOpenAI APIキーが含まれます。\
 IncidentRepository と IncidentMapper はコンストラクターインジェクションを通じて注入される。\
-@Valueはを使用する事でアプリケーションの設定値や外部の値を簡単に取得し、フィールド、コンストラクタ、メソッドに注入する事が出来る。\\
+@Valueはを使用する事でアプリケーションの設定値や外部の値を簡単に取得し、フィールド、コンストラクタ、メソッドに注入する事が出来る。
 ## 年次サマリーの表示 (/annualSummary)
 @GetMapping("/annualSummary")\
 public String showAnnualSummary(Model model) {\
@@ -31,7 +31,7 @@ values().stream().mapToInt(Integer::intValue).sum()はjava Stream APIを使用�
 map.values()はmapのすべての値を取得する。\
 stream()は取得した値のコレクションをストリームに変換する。stream APIを使用してデータの処理を行う事が出来る。\
 .mapToInt(Integer::intValue)はstream<Integer>をInstreamに変換する。Integer::intValueはメソッド参照で各Integerオブジェクトをプリミティブ型のintの変換する。\
-sum()は変換されたintstreamの全てに値を合計する。\\
+sum()は変換されたintstreamの全てに値を合計する。
 ## 年次サマリーの検索 (/SearchAnnualSummaries)
 @GetMapping("/SearchAnnualSummaries")\
 public String searchAnnualSummary(@RequestParam(value = "year", required = false) Integer year, Model model) {\
@@ -40,30 +40,21 @@ public String searchAnnualSummary(@RequestParam(value = "year", required = false
 if (year == null || year == 0) {\
     year = LocalDate.now().getYear();\
 }\
-年が指定されていない場合、現在の年を使用する。\\
-
-
-## インシデントフォームの表示 (/incidentForm)\
-
+年が指定されていない場合、現在の年を使用する。
+## インシデントフォームの表示 (/incidentForm)
 @GetMapping("/incidentForm")\
 public String showIncidentForm(Model model) {\
 インシデントを新たに登録するためのフォームを表示する。\\
-
 Map<String, List<String>> subCategoryMap = new HashMap<>();\
 subCategoryMap.put("転倒・転落", Arrays.asList("転倒", "転落", "滑落", "その他"));\
 大カテゴリごとにサブカテゴリのマッピングを設定する。subCategoryMap は大カテゴリとそれに対応するサブカテゴリのリストを保持する。\\
-
 model.addAttribute("subCategoryMap", subCategoryMap);\
-このマッピングをテンプレートに渡し、フォーム内で使用する。\\
-
-
-## インシデントの作成 (/incidents)\
-
+このマッピングをテンプレートに渡し、フォーム内で使用する。
+## インシデントの作成 (/incidents)
 @PostMapping("/incidents")\
 public String createIncident(@ModelAttribute IncidentForm incidentForm) {\
 インシデントを新規作成または更新するためのメソッド。\
 @ModelAttribute アノテーションを使用して、フォームデータを IncidentForm オブジェクトにバインドする。\\
-
 if (incidentForm.getId() == null) {\
     incidentMapper.insert(...);\
 } else {\
