@@ -34,7 +34,8 @@ return response;
 ## 6. OpenAI API と通信する getAIPrediction メソッド
 private String getAIPrediction(String prompt) {\
 
-このメソッドは、OkHttpClient を使用して OpenAI API へのリクエストを行い、応答を処理する。
+このメソッドは、OkHttpClient を使用して OpenAI API へのリクエストを行い、応答を処理する。\
+OkHttpClientはHttpリクエストを簡単に送信し、レスポンスを受け取る事でできるライブラリ。シンプルなAPIで非同期リクエストもサポートしている。また接続の再利用や接続プールの管理が自動的に行われる。
 ## 7. OkHttpClient と MediaType の設定
 OkHttpClient client = new OkHttpClient();\
 MediaType mediaType = MediaType.get("application/json; charset=utf-8");
