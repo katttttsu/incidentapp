@@ -1,4 +1,4 @@
-# 理解を深める為、分解して意味を考える
+# IncidentControllerの理解を深める為、分解して意味を考える
 @Controller\
 public class IncidentController {\
 @Controller アノテーションを使用しており、Spring MVCのコントローラーとして機能。
