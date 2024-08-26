@@ -1,18 +1,18 @@
 # 理解を深める為、分解して意味を考える
 @Controller\
 public class IncidentController {\
-@Controller アノテーションを使用しており、Spring MVCのコントローラーとして機能。\
+@Controller アノテーションを使用しており、Spring MVCのコントローラーとして機能。
 
 @Autowired\
 private IncidentService incidentService;\
 IncidentService クラスを自動的に注入し、コントローラー内でサービスを利用できる。\
-@Autowiredを使用する事でSpringのコンテナが自動的に適切な型のBeanを探してフィールドやコンストラクタ、またはセッターに注入する。\
+@Autowiredを使用する事でSpringのコンテナが自動的に適切な型のBeanを探してフィールドやコンストラクタ、またはセッターに注入する。
 
 @Value("${admin.password}")\
-private String adminPassword;\
+private String adminPassword;
 
 @Value("${openai.api.key}")\
-private String openaiApiKey;\
+private String openaiApiKey;
 
 private final IncidentRepository incidentRepository;\
 private final IncidentMapper incidentMapper;\
@@ -22,14 +22,14 @@ IncidentRepository と IncidentMapper はコンストラクターインジェク
 ## 年次サマリーの表示 (/annualSummary)
 @GetMapping("/annualSummary")\
 public String showAnnualSummary(Model model) {\
-年次サマリーを表示するためのメソッドです。Model オブジェクトを使用してテンプレートにデータを渡す。\
+年次サマリーを表示するためのメソッドです。Model オブジェクトを使用してテンプレートにデータを渡す。
 
 int year = LocalDate.now().getYear();\
 現在の年を取得する。\
 Map<String, Map<Integer, Integer>> levelData = incidentService.countIncidentsByLevel(year);\
 IncidentService クラスのメソッドを呼び出して、年ごとのレベル別インシデント件数を取得する。ここでは、インシデントを月ごとに集計してマップ形式で返す。\
 model.addAttribute("levelData", levelData);\
-取得したデータをテンプレートに渡す。levelData はテンプレート内でアクセスできる名前の事。\
+取得したデータをテンプレートに渡す。levelData はテンプレート内でアクセスできる名前の事。
 
 int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum();\
 年間のインシデント件数を合計する。\
@@ -73,10 +73,10 @@ if (incidentForm.getId() == null) {\
 @ResponseBody\
 public Map<String, String> generateAISuggestion(@RequestBody Map<String, String> request) {\
 ユーザーが入力した原因に基づいて、AI（OpenAI）から提案を生成するメソッド。\
-@ResponseBodyはSpring Freamworkのアノテーションでコントローラーのメソッドの戻り値をHTTPレスポンスのボディとして直接出力する為に使用される。\
+@ResponseBodyはSpring Freamworkのアノテーションでコントローラーのメソッドの戻り値をHTTPレスポンスのボディとして直接出力する為に使用される。
 
 String suggestion = getAIPrediction(prompt);\
-getAIPrediction メソッドを使用して、OpenAIから提案を取得する。\
+getAIPrediction メソッドを使用して、OpenAIから提案を取得する。
 
 private String getAIPrediction(String prompt) {\
     OkHttpClient client = new OkHttpClient();\
