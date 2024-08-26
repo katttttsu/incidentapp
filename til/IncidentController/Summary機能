@@ -1,0 +1,106 @@
+# 年次サマリーの使用方法についての復習
+
+# 1. 年次サマリーの表示
+年次サマリーのデータを取得し、それをビュー（HTMLページ）に渡して表示する。
+  
+@GetMapping("/annualSummary")\
+public String showAnnualSummary(Model model) {\
+    int year = LocalDate.now().getYear();
+
+    Map<String, Map<Integer, Integer>> levelData = incidentService.countIncidentsByLevel(year);\
+    Map<String, Map<Integer, Integer>> categoryData = incidentService.countIncidentsByCategory(year);\
+    Map<String, Map<Integer, Integer>> departmentData = incidentService.countIncidentsByDepartment(year);\
+    Map<String, Map<Integer, Integer>> jobData = incidentService.countIncidentsByJob(year);
+
+    Map<String, Integer> levelTotals = incidentService.getLevelTotals(year);\
+    Map<String, Integer> categoryTotals = incidentService.getCategoryTotals(year);\
+    Map<String, Integer> departmentTotals = incidentService.getDepartmentTotals(year);\
+    Map<String, Integer> jobTotals = incidentService.getJobTotals(year);
+
+    model.addAttribute("levelData", levelData);\
+    model.addAttribute("levelTotals", levelTotals);\
+    model.addAttribute("categoryData", categoryData);\
+    model.addAttribute("categoryTotals", categoryTotals);\
+    model.addAttribute("departmentData", departmentData);\
+    model.addAttribute("departmentTotals", departmentTotals);\
+    model.addAttribute("jobData", jobData);\
+    model.addAttribute("jobTotals", jobTotals);
+
+    int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum() +\
+            categoryTotals.values().stream().mapToInt(Integer::intValue).sum() +\
+            departmentTotals.values().stream().mapToInt(Integer::intValue).sum() +\
+            jobTotals.values().stream().mapToInt(Integer::intValue).sum();\
+    model.addAttribute("annualTotal", totalAnnualSum);
+
+    return "annualSummary";\
+}
+
+@GetMapping("/annualSummary"):\
+/annualSummaryというURLパスにGETリクエストが来たときに、このメソッドが呼び出されることを指定する。
+  
+Model model:\
+modelは、ビューにデータを渡すためのオブジェクト。ここで設定したデータは、後でビュー（HTMLテンプレート）で使用できる。
+  
+incidentService.countIncidentsByLevel(year):\
+これは、指定された年のインシデントをレベルごとに集計し、各月ごとの件数を返します。返されるのは、Map<String, Map<Integer, Integer>> 型のデータで、キーがレベル（例えば"1"、"2"など）、値がそのレベルに対応する各月のインシデント数を表す。
+  
+model.addAttribute("levelData", levelData):\
+これによって、levelDataがビューに渡されます。ビュー側でlevelDataを使ってデータを表示できる。
+
+totalAnnualSum:\
+レベル、カテゴリ、部署、職種ごとのインシデント総数を全て合算し、年間のインシデント総数を計算する。この値は、annualTotalという名前でビューに渡す。
+  
+return "annualSummary":\
+これは、annualSummaryという名前のビュー（例えばannualSummary.html）にリクエストを転送することを意味する。このビューで、上記で追加したデータを使って年次サマリーを表示する。
+
+## 2. 検索による年次サマリーの表示 (searchAnnualSummary)
+ユーザーが指定した年のインシデントデータを検索し、そのデータを表示する。
+
+@GetMapping("/SearchAnnualSummaries")\
+public String searchAnnualSummary(\
+        @RequestParam(value = "year", required = false) Integer year,\
+        Model model) {
+
+    if (year == null || year == 0) {\
+        year = LocalDate.now().getYear();\
+    }\
+    Map<String, Integer> levelTotals = incidentService.getLevelTotals(year);\
+    Map<String, Integer> categoryTotals = incidentService.getCategoryTotals(year);\
+    Map<String, Integer> departmentTotals = incidentService.getDepartmentTotals(year);\
+    Map<String, Integer> jobTotals = incidentService.getJobTotals(year);
+
+    model.addAttribute("levelData", incidentService.countIncidentsByLevel(year));\
+    model.addAttribute("levelTotals", levelTotals);\
+    model.addAttribute("categoryData", incidentService.countIncidentsByCategory(year));\
+    model.addAttribute("categoryTotals", categoryTotals);\
+    model.addAttribute("departmentData", incidentService.countIncidentsByDepartment(year));\
+    model.addAttribute("departmentTotals", departmentTotals);\
+    model.addAttribute("jobData", incidentService.countIncidentsByJob(year));\
+    model.addAttribute("jobTotals", jobTotals);
+
+    int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum() +\
+            categoryTotals.values().stream().mapToInt(Integer::intValue).sum() +\
+            departmentTotals.values().stream().mapToInt(Integer::intValue).sum() +\
+            jobTotals.values().stream().mapToInt(Integer::intValue).sum();\
+    model.addAttribute("annualTotal", totalAnnualSum);
+
+    return "annualSummary";\
+}
+
+@GetMapping("/SearchAnnualSummaries"):\
+/SearchAnnualSummariesというURLパスにGETリクエストが来たときに、このメソッドが呼び出されることを指定している。
+  
+@RequestParam(value = "year", required = false) Integer year:\
+リクエストからyearという名前のパラメータを受け取ることを指定する。required = falseという指定により、yearが必須ではなく、パラメータが提供されなかった場合はnullになる。
+
+if (year == null || year == 0) { year = LocalDate.now().getYear(); }:\
+yearが指定されていないか、0が指定された場合は、現在の年を使用する。これにより、デフォルトで現在の年のデータを表示するようにできる。\
+
+incidentService.getLevelTotals(year):\
+これは、指定された年における各レベルのインシデント総数を取得できる。
+
+model.addAttribute("levelTotals", levelTotals):\
+これによって、levelTotalsがビューに渡されます。ビュー側でこのデータを使って、各レベルのインシデント総数を表示できる。
+
+return "annualSummary":\
+これは、年次サマリーの結果を表示するためにannualSummaryビューをレンダリングする。上記で追加されたすべてのデータが、このビューで利用可能になる。
