@@ -68,7 +68,7 @@ if (incidentForm.getId() == null) {\
     incidentMapper.update(...);\
 }\
 新しいインシデントか既存のインシデントかを確認し、それに応じて挿入または更新を行う。
-##OpenAIを使用した提案生成 (/generateAISuggestion)
+## OpenAIを使用した提案生成 (/generateAISuggestion)
 @PostMapping("/generateAISuggestion")\
 @ResponseBody\
 public Map<String, String> generateAISuggestion(@RequestBody Map<String, String> request) {\
