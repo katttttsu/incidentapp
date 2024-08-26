@@ -10,27 +10,21 @@ IncidentService クラスを自動的に注入し、コントローラー内で�
 private String adminPassword;\\
 @Value("${openai.api.key}")\
 private String openaiApiKey;\\
-
 private final IncidentRepository incidentRepository;\
 private final IncidentMapper incidentMapper;\
 @Value アノテーションを使用して、アプリケーションのプロパティファイル (application.properties) から値を取得する。これには管理者パスワードとOpenAI APIキーが含まれます。\
 IncidentRepository と IncidentMapper はコンストラクターインジェクションを通じて注入される。\
-@Valueはを使用する事でアプリケーションの設定値や外部の値を簡単に取得し、フィールド、コンストラクタ、メソッドに注入する事が出来る。\\\
-## 年次サマリーの表示 (/annualSummary)\
-
+@Valueはを使用する事でアプリケーションの設定値や外部の値を簡単に取得し、フィールド、コンストラクタ、メソッドに注入する事が出来る。\\
+## 年次サマリーの表示 (/annualSummary)
 @GetMapping("/annualSummary")\
 public String showAnnualSummary(Model model) {\
 年次サマリーを表示するためのメソッドです。Model オブジェクトを使用してテンプレートにデータを渡す。\\
-
 int year = LocalDate.now().getYear();\
 現在の年を取得する。\\
-
 Map<String, Map<Integer, Integer>> levelData = incidentService.countIncidentsByLevel(year);\
 IncidentService クラスのメソッドを呼び出して、年ごとのレベル別インシデント件数を取得する。ここでは、インシデントを月ごとに集計してマップ形式で返す。\\
-
 model.addAttribute("levelData", levelData);\
 取得したデータをテンプレートに渡す。levelData はテンプレート内でアクセスできる名前の事。\\
-
 int totalAnnualSum = levelTotals.values().stream().mapToInt(Integer::intValue).sum();\
 年間のインシデント件数を合計する。\
 values().stream().mapToInt(Integer::intValue).sum()はjava Stream APIを使用してコレクションやマップの値の合計を求める際によく使われるコード。\
@@ -38,15 +32,11 @@ map.values()はmapのすべての値を取得する。\
 stream()は取得した値のコレクションをストリームに変換する。stream APIを使用してデータの処理を行う事が出来る。\
 .mapToInt(Integer::intValue)はstream<Integer>をInstreamに変換する。Integer::intValueはメソッド参照で各Integerオブジェクトをプリミティブ型のintの変換する。\
 sum()は変換されたintstreamの全てに値を合計する。\\
-
-
-## 年次サマリーの検索 (/SearchAnnualSummaries)\
-
+## 年次サマリーの検索 (/SearchAnnualSummaries)
 @GetMapping("/SearchAnnualSummaries")\
 public String searchAnnualSummary(@RequestParam(value = "year", required = false) Integer year, Model model) {\
 年次サマリーを指定された年で検索するためのメソッド。\
 @RequestParam アノテーションを使用して、リクエストパラメータとして年を受け取る。\\
-
 if (year == null || year == 0) {\
     year = LocalDate.now().getYear();\
 }\
