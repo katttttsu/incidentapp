@@ -93,7 +93,7 @@ private String getAIPrediction(String prompt) {\
     }\
 }\
 OkHttpClient を使用して、OpenAIのAPIにリクエストを送信し、提案を取得する。\
-okHttpClientはHttpリクエストを簡単に送信し、レスポンスを受け取る事でできるライブラリ。シンプルなAPIで非同期リクエストもサポートしている。また接続の再利用や接続プールの管理が自動的に行われる。
+OkHttpClientはHttpリクエストを簡単に送信し、レスポンスを受け取る事でできるライブラリ。シンプルなAPIで非同期リクエストもサポートしている。また接続の再利用や接続プールの管理が自動的に行われる。
 ## グラフデータのテンプレートへの追加 (addGraphDataToModel)
 private void addGraphDataToModel(Model model, List<IncidentEntity> incidents) {\
     model.addAttribute("categoryCounts", getCategoryCounts(incidents));\
