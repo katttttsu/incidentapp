@@ -1,4 +1,4 @@
-#理解を深める為、分解して意味を考える\
+# 理解を深める為、分解して意味を考える
 @Controller\
 public class IncidentController {\
 @Controller アノテーションを使用しており、Spring MVCのコントローラーとして機能。\
@@ -25,9 +25,9 @@ public String showAnnualSummary(Model model) {\
 年次サマリーを表示するためのメソッドです。Model オブジェクトを使用してテンプレートにデータを渡す。\
 
 int year = LocalDate.now().getYear();\
-現在の年を取得する。\\
+現在の年を取得する。\
 Map<String, Map<Integer, Integer>> levelData = incidentService.countIncidentsByLevel(year);\
-IncidentService クラスのメソッドを呼び出して、年ごとのレベル別インシデント件数を取得する。ここでは、インシデントを月ごとに集計してマップ形式で返す。\\
+IncidentService クラスのメソッドを呼び出して、年ごとのレベル別インシデント件数を取得する。ここでは、インシデントを月ごとに集計してマップ形式で返す。\
 model.addAttribute("levelData", levelData);\
 取得したデータをテンプレートに渡す。levelData はテンプレート内でアクセスできる名前の事。\
 
@@ -53,7 +53,7 @@ public String showIncidentForm(Model model) {\
 インシデントを新たに登録するためのフォームを表示する。\
 Map<String, List<String>> subCategoryMap = new HashMap<>();\
 subCategoryMap.put("転倒・転落", Arrays.asList("転倒", "転落", "滑落", "その他"));\
-大カテゴリごとにサブカテゴリのマッピングを設定する。subCategoryMap は大カテゴリとそれに対応するサブカテゴリのリストを保持する。\\
+大カテゴリごとにサブカテゴリのマッピングを設定する。subCategoryMap は大カテゴリとそれに対応するサブカテゴリのリストを保持する。\
 model.addAttribute("subCategoryMap", subCategoryMap);\
 このマッピングをテンプレートに渡し、フォーム内で使用する。
 ## インシデントの作成 (/incidents)
