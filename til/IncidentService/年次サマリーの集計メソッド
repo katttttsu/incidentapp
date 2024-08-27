@@ -1,0 +1,67 @@
+# 年次サマリーの集計メソッド
+public Map<String, Map<Integer, Integer>> countIncidentsByLevel(int year) {
+    List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+    Map<String, Map<Integer, Integer>> levelData = new LinkedHashMap<>();
+
+    List<String> levels = Arrays.asList("0", "1", "2", "3a", "3b", "4", "5");
+    for (String level : levels) {
+        Map<Integer, Integer> monthData = new LinkedHashMap<>();
+        for (int month = 1; month <= 12; month++) {
+            monthData.put(month, 0);
+        }\
+        levelData.put(level, monthData);
+    }
+
+    for (IncidentEntity incident : incidents) {
+        String level = incident.getLevel();
+        int month = incident.getDate().getMonthValue();
+        if (levelData.containsKey(level)) {
+            levelData.get(level).put(month, levelData.get(level).get(month) + 1);
+        }
+    }
+
+    return levelData;
+}
+
+##　年次サマリー表示の流れ（レベルのサマリーを取得）
+1. 指定された年の全てのインシデントをデータベースから取得する。
+2. インシデントのレベル毎に各月のインシデント数をカウントする為のデータ構造を準備する。
+3. 各インシデントをチェックしてそのレベルと発生月に基づいて増やす。
+4. 最終的にレベル毎に月別のカウントが入ったマップを返す。
+
+## 1. インシデントの取得
+List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+指定された年 (year) に発生したすべてのインシデントをデータベースから取得し、そのリストを incidents という変数に保存する。
+※この findByYear(year) メソッドは、データベースに問い合わせて、指定された年に関連するインシデントをすべて取得する。
+## 2. レベルと月ごとのデータ構造を準備
+Map<String, Map<Integer, Integer>> levelData = new LinkedHashMap<>();
+
+for (String level : levels) {
+    Map<Integer, Integer> monthData = new LinkedHashMap<>();
+    for (int month = 1; month <= 12; month++) {
+        monthData.put(month, 0);
+    }
+    levelData.put(level, monthData);
+}
+Map<String, Map<Integer, Integer>>は、キーが String 型で、値が Map<Integer, Integer> 型のマップを表す。
+levelData というマップを作成する。このマップは、キーとして「レベル」を持ち、その値として「月ごとのインシデント数をカウントするマップ」を持つ。
+各レベル（levels リスト内の値）について、12ヶ月分の初期値（0）を持つ monthData というマップを作成する。
+この monthData を levelData に追加し、レベルごとに月別のカウントを行うための準備する。
+※これにより、すべてのレベルについて、各月のインシデント数を記録するためのマップが準備される。
+
+## 3. インシデントのカウント
+for (IncidentEntity incident : incidents) {
+    String level = incident.getLevel();
+    int month = incident.getDate().getMonthValue();
+    if (levelData.containsKey(level)) {
+        levelData.get(level).put(month, levelData.get(level).get(month) + 1);
+    }
+}
+取得したすべてのインシデント (incidents) を1つずつループして処理する。
+それぞれのインシデントについて、その「レベル」と「発生月」を取得する。
+levelData マップを使って、該当するレベルと月のカウントを1つ増やす。
+※各インシデントのレベルと月をチェックし、それに対応するカウントを増やすことで、レベルごとの月別インシデント数が集計される。
+4. 結果を返す
+return levelData;
+最終的に、レベルごとの月別インシデント数が記録された levelData を返します。
+※このデータは、後の処理や表示に使われるため、重要な役割を果たします。
