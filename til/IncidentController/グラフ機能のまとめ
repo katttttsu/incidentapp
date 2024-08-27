@@ -1,0 +1,72 @@
+# グラフ機能の復習を行った。
+
+## 1.ddGraphDataToModel メソッド\
+private void addGraphDataToModel(Model model, List<IncidentEntity> incidents) {\
+    model.addAttribute("categoryCounts", getCategoryCounts(incidents));\
+    model.addAttribute("levelCounts", getLevelCounts(incidents));\
+    model.addAttribute("departmentCounts", getDepartmentCounts(incidents));\
+    model.addAttribute("jobCounts", getJobCounts(incidents));\
+}\
+目的: このメソッドは、インシデントデータを元に集計を行い、その結果を Model に追加して、HTMLテンプレート（ビュー）に渡す役割を持っている。\
+Model: ビューにデータを渡すためのオブジェクトです。model.addAttribute メソッドを使って、ビューに渡したいデータを Model に追加する。\
+getCategoryCounts(incidents) などのメソッドを呼び出して、それぞれカテゴリ別、レベル別、部署別、職種別のインシデントの件数を集計する。
+
+## 2. 各 getXCounts メソッド\
+これらのメソッドは、インシデントのリストを受け取り、各カテゴリ（カテゴリー、レベル、部署、職種）ごとに集計を行い、その結果を Map オブジェクトにして返す。
+
+### 2.1 getCategoryCounts メソッド\
+public Map<String, Integer> getCategoryCounts(List<IncidentEntity> incidents) {\
+    Map<String, Integer> counts = new HashMap<>();\
+    for (IncidentEntity incident : incidents) {\
+        String category = incident.getCategory() + " ／ " + incident.getSegment();\
+        counts.put(category, counts.getOrDefault(category, 0) + 1);\
+    }\
+    return counts;\
+}\
+役割: インシデントを「カテゴリー」と「セグメント」（小分類）の組み合わせで集計し、その結果を Map 形式で返す。\
+処理:\
+counts という空の Map を作成します。この Map には、キーとして「カテゴリー／セグメント」、値としてその組み合わせのインシデント数が入れる。\
+インシデントのリストを1件ずつ処理し、それぞれのインシデントの「カテゴリー／セグメント」をキーとして、既に Map に存在していればその値を1増やし、存在していなければ新しくキーを作成して1を設定する。\
+全てのインシデントを処理し終えたら、結果を Map として返す。
+
+### 2.2 getLevelCounts メソッド\
+public Map<String, Integer> getLevelCounts(List<IncidentEntity> incidents) {\
+    Map<String, Integer> counts = new HashMap<>();\
+    for (IncidentEntity incident : incidents) {\
+        String level = incident.getLevel();\
+        counts.put(level, counts.getOrDefault(level, 0) + 1);\
+    }\
+    return counts;\
+}\
+役割: インシデントを「レベル」ごとに集計し、その結果を Map 形式で返す。\
+処理: 上記 getCategoryCounts と似たロジックで、今回は「レベル」をキーにしてインシデント数を集計する。
+
+### 2.3 getDepartmentCounts メソッド\
+public Map<String, Integer> getDepartmentCounts(List<IncidentEntity> incidents) {\
+    Map<String, Integer> counts = new HashMap<>();\
+    for (IncidentEntity incident : incidents) {\
+        String department = incident.getDepartment();\
+        counts.put(department, counts.getOrDefault(department, 0) + 1);\
+    }\
+    return counts;\
+}\
+役割: インシデントを「部署」ごとに集計し、その結果を Map 形式で返す。\
+処理: 上記 getCategoryCounts と同様に、「部署」をキーにしてインシデント数を集計する。
+
+### 2.4 getJobCounts メソッド\
+public Map<String, Integer> getJobCounts(List<IncidentEntity> incidents) {\
+    Map<String, Integer> counts = new HashMap<>();\
+    for (IncidentEntity incident : incidents) {\
+        String job = incident.getJob();\
+        counts.put(job, counts.getOrDefault(job, 0) + 1);\
+    }\
+    return counts;\
+}\
+役割: インシデントを「職種」ごとに集計し、その結果を Map 形式で返す。\
+処理: 上記と同様に、「職種」をキーにしてインシデント数を集計する。\
+
+### 3. まとめ
+これらのメソッドは、インシデントデータを各種カテゴリ（カテゴリー、レベル、部署、職種）ごとに集計し、その結果を Model に追加することで、後でビュー（HTMLページ）でグラフとして表示できるようにする。
+
+addGraphDataToModel メソッドがビューに渡すデータを準備し、例えばビューではこれらのデータを使ってグラフを描画することができる。
+各 getXCounts メソッドは、特定のカテゴリに基づいてデータを集計するための基本的なロジックを提供する。
