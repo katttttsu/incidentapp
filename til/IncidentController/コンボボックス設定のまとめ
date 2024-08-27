@@ -1,0 +1,55 @@
+# コンボボックスの設定方法について復習した。
+インシデント報告のフォームに関連する「コンボボックス」（ドロップダウンリスト）を設定する部分が含まれています。具体的には、showIncidentForm メソッド内での設定がこれに該当します。以下にその部分をかみ砕いて説明します。
+
+## 1. showIncidentForm メソッド
+@GetMapping("/incidentForm")\
+public String showIncidentForm(Model model) {\
+    model.addAttribute("incidentForm", new IncidentForm());
+
+    Map<String, List<String>> subCategoryMap = new HashMap<>();\
+    subCategoryMap.put("転倒・転落", Arrays.asList("転倒", "転落", "滑落", "その他"));\
+    subCategoryMap.put("外傷", Arrays.asList("熱傷", "擦過傷", "表皮剥離", "打撲", "骨折", "自傷行為", "その他"));\
+    subCategoryMap.put("薬剤", Arrays.asList("薬剤の過不足", "薬剤の入れ間違い", "薬袋の記入間違い", "持参薬鑑別関連", "配薬ミス", "副作用", "患者間違い", "患者による与薬トラブル", "その他"));\
+    subCategoryMap.put("食事", Arrays.asList("患者間違い", "誤嚥・誤飲", "異物混入", "指示と食事内容の違い", "その他"));\
+    subCategoryMap.put("受付", Arrays.asList("患者間違い", "カルテ作成ミス", "受診科登録ミス", "受付対応の不備", "電話対応", "その他"));\
+    subCategoryMap.put("診察", Arrays.asList("患者間違い", "不適切な処方", "不適切な処置", "書類関係の誤り", "検査オーダーミス", "その他"));\
+    subCategoryMap.put("検査・処置", Arrays.asList("患者間違い", "検体の採り間違い", "未採集", "不適切な前処置", "その他"));\
+    subCategoryMap.put("放射線", Arrays.asList("患者間違い", "部位間違い", "撮影条件の間違い", "撮影端末への入力ミス", "その他"));\
+    subCategoryMap.put("リハビリ", Arrays.asList("患者間違い", "部位間違い", "設定条件の間違い", "評価ミス", "理学・作業療法時のトラブル", "その他"));\
+    subCategoryMap.put("機器操作", Arrays.asList("操作ミス", "故障・不具合", "電源の入れ忘れ", "設定条件の間違い", "その他"));\
+    subCategoryMap.put("チューブ・カテーテル", Arrays.asList("自己抜去", "自然抜去", "漏れ", "留置固定部障害", "その他"));\
+    subCategoryMap.put("輸液ルート", Arrays.asList("自己抜去", "接続の緩み", "三方活栓の方向間違い", "クランプの開閉", "その他"));\
+    subCategoryMap.put("手術", Arrays.asList("患者間違い", "部位間違い", "連絡ミス", "機具の不足・調整ミス", "ガーゼカウント", "その他"));\
+    subCategoryMap.put("その他", Arrays.asList("離院", "患者間トラブル", "その他"));
+
+    model.addAttribute("mainCategories", subCategoryMap.keySet());\
+    model.addAttribute("subCategoryMap", subCategoryMap);\
+    return "incidentForm";\
+}
+2. showIncidentForm メソッドの詳細
+このメソッドは、インシデント報告フォームを表示するためのデータを準備して、ビュー（HTMLテンプレート）に渡す。特に、フォームの中で選択可能な「カテゴリー」と「サブカテゴリー」のコンボボックスを設定する。
+
+### 2.1 incidentForm の設定
+model.addAttribute("incidentForm", new IncidentForm());\
+意味: 新しい IncidentForm オブジェクトを作成し、それをビューに渡す。これにより、HTMLフォームとJavaオブジェクトがバインドされ、フォームの入力内容が IncidentForm オブジェクトに反映される。\
+### 2.2 カテゴリとサブカテゴリの設定
+Map<String, List<String>> subCategoryMap = new HashMap<>();\
+subCategoryMap.put("転倒・転落", Arrays.asList("転倒", "転落", "滑落", "その他"));\
+subCategoryMap.put("外傷", Arrays.asList("熱傷", "擦過傷", "表皮剥離", "打撲", "骨折", "自傷行為", "その他"));\
+subCategoryMap.put("薬剤", Arrays.asList("薬剤の過不足", "薬剤の入れ間違い", "薬袋の記入間違い", "持参薬鑑別関連", "配薬ミス", "副作用", "患者間違い", "患者による与薬トラブル", "その他"));\
+意味: subCategoryMap という Map オブジェクトを作成し、キーとして「メインカテゴリー」、値として「サブカテゴリーのリスト」を設定する。例えば、"転倒・転落" というメインカテゴリーに対して、"転倒", "転落", "滑落", "その他" というサブカテゴリーを設定する。
+
+Map と List の使い方:
+
+Map<String, List<String>>: キーがメインカテゴリー、値がサブカテゴリーのリストであるマップ。\
+List<String>: 複数のサブカテゴリーをリストとしてまとめる。
+###! 2.3 モデルへのデータ追加
+model.addAttribute("mainCategories", subCategoryMap.keySet());\
+model.addAttribute("subCategoryMap", subCategoryMap);\
+意味:\
+mainCategories という名前でメインカテゴリーのセット（キーの集合）をモデルに追加する。\
+subCategoryMap という名前で、メインカテゴリーとサブカテゴリーのマップをモデルに追加する。\
+ビューでの使用: これにより、HTMLテンプレート側で mainCategories を使ってメインカテゴリーのコンボボックスを表示し、選択されたメインカテゴリーに応じて、対応するサブカテゴリーのリストを表示することができる。
+
+## 3. まとめ
+このメソッドは、フォームにおける「メインカテゴリー」と「サブカテゴリー」の選択肢を設定し、それをHTMLビューに渡す役割を果たしている。これにより、ユーザーがフォームでインシデントを報告する際に、適切なカテゴリーを選択できるようになる。例えば、ユーザーが「転倒・転落」を選択すると、そのサブカテゴリーとして「転倒」や「滑落」などが表示される。
