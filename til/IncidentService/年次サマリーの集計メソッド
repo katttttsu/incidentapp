@@ -23,12 +23,6 @@ public Map<String, Map<Integer, Integer>> countIncidentsByLevel(int year) {
     return levelData;
 }
 
-##　年次サマリー表示の流れ（レベルのサマリーを取得）
-1. 指定された年の全てのインシデントをデータベースから取得する。
-2. インシデントのレベル毎に各月のインシデント数をカウントする為のデータ構造を準備する。
-3. 各インシデントをチェックしてそのレベルと発生月に基づいて増やす。
-4. 最終的にレベル毎に月別のカウントが入ったマップを返す。
-
 ## 1. インシデントの取得
 List<IncidentEntity> incidents = incidentRepository.findByYear(year);
 指定された年 (year) に発生したすべてのインシデントをデータベースから取得し、そのリストを incidents という変数に保存する。
@@ -63,6 +57,46 @@ levelData マップを使って、該当するレベルと月のカウントを1
 ※各インシデントのレベルと月をチェックし、それに対応するカウントを増やすことで、レベルごとの月別インシデント数が集計される。
 4. 結果を返す
 return levelData;
-最終的に、レベルごとの月別インシデント数が記録された levelData を返します。
+最終的に、レベルごとの月別インシデント数が記録された levelData を返す。
+
+# 集計結果を合計する
+各カテゴリやレベル、部門、職種ごとの年間の合計件数を計算する。
+
+getLevelTotals は、指定された年に発生したインシデントを「レベルごと」に合計し、その結果を返すためのもの。
+
+メソッド全体の流れ
+## 1. インシデントの取得
+List<IncidentEntity> incidents = incidentRepository.findByYear(year);
+何をしているか: 指定された年 (year) に発生したすべてのインシデントをデータベースから取得し、そのリストを incidents という変数に保存する。
+※この findByYear(year) メソッドは、データベースに問い合わせて、その年に関連するすべてのインシデントを取得する。
+## 2. レベルごとの初期値設定
+Map<String, Integer> levelTotals = new HashMap<>();
+
+List<String> levels = Arrays.asList("0", "1", "2", "3a", "3b", "4", "5");
+for (String level : levels) {
+    levelTotals.put(level, 0);
+}
+levelTotals というマップを作成し、これは「レベル」をキーとし、そのレベルに対応するインシデント数を値として保持する。
+levels というリストには、考えられるすべてのレベル（"0", "1", "2", "3a", "3b", "4", "5"）が含まれている。
+このリストを使って、各レベルに初期値として0を設定する。
+※この段階では、まだインシデントの数をカウントしていないので、すべてのレベルのインシデント数は0になっている。
+
+## 3. インシデントのカウント
+for (IncidentEntity incident : incidents) {
+    String level = incident.getLevel();
+    levelTotals.put(level, levelTotals.getOrDefault(level, 0) + 1);
+}
+取得したすべてのインシデント (incidents) を1つずつループして処理する。
+各インシデントの「レベル」を取得する。
+そのレベルに対応するカウントを1つ増やします。levelTotals.getOrDefault(level, 0) は、指定されたレベルのカウントが存在する場合はその値を、存在しない場合は0を返す。
+※これにより、各レベルのインシデント数が正確にカウントされる。
+
+## 4. 結果を返す
+return levelTotals;
+何をしているか: 最終的に、各レベルごとのインシデント数が記録された levelTotals マップを返す。
+※これにより、指定された年に発生した各レベルのインシデントの合計数を確認できる。
+
+全体のまとめ
+全体の目的: このメソッドは、指定された年に発生したインシデントをレベルごとに集計し、その結果を返すもの。これにより、年間を通じてどのレベルのインシデントがどれだけ発生したかを把握することができる。
 
 category, department, jobでの同様にコーディングを行う。
