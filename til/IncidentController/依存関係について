@@ -1,0 +1,71 @@
+# Controllerクラスで使用した依存関係についてまとめた。
+
+## import org.springframework.beans.factory.annotation.Autowired;
+Spring Frameworkの依存関係
+@Autowired は、Springの依存性注入（DI）機能を使用して、必要な依存オブジェクトを自動的に注入するためのアノテーション。
+クラス内のフィールド、コンストラクタ、またはセッターメソッドに使用される。
+
+import org.springframework.beans.factory.annotation.Value;
+Spring Frameworkの依存関係
+@Value アノテーションは、プロパティファイルなどから設定値を注入するために使用される。
+例えば、環境設定ファイルからパスワードやAPIキーをロードするときに便利。
+
+import org.springframework.stereotype.Controller;
+Spring Frameworkの依存関係
+@Controller は、Spring MVCにおいて、コントローラとして機能するクラスに付与されるアノテーション。
+このクラスがHTTPリクエストを処理し、ビューにデータを渡す役割を果たす。
+
+import org.springframework.ui.Model;
+Spring Frameworkの依存関係
+Model オブジェクトは、コントローラとビューの間でデータを渡すために使用される。コントローラで作成したデータをビューに渡すための入れ物として機能する。
+
+import org.springframework.web.bind.annotation.*;
+Spring Frameworkの依存関係
+このパッケージには、Spring MVCで使用される多くのアノテーションが含まれる。
+たとえば、@GetMapping, @PostMapping, @RequestParam, @PathVariableなどが含まれており、これらはHTTPリクエストを処理するためのルーティングやパラメータバインディングに使用される。
+
+import org.json.JSONObject;
+JSONの依存関係
+JSONObject は、JavaでJSONデータを扱うためのクラス。
+このクラスを使用して、JSON形式のデータを作成、解析、操作できる。
+
+import org.json.JSONArray;
+JSONの依存関係
+JSONArray は、JavaでJSON配列データを扱うためのクラス。
+複数の値を持つ配列形式のJSONデータを作成、解析、操作するために使用される。
+
+import java.time.LocalDate;
+Java標準ライブラリの依存関係
+LocalDate は、Java 8で導入された日付を表すクラス。年、月、日のみを持つ日付データを扱うために使用される。
+
+import java.util.*;
+Java標準ライブラリの依存関係
+java.util パッケージには、List, Map, HashMap, ArrayList, Optional など、コレクションやユーティリティクラスが含まれている。
+これらは、データ構造を管理するために広く使用される。
+
+import java.io.IOException;
+Java標準ライブラリの依存関係
+IOException は、入出力操作中に発生する例外を処理するために使用される。
+ファイル操作やネットワーク通信中にエラーが発生した場合にスローされる一般的な例外。
+
+import okhttp3.MediaType;
+OkHttpライブラリの依存関係
+MediaType クラスは、HTTPリクエストで使用されるコンテンツタイプを表す。例えば、application/json のような値を指定する。
+
+import okhttp3.OkHttpClient;
+OkHttpライブラリの依存関係
+OkHttpClient は、HTTPリクエストを行うためのクライアントクラス。このクラスを使用して、サーバーにリクエストを送り、レスポンスを受け取る。
+
+import okhttp3.Request;
+OkHttpライブラリの依存関係
+Request クラスは、HTTPリクエストを構築するためのクラス。URL、HTTPメソッド、ヘッダーなどを設定し、リクエストを作成する。
+
+import okhttp3.Response;
+OkHttpライブラリの依存関係
+Response クラスは、HTTPリクエストに対するレスポンスを表す。このクラスを使用して、サーバーからのレスポンスデータやステータスコードを取得する。
+
+import java.nio.charset.StandardCharsets;
+Java標準ライブラリの依存関係
+StandardCharsets クラスは、文字セットを定義するための定数を提供する。たとえば、UTF-8やUS-ASCIIなどの標準的な文字セットを使用する場合に使用する。
+このコードでは、主にSpring Framework、OkHttp、Java標準ライブラリ、およびJSON操作のためのライブラリが使用されている。
+それぞれのライブラリやクラスは、特定の機能を提供するために役立ち、アプリケーションの主要な機能を実現している。
