@@ -1,0 +1,71 @@
+# Lombokについて
+Lombokは、Javaでの開発をより簡潔にするためのライブラリ。
+特に、Javaクラスでよく使われるボイラープレートコード（冗長で手間がかかるコード）を自動生成することが主な機能。
+これにより、開発者は主要なビジネスロジックに集中でき、コードの可読性と保守性が向上する。
+（今回はエラーが発生した為不使用）
+
+## 書き直したコード
+package in.original.incidentapp;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class IncidentForm {
+
+    private Long id;
+    private String level;
+    private LocalDate date;
+    private LocalTime time;
+    private String place;
+    private Long number;
+    private String name;
+    private Integer age;
+    private String department;
+    private String job;
+    private String continuation;
+    private String category;
+    private String segment;
+    private String customSubCategory;
+    private String situation;
+    private String cause;
+    private String suggestion;
+    private String countermeasure;
+}
+
+## Lombokの導入
+1. 依存関係の追加
+Gradleプロジェクトでは build.gradle に以下を追加する。
+dependencies {
+    compileOnly 'org.projectlombok:lombok:最新バージョン'
+    annotationProcessor 'org.projectlombok:lombok:最新バージョン'
+}
+2. IDEの設定
+Lombokを使用するためには、IDE（IntelliJ IDEAやEclipse）にLombokプラグインをインストールする必要がある。
+これにより、IDEがLombokのアノテーションを認識し、コード補完などの機能をサポートする事ができる。
+
+## Lombokの主な機能とアノテーション
+### @Getter, @Setter
+クラスのフィールドに対するゲッターメソッドとセッターメソッドを自動生成する。
+例: @Getter をフィールドに付けると、そのフィールドのゲッターメソッドが生成する。
+### @Data
+@Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor のすべてを一度に適用する。
+これにより、クラスのフィールドに対するゲッターとセッター、toString()、equals()、hashCode() などが一括で自動生成される。
+### @NoArgsConstructor, @AllArgsConstructor
+引数なしのコンストラクタと、全フィールドを引数に持つコンストラクタを自動生成する。
+### @Builder
+クラスのビルダーパターンを自動生成する。これにより、オブジェクトの生成を簡潔で読みやすくすることができる。
+### @ToString
+クラスの toString() メソッドを自動生成する。
+### @EqualsAndHashCode
+クラスの equals() メソッドと hashCode() メソッドを自動生成する。
+### @Value
+不変クラス（Immutable Class）を作成する。全フィールドを final にし、ゲッターメソッドのみを提供する。
+
+## ポイント
+手動で定義していたゲッター、セッター、コンストラクタはLombokのアノテーションによって自動生成されるため、コードが大幅に簡素化される。
+Lombokを使用するには、プロジェクトの pom.xml または build.gradle にLombokの依存関係を追加する必要がある。
+また、IDE（IntelliJ IDEAやEclipse）ではLombokプラグインをインストールしておく必要がある。
