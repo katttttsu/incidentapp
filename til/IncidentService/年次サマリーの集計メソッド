@@ -100,3 +100,9 @@ return levelTotals;
 全体の目的: このメソッドは、指定された年に発生したインシデントをレベルごとに集計し、その結果を返すもの。これにより、年間を通じてどのレベルのインシデントがどれだけ発生したかを把握することができる。
 
 category, department, jobでの同様にコーディングを行う。
+
+※表の順番変更
+変更するクラス：Service
+Map<String, Map<Integer, Integer>> jobData = new LinkedHashMap<>();と記入する（new HashMap<>()ではなくnew LinkedHashMap<>()にする）
+
+List<String> jobs = Arrays.asList(表示させたい名称をダブルクォーテーション順番に記述);
