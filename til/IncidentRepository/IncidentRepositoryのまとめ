@@ -2,83 +2,90 @@
 IncidentRepositoryというインターフェースを定義しており、インシデント（事件や事故など）のデータをデータベースに対して操作するためのSQLクエリを管理する。
 このインターフェースは、MyBatisというJavaのORM（Object-Relational Mapping）フレームワークを使用して、データベースとのやり取りを行う。以下に、各メソッドの役割とその動作を詳しく説明する。
 
-# 1. findAll()
+# 1. データベース内の全てのインシデントデータを取得する。
 List<IncidentData> findAll();
-役割: データベース内の全てのインシデントデータを取得する。
 戻り値: IncidentData のリストとして、全てのレコードを返す。
 
-# 2. findById(long id)
+# 2. 指定されたidに対応するインシデントをデータベースから取得する。
 @Select("SELECT * FROM incidents WHERE id = #{id}")
 Optional<IncidentEntity> findById(long id);
-役割: 指定されたidに対応するインシデントをデータベースから取得する。
 SQLクエリ: SELECT * FROM incidents WHERE id = #{id} — idが一致するレコードを取得する。
 戻り値: Optional<IncidentEntity> — 見つかったインシデントがあればそれを、見つからなければ空のOptionalを返す。
 
-3. insert(...)
-@Insert("INSERT INTO incidents (...) VALUES (...)")
-void insert(
-    ...
-);
-役割: 新しいインシデントをデータベースに挿入する。
+3. 新しいインシデントをデータベースに挿入する。
+@Insert("INSERT INTO incidents (level, date, time, place, number, name, age, department, job, continuation, category, `segment`, situation, cause, suggestion, countermeasure) VALUES (#{level}, #{date}, #{time}, #{place}, #{number}, #{name}, #{age}, #{department}, #{job}, #{continuation}, #{category}, #{segment}, #{situation}, #{cause}, #{suggestion}, #{countermeasure})")
+    void insert(
+            @Param("level") String level,
+            @Param("date") LocalDate date,
+            @Param("time") LocalTime time,
+            @Param("place") String place,
+            @Param("number") Long number,
+            @Param("name") String name,
+            @Param("age") Integer age,
+            @Param("department") String department,
+            @Param("job") String job,
+            @Param("continuation") String continuation,
+            @Param("category") String category,
+            @Param("segment") String segment,
+            @Param("situation") String situation,
+            @Param("cause") String cause,
+            @Param("suggestion") String suggestion,
+            @Param("countermeasure") String countermeasure
+    );
 SQLクエリ: INSERT INTO incidents (...) VALUES (...) — 指定された値を持つ新しいレコードをデータベースに追加する。
 パラメータ: 各フィールド（level, date, time など）は、インシデントの詳細情報。
 
-## 4. update(IncidentEntity incident)
+## 4. 既存のインシデントを更新する。
 @Update("UPDATE incidents SET ... WHERE id = #{id}")
 void update(IncidentEntity incident);
-役割: 既存のインシデントを更新する。
 SQLクエリ: UPDATE incidents SET ... WHERE id = #{id} — idが一致するレコードを指定された内容で更新する。
 パラメータ: 更新したいインシデントの詳細を含むIncidentEntityオブジェクト。
 
-## 5. delete(long id)
+## 5. 指定されたidのインシデントをデータベースから削除する。
 @Delete("DELETE FROM incidents WHERE id = #{id}")
 void delete(@Param("id") long id);
-役割: 指定されたidのインシデントをデータベースから削除する。
 SQLクエリ: DELETE FROM incidents WHERE id = #{id} — idが一致するレコードを削除する。
 
-## 6. findByCriteria(...)
+## 6. 指定された期間、部署、職種に基づいてインシデントを検索する。
 @Select("SELECT * FROM incidents WHERE date BETWEEN #{startDate} AND #{endDate} AND (department = #{department} OR #{department} = '') AND (job = #{job} OR #{job} = '')")
-List<IncidentEntity> findByCriteria(
-    ...
-);
-役割: 指定された期間、部署、職種に基づいてインシデントを検索する。
+    List<IncidentEntity> findByCriteria(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("department") String department,
+            @Param("job") String job
+    );
 SQLクエリ:
 date BETWEEN #{startDate} AND #{endDate} — 指定された開始日と終了日の間に発生したインシデントを取得する。
 AND (department = #{department} OR #{department} = '') — 部署が指定されたものか、空の場合はすべての部署を対象にする。
 AND (job = #{job} OR #{job} = '') — 職種が指定されたものか、空の場合はすべての職種を対象にする。
 戻り値: 条件に一致するインシデントのリスト。
 
-## 7. findDistinctDepartments()
+## 7. データベース内のユニークな（重複しない）部署名を取得する。
 @Select("SELECT DISTINCT department FROM incidents")
 List<String> findDistinctDepartments();
-役割: データベース内のユニークな（重複しない）部署名を取得する。
 SQLクエリ: SELECT DISTINCT department FROM incidents — 全てのインシデントから一意の部署名を取得する。
 戻り値: 部署名のリスト。
 
-## 8. findDistinctJobs()
+## 8. データベース内のユニークな職種名を取得する。
 @Select("SELECT DISTINCT job FROM incidents")
 List<String> findDistinctJobs();
-役割: データベース内のユニークな職種名を取得する。
 SQLクエリ: SELECT DISTINCT job FROM incidents — 全てのインシデントから一意の職種名を取得する。
 戻り値: 職種名のリスト。
 
-## 9. countByDateBetween(...)
+## 9. 指定された期間内のインシデント数をカウントする。
 @Select("SELECT COUNT(*) FROM incidents WHERE date BETWEEN #{startDate} AND #{endDate}")
 long countByDateBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
-役割: 指定された期間内のインシデント数をカウントする。
 SQLクエリ: SELECT COUNT(*) FROM incidents WHERE date BETWEEN #{startDate} AND #{endDate} — 指定された日付範囲にあるインシデントの総数を返す。
 戻り値: インシデントの数。
 
-## 10. deleteAll()
+## 10. 全てのインシデントをデータベースから削除する。
 @Delete("DELETE FROM incidents")
 void deleteAll();
-役割: 全てのインシデントをデータベースから削除する。
 SQLクエリ: DELETE FROM incidents — incidentsテーブルの全てのレコードを削除する。
 
-## 11. findByYear(int year)
+## 11. 指定された年に発生したインシデントを取得する。
 @Select("SELECT * FROM incidents WHERE YEAR(date) = #{year}")
 List<IncidentEntity> findByYear(int year);
-役割: 指定された年に発生したインシデントを取得する。
 SQLクエリ: SELECT * FROM incidents WHERE YEAR(date) = #{year} — 指定された年に対応するインシデントを取得する。
 戻り値: 該当するインシデントのリスト。
 
