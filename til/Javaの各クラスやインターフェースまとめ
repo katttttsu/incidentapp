@@ -1,0 +1,104 @@
+# Javaの各クラスやインターフェースまとめ
+JavaJavaのWebアプリケーションにおいて、各クラスやインターフェースの役割、目的、使用例をまとめる事で理解を深めるため行った。
+
+## 1. Mapperインターフェース
+### 役割・目的
+### データベースとのやり取り：Mapperインターフェースは、データベース操作を担当する。
+SQLクエリを直接書かずに、データベースからデータを取得したり、データを挿入、更新、削除するためのメソッドを定義する。
+MyBatisと連携：MyBatisのフレームワークを使用して、SQLクエリとJavaメソッドを簡単に関連付けることができる。
+### 使用例
+@Mapper
+public interface IncidentMapper {
+    @Select("SELECT * FROM incidents WHERE id = #{id}")
+    IncidentEntity findById(Long id);
+}
+この例では、findById メソッドを呼び出すと、データベースの incidents テーブルから指定された id に対応するレコードが取得される。
+
+### 2. Formクラス
+## 役割・目的
+データ転送オブジェクト（DTO）：Formクラスは、ユーザーがフォームを通じて入力したデータを受け取り、Controllerへ渡すためのオブジェクトです。ユーザーの入力をサーバーサイドで処理するために使用される。
+バリデーション：Formクラスにバリデーションルールを追加することで、ユーザー入力の検証を行うことができる。
+## 使用例
+public class IncidentForm {
+    private Long id;
+    private String level;
+    private LocalDate date;
+    private String department;
+    private String category;
+    // ゲッターとセッター
+}
+この例では、インシデントの情報をユーザーがフォームに入力した際、そのデータが IncidentForm オブジェクトとしてControllerに渡される。
+
+## 3. Entityクラス
+### 役割・目的
+データモデルの表現：Entityクラスは、データベースのテーブルのレコードをJavaオブジェクトとして表現する。
+これにより、データベースとオブジェクトの間でデータをやり取りすることが容易になる。
+ORM（Object-Relational Mapping）：Entityクラスは、JPAやHibernateなどのORMフレームワークを使用して、データベースのテーブルと自動的にマッピングされる。
+### 使用例
+@Entity
+@Table(name = "incidents")
+public class IncidentEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String level;
+    private LocalDate date;
+    private String department;
+    private String category;
+    // ゲッターとセッター
+}
+この例では、IncidentEntity は incidents テーブルのレコードを表現している。
+
+## 4. Repositoryインターフェース
+### 役割・目的
+データ操作の抽象化：Repositoryインターフェースは、データベース操作の詳細を隠し、データアクセスのための標準的なCRUD（Create, Read, Update, Delete）操作を提供する。
+Spring Data JPAと連携：Spring Data JPAを使用することで、SQLを記述することなくデータ操作を実現する。
+### 使用例
+public interface IncidentRepository extends JpaRepository<IncidentEntity, Long> {
+    List<IncidentEntity> findByDepartment(String department);
+}
+この例では、IncidentRepository インターフェースを使用して、特定の部門に属するインシデントのリストを取得する。
+
+## 5. Controllerクラス
+### 役割・目的
+リクエストハンドリング： Controllerクラスは、クライアントからのHTTPリクエストを受け取り、それに応じたレスポンスを返す。
+　　　　　　　　　　　　 アプリケーションのエンドポイントを定義し、ビュー（HTMLページなど）やAPIレスポンスを生成する。
+ビジネスロジックの連携： Controllerは、Serviceクラスを呼び出してビジネスロジックを実行し、その結果をビューに渡す。
+### 使用例
+@Controller
+public class IncidentController {
+    @Autowired
+    private IncidentService incidentService;
+
+    @GetMapping("/incidents")
+    public String showIncidents(Model model) {
+        List<IncidentEntity> incidents = incidentService.findAll();
+        model.addAttribute("incidents", incidents);
+        return "incidentList";
+    }
+}
+この例では、/incidents へのGETリクエストを処理し、すべてのインシデントをビューに表示する。
+
+## 6. Serviceクラス
+### 役割・目的
+ビジネスロジックの実装：Serviceクラスは、アプリケーションのビジネスロジックを集中管理する。これにより、Controllerクラスがシンプルになり、ビジネスロジックの再利用が可能になる。
+トランザクション管理：Serviceクラスでは、データベース操作のトランザクション管理を行い、一貫したデータの処理を保証する。
+### 使用例
+@Service
+public class IncidentService {
+    @Autowired
+    private IncidentRepository incidentRepository;
+
+    public List<IncidentEntity> findAll() {
+        return incidentRepository.findAll();
+    }
+}
+この例では、IncidentService クラスがすべてのインシデントを取得するロジックを担当し、Controllerから呼び出される。
+
+## まとめ
+Mapperインターフェース : データベースとのやり取りを担当し、SQLクエリを使用してデータを操作する。
+Formクラス : ユーザーの入力を受け取り、サーバーに渡すためのデータ構造を提供する。
+Entityクラス : データベーステーブルのレコードをJavaオブジェクトとして表現する。
+Repositoryインターフェース : データ操作を抽象化し、データアクセスのための標準操作を提供する。
+Controllerクラス : リクエストを処理し、ビジネスロジックを呼び出してレスポンスを生成する。
+Serviceクラス : ビジネスロジックを実装し、データ操作やトランザクション管理を行う。
