@@ -1,0 +1,88 @@
+# Thymeleafについてまとめた。
+Thymeleafは、Javaベースのテンプレートエンジンで、主にWebアプリケーションのビュー層で使用される。
+Spring Frameworkと組み合わせて利用されることが多く、動的なHTMLページを生成するために非常に便利なツール。
+
+Thymeleafの主な特徴
+ナチュラルテンプレート: Thymeleafは、テンプレートがそのままブラウザで表示可能な形式（ナチュラルテンプレート）であることを目指しています。
+　　　　　　　　　　　　Thymeleafテンプレートは、テンプレートエンジンを通さなくても、ブラウザで静的なHTMLとして表示可能です。
+
+統合性: Spring Bootと容易に統合でき、MVCアーキテクチャの一部として使用することができる。
+　　　　Thymeleafは、フォーム処理、URLの構築、条件分岐、繰り返し処理、そしてメッセージの国際化など、Webアプリケーション開発に必要な機能を提供する。
+
+テンプレートの再利用性: フラグメント（テンプレートの一部）を定義し、それを他のテンプレートで再利用できるため、コードの再利用性が高まる。
+
+条件分岐やループ処理: Thymeleafでは、条件分岐や繰り返し処理が可能。th:if、th:each などの属性を使って、動的なコンテンツを簡単に生成できる。
+
+基本的な使用方法
+### 1. テンプレートの作成
+Thymeleafのテンプレートは、通常、src/main/resources/templates フォルダに配置されます。例えば、以下のようなシンプルなテンプレートを作成する。
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf Example</title>
+</head>
+<body>
+    <h1>Welcome, <span th:text="${name}">User</span>!</h1>
+    <ul>
+        <li th:each="item : ${items}" th:text="${item}">Item</li>
+    </ul>
+</body>
+</html>
+### 2. Spring Boot コントローラーの作成
+コントローラーで、Thymeleafテンプレートに渡すデータを準備する。
+
+package com.example.demo;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Arrays;
+import java.util.List;
+
+@Controller
+public class MyController {
+
+    @GetMapping("/welcome")
+    public String welcome(Model model) {
+        model.addAttribute("name", "John Doe");
+        List<String> items = Arrays.asList("Item 1", "Item 2", "Item 3");
+        model.addAttribute("items", items);
+        return "welcome";
+    }
+}
+上記の例では、/welcome URLにアクセスすると、welcome.html テンプレートが表示され、name と items がHTMLページにレンダリングされる。
+
+### 3. Thymeleafのディレクティブ
+Thymeleafには、さまざまなディレクティブがある。
+
+th:text: テキストの挿入
+th:if, th:unless: 条件分岐
+th:each: ループ処理
+th:href: リンクの動的生成
+th:action: フォームアクションの指定
+th:value: フォームの値設定
+4. フラグメントの再利用
+Thymeleafでは、テンプレートの一部をフラグメントとして定義し、再利用できる。
+
+<!-- header.html -->
+<div th:fragment="header">
+    <h1>My Website</h1>
+</div>
+
+<!-- main.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Website</title>
+</head>
+<body>
+    <div th:include="fragments/header :: header"></div>
+    <p>Welcome to my website!</p>
+</body>
+</html>
+
+## まとめ
+Thymeleafは、JavaでWebアプリケーションを開発する際に非常に強力なテンプレートエンジンである。
+Spring Bootと統合して使用することで、簡単に動的なWebページを生成できる。Thymeleafを使えば、ビューのロジックを簡単に実装でき、テンプレートの再利用性も高めることができる。
