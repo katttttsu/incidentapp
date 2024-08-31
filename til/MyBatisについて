@@ -1,0 +1,248 @@
+# Javaで使用するMyBatisについての理解を深める目的でまとめることにした。
+MyBatis は、Java の持つデータベースアクセス層で使用されるフレームワークの一つで、主に SQL マッピングをサポートしている。
+MyBatis は、SQL クエリやストアドプロシージャを使ってデータベースとやり取りするための強力で柔軟な方法を提供する。
+
+## MyBatisの主な特徴
+### SQLの直接使用:
+MyBatis は、データベース操作のために SQL を直接記述することを許可する。
+これにより、SQL の自由度が高まり、複雑なクエリやパフォーマンスの最適化が容易に行える。
+
+### マッピング機能:
+MyBatis は、データベースのテーブルのカラムと Java オブジェクトのプロパティをマッピングする。
+これにより、データベースの結果セットを Java のオブジェクトとして簡単に扱うことができる。
+
+### 柔軟な設定:
+MyBatis は XML ファイルやアノテーションを使ってマッピングや設定を行う。
+これにより、開発者は柔軟に設定を変更することができる。
+
+### 動的 SQL のサポート:
+MyBatis は動的 SQL をサポートしており、条件に応じて異なる SQL を生成することができる。
+これにより、クエリの再利用性が向上し、コードの重複が減少する。
+
+### SQL とトランザクションの管理:
+MyBatis は、SQL ステートメントの実行を管理し、必要に応じてトランザクションの管理を行う。
+
+### MyBatisの使用例
+MyBatis を使用してデータベースからデータを取得する例
+
+@Mapper
+public interface UserMapper {
+
+    @Select("SELECT * FROM users WHERE id = #{id}")
+    User findById(@Param("id") Long id);
+
+    @Insert("INSERT INTO users (name, email) VALUES (#{name}, #{email})")
+    void insert(User user);
+}
+この例では、UserMapper というインターフェースが @Mapper アノテーションを使って MyBatis のマッパーとして定義されている。
+findById メソッドは、SQL クエリを使って指定された id を持つ User を取得する。
+
+### MyBatisの利点
+柔軟性: SQL の直接記述が可能なため、複雑なクエリやデータベース操作が容易に行う。
+軽量: ORM フレームワークに比べて、MyBatis はより軽量であり、学習コストも低い。
+動的 SQL: 動的 SQL をサポートしており、複雑な条件に基づくクエリを簡単に作成できる。
+### MyBatisの欠点
+手動マッピングの必要性: ORM（Object-Relational Mapping）フレームワークと比べて、MyBatis は手動でマッピングを設定する必要があり、大規模なプロジェクトではこの設定が複雑になることがある。
+SQLに依存: MyBatis を使用する場合、SQL の知識が必要となる。
+また、SQL クエリはデータベース固有のものであるため、異なるデータベース間で移植性が低くなる可能性がある。
+
+## 使用方法
+### 1. プロジェクトのセットアップ
+まず、MavenやGradleなどのビルドツールを使用して、プロジェクトにMyBatisを追加する。
+Gradleの場合:
+dependencies {
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
+}
+### 2. データベース接続の設定
+Spring Bootを使用している場合、application.properties または application.yml にデータベース接続設定を記述する。
+application.properties 
+spring.datasource.url=jdbc:mysql://localhost:3306/mydatabase
+spring.datasource.username=root
+spring.datasource.password=password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+mybatis.mapper-locations=classpath:mappers/*.xml
+
+### . Entityクラスの作成
+データベースのテーブルに対応するEntityクラスを作成する。
+
+package com.example.demo;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class IncidentEntity {
+    private Long id;
+    private String level;
+    private LocalDate date;
+    private LocalTime time;
+    private String place;
+    private Long number;
+    private String name;
+    private Integer age;
+    private String department;
+    private String job;
+    private String continuation;
+    private String category;
+    private String segment;
+    private String situation;
+    private String cause;
+    private String suggestion;
+    private String countermeasure;
+
+    // Getters and Setters
+}
+### 4. Mapperインターフェースの作成
+次に、SQLクエリをマッピングするためのMapperインターフェースを作成する。
+
+package com.example.demo;
+
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+@Mapper
+public interface IncidentMapper {
+
+    @Select("SELECT * FROM incidents WHERE id = #{id}")
+    IncidentEntity findById(Long id);
+
+    @Insert("INSERT INTO incidents (level, date, time, place, number, name, age, department, job, continuation, category, segment, situation, cause, suggestion, countermeasure) VALUES (#{level}, #{date}, #{time}, #{place}, #{number}, #{name}, #{age}, #{department}, #{job}, #{continuation}, #{category}, #{segment}, #{situation}, #{cause}, #{suggestion}, #{countermeasure})")
+    void insert(IncidentEntity incident);
+
+    @Update("UPDATE incidents SET level = #{level}, date = #{date}, time = #{time}, place = #{place}, number = #{number}, name = #{name}, age = #{age}, department = #{department}, job = #{job}, continuation = #{continuation}, category = #{category}, segment= #{segment}, situation = #{situation}, cause = #{cause}, suggestion = #{suggestion}, countermeasure = #{countermeasure} WHERE id = #{id}")
+    void update(IncidentEntity incident);
+
+    @Delete("DELETE FROM incidents WHERE id = #{id}")
+    void delete(Long id);
+
+    @Select("SELECT * FROM incidents")
+    List<IncidentEntity> findAll();
+}
+### 5. MyBatis XMLマッパーの作成（オプション）
+SQLクエリをXMLファイルに分離して管理する場合、Mapper XMLファイルを作成する。
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.IncidentMapper">
+
+  <select id="findById" resultType="com.example.demo.IncidentEntity">
+    SELECT * FROM incidents WHERE id = #{id}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO incidents (level, date, time, place, number, name, age, department, job, continuation, category, segment, situation, cause, suggestion, countermeasure)
+    VALUES (#{level}, #{date}, #{time}, #{place}, #{number}, #{name}, #{age}, #{department}, #{job}, #{continuation}, #{category}, #{segment}, #{situation}, #{cause}, #{suggestion}, #{countermeasure})
+  </insert>
+
+  <update id="update">
+    UPDATE incidents SET level = #{level}, date = #{date}, time = #{time}, place = #{place}, number = #{number}, name = #{name}, age = #{age}, department = #{department}, job = #{job}, continuation = #{continuation}, category = #{category}, segment= #{segment}, situation = #{situation}, cause = #{cause}, suggestion = #{suggestion}, countermeasure = #{countermeasure} WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM incidents WHERE id = #{id}
+  </delete>
+
+  <select id="findAll" resultType="com.example.demo.IncidentEntity">
+    SELECT * FROM incidents
+  </select>
+
+</mapper>
+### 6. Serviceクラスの作成
+ビジネスロジックを実装するためのServiceクラスを作成する。
+
+package com.example.demo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class IncidentService {
+
+    @Autowired
+    private IncidentMapper incidentMapper;
+
+    public List<IncidentEntity> getAllIncidents() {
+        return incidentMapper.findAll();
+    }
+
+    public IncidentEntity getIncidentById(Long id) {
+        return incidentMapper.findById(id);
+    }
+
+    public void createIncident(IncidentEntity incident) {
+        incidentMapper.insert(incident);
+    }
+
+    public void updateIncident(IncidentEntity incident) {
+        incidentMapper.update(incident);
+    }
+
+    public void deleteIncident(Long id) {
+        incidentMapper.delete(id);
+    }
+}
+### 7. Controllerクラスの作成
+Spring MVCを使用して、リクエストを受け付けるコントローラーを作成する。
+
+package com.example.demo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+public class IncidentController {
+
+    @Autowired
+    private IncidentService incidentService;
+
+    @GetMapping("/incidents")
+    public String getAllIncidents(Model model) {
+        List<IncidentEntity> incidents = incidentService.getAllIncidents();
+        model.addAttribute("incidents", incidents);
+        return "incidentList"; // 表示するHTMLファイル名
+    }
+
+    @GetMapping("/incidents/{id}")
+    public String getIncidentById(@PathVariable Long id, Model model) {
+        IncidentEntity incident = incidentService.getIncidentById(id);
+        model.addAttribute("incident", incident);
+        return "incidentDetail"; // 表示するHTMLファイル名
+    }
+
+    @PostMapping("/incidents")
+    public String createIncident(@ModelAttribute IncidentEntity incident) {
+        incidentService.createIncident(incident);
+        return "redirect:/incidents";
+    }
+
+    @PostMapping("/incidents/{id}/update")
+    public String updateIncident(@PathVariable Long id, @ModelAttribute IncidentEntity incident) {
+        incident.setId(id);
+        incidentService.updateIncident(incident);
+        return "redirect:/incidents";
+    }
+
+    @PostMapping("/incidents/{id}/delete")
+    public String deleteIncident(@PathVariable Long id) {
+        incidentService.deleteIncident(id);
+        return "redirect:/incidents";
+    }
+}
+### 8. ビューの作成
+incidentList.html や incidentDetail.html といったビューを作成して、データを表示する。
+これらは通常、src/main/resources/templates フォルダに配置される。
+
+## まとめ
+MyBatis は、Java アプリケーションでデータベースとやり取りするための柔軟で強力なフレームワークである。
+MyBatisの設定は、プロジェクトの規模や要件に応じてmybatis-config.xml、マッパーXMLファイル、application.propertiesまたはapplication.yml、Java Configなどで行う。
+Spring Bootを使用している場合、Springの設定ファイルでほとんどの設定を管理できるため、MyBatisの標準的な設定ファイルを使わずに済むこともある。
+SQL を直接記述することで、複雑なデータベース操作を柔軟に扱うことができる反面、手動での設定が必要となるため、プロジェクトの規模や開発チームのスキルに応じて適切に選択する必要がある。
