@@ -1,0 +1,48 @@
+# 複数の円グラフ（パイチャート）を生成・表示機能
+CanvasJSライブラリを使用して、複数の円グラフ（パイチャート）を生成・表示するためのスクリプト。以下に各部分をかみ砕いて説明する。
+
+1. <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+意味: これは、CanvasJSというJavaScriptライブラリを使用するための外部スクリプトをHTMLに読み込むコード。CanvasJSは、チャートを簡単に作成できるライブラリ。
+
+2. <script th:inline="javascript">
+意味: このスクリプトタグは、Thymeleafテンプレートエンジンと連携している。th:inline="javascript"は、Thymeleafによるテンプレート処理をJavaScriptコード内で行うことを指定する。
+
+3. /*<![CDATA[*/ と /*]]>*/
+意味: これらは、JavaScriptコードの中でThymeleafが処理する部分を囲むために使用されている。この形式はThymeleafが正しくJavaScript内の変数を置換できるようにする。
+
+4. var categoryDataPoints = /*[[${categoryCounts}]]*/; など
+意味: これらの行で、Thymeleafがサーバーサイドで計算したデータをJavaScript変数に渡している。
+　　　[[${categoryCounts}]]はThymeleafがcategoryCountsというサーバー側の変数をJavaScriptに埋め込む部分。
+　　　以下の4つの変数に、それぞれカテゴリー、レベル、部署、職種ごとの集計データが格納される。
+　　　　　　categoryDataPoints：カテゴリー別のデータポイント
+　　　　　　levelDataPoints：レベル別のデータポイント
+　　　　　　departmentDataPoints：部署別のデータポイント
+　　　　　　jobDataPoints：職種別のデータポイント
+
+5. var createChart = function(containerId, title, dataPoints) { ... };
+意味: この部分は、チャートを生成するための関数createChartを定義する。
+　　　関数は以下の3つの引数を受け取る。
+　　　　　　containerId：チャートを表示するHTML要素のID
+　　　　　　title：チャートのタイトル
+　　　　　　dataPoints：チャートに表示するデータポイントのオブジェクト
+　　　5.1. var chart = new CanvasJS.Chart(containerId, { ... });
+　　　　　　意味: CanvasJS.Chartオブジェクトを作成し、その設定を行う。各設定項目は以下のように対応している。
+　　　　　　animationEnabled: チャートのアニメーションを有効化する。
+　　　　　　theme: チャートのテーマを指定する。light2はライトテーマのスタイル。
+　　　　　　title: チャートのタイトルを指定する。
+　　　　　　data: チャートに表示するデータの設定。ここではパイチャートの設定を行う。
+　　　5.2. dataPoints: Object.keys(dataPoints).map(function(key) { ... })
+　　　　　　意味: この行で、dataPointsオブジェクトをパイチャートに適した形式に変換する。dataPointsオブジェクトのキー（ラベル）と値（数値）をlabelとyに変換して、パイチャートの各セグメントとして使用する。
+　　　5.3. chart.render();
+　　　　　　意味: チャートを実際に描画（レンダリング）するためのメソッド。
+
+6. createChart("levelChartContainer", "レベル別件数", levelDataPoints);
+意味: 定義したcreateChart関数を使って、実際にチャートを作成する。
+例えば、この行では「レベル別件数」というタイトルで、levelDataPointsのデータを使って、levelChartContainerというIDの要素にチャートを表示する。
+
+7. 複数のチャートを作成
+意味: createChart関数を複数回呼び出すことで、レベル別、カテゴリー別、部署別、職種別の4つのチャートをそれぞれ作成し、異なるHTML要素に表示する。
+
+まとめ
+このスクリプトは、CanvasJSを使用して複数の円グラフを作成し、画面上に表示するためのコード。
+Thymeleafを使ってサーバーサイドで集計したデータをクライアント側のJavaScriptに渡し、そのデータを基に円グラフを表示する。
