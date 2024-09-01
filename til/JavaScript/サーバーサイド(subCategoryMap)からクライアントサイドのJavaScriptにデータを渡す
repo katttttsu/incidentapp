@@ -1,0 +1,27 @@
+# サーバーサイド(subCategoryMap)からクライアントサイドのJavaScriptにデータを渡す
+Thymeleafテンプレートエンジンを使用してサーバーサイドからクライアントサイドのJavaScriptにデータを渡すためのもの。
+
+1. script th:inline="javascript">
+意味: この部分は、ThymeleafがテンプレートエンジンとしてJavaScriptコードの中で動作することを指定する。
+　　　通常のHTMLテンプレート内でサーバーサイドのデータを埋め込むのと同様に、JavaScript内でもサーバーサイドのデータを使用することができる。
+
+2. var subCategoryMap = /*[[${subCategoryMap}]]*/ {};
+意味:
+var subCategoryMap は、subCategoryMapというJavaScriptの変数を定義している。
+/*[[${subCategoryMap}]]*/ はThymeleafの構文です。[[${subCategoryMap}]] の部分でサーバーサイドのsubCategoryMapというデータが埋め込まれる。
+この構文を使って、ThymeleafはsubCategoryMapというサーバー側のオブジェクトをJavaScriptのオブジェクトとして埋め込まれる。
+Thymleafの処理
+サーバーサイドでThymeleafがsubCategoryMapという変数に対応するデータを処理し、[[${subCategoryMap}]] の部分にそのデータを埋め込まれる。
+
+Map<String, List<String>> subCategoryMap = new HashMap<>();
+subCategoryMap.put("Category1", Arrays.asList("Sub1", "Sub2"));
+subCategoryMap.put("Category2", Arrays.asList("Sub3", "Sub4"));
+その場合、JavaScriptでは次のように展開されます：
+
+var subCategoryMap = {"Category1": ["Sub1", "Sub2"], "Category2": ["Sub3", "Sub4"]};
+{} は、デフォルトの空のオブジェクトを提供するが、実際には[[${subCategoryMap}]] の部分がサーバーから渡されたデータで置き換わるため、この {} は無視される。
+
+まとめ
+このコードは、サーバーサイドで定義されたsubCategoryMapというデータを、クライアントサイドのJavaScriptに変数として渡す。
+これにより、subCategoryMapの内容をJavaScriptで直接操作できるようになる。
+Thymeleafを使用してデータをJavaScriptに埋め込む際に、サーバーからの動的データをスクリプト内で扱うことができるようにしている。
