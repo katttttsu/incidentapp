@@ -1,0 +1,149 @@
+# Controlerクラスのユニットテスト
+JavaとSpring Bootを使用して、IncidentControllerのテストを行うための単体テスト（ユニットテスト）。
+各テストケースが特定のエンドポイントやメソッドの機能をまとめた。
+
+## 1. インポートセクション
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import java.util.Optional;
+import java.util.Collections;
+
+import java.util.HashMap;
+import java.util.Map;
+
+MockMvc: Springのテスト用ツールで、Webリクエストをシミュレーションする。
+Mockito: モックオブジェクトを作成し、テスト環境を制御するために使用する。
+@SpringBootTest: Spring Bootのコンテキストをロードし、統合テストを実行するためのアノテーション。
+@AutoConfigureMockMvc: MockMvcの自動設定を有効にする。
+
+## 2. テストクラスとセットアップ
+@SpringBootTest
+@AutoConfigureMockMvc
+public class IncidentControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Mock
+    private IncidentRepository incidentRepository;
+
+    @Mock
+    private IncidentMapper incidentMapper;
+
+    @Mock
+    private IncidentService incidentService;
+
+    @InjectMocks
+    private IncidentController incidentController;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
+}
+
+@Autowired: Springがコンテナ内で管理しているMockMvcをインジェクトする。
+@Mock: モックオブジェクトとしてIncidentRepository、IncidentMapper、IncidentServiceを作成する。
+@InjectMocks: モックオブジェクトをIncidentControllerに注入し、テスト対象のコントローラを設する。
+@BeforeEach: 各テストの前に実行されるセットアップメソッドです。MockitoAnnotations.initMocks(this)でモックの初期化を行う。
+
+## 3. テストケース
+@Test
+public void testShowIncidentForm() throws Exception {
+    mockMvc.perform(get("/incidentForm"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("incidentForm"))
+            .andExpect(model().attributeExists("incidentForm"))
+            .andExpect(model().attributeExists("mainCategories"))
+            .andExpect(model().attributeExists("subCategoryMap"));
+}
+
+目的: /incidentFormエンドポイントにGETリクエストを送信し、ビュー名やモデル属性が正しく設定されているかをテストする。。
+      mockMvc.perform(get("/incidentForm")): GETリクエストを送信。
+      andExpect(status().isOk()): HTTPステータスが200 OKであることを検証。
+      andExpect(view().name("incidentForm")): レンダリングされたビュー名がincidentFormであることを検証。
+      andExpect(model().attributeExists("incidentForm")): モデルにincidentFormという属性が存在することを検証。
+      andExpect(model().attributeExists("mainCategories")), andExpect(model().attributeExists("subCategoryMap")): 他のモデル属性の存在も検証する。
+
+@Test
+public void testCreateIncident() throws Exception {
+    mockMvc.perform(post("/incidents")
+                    .param("level", "3")
+                    .param("date", "2023-08-1")
+                    .param("time", "12:00")
+                    .param("place", "500病室")
+                    .param("number", "1")
+                    .param("name", "テスト")
+                    .param("age", "65")
+                    .param("department", "5階病棟")
+                    .param("job", "看護師")
+                    .param("continuation", "5")
+                    .param("category", "転倒・転落")
+                    .param("segment", "転倒")
+                    .param("situation", "患者が滑って転んだ")
+                    .param("cause", "靴下で移動しようとしていた")
+                    .param("suggestion", "靴をしっかり履く")
+                    .param("countermeasure", "靴をしっかり履くように担当看護師から伝える"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/"));
+}
+
+目的: 新しいインシデントを作成するPOSTリクエストをテストする。
+      mockMvc.perform(post("/incidents"): POSTリクエストを送信。
+      param(): リクエストのパラメータを設定する。
+      andExpect(status().is3xxRedirection()): リクエストがリダイレクトで終わることを確認する。
+      andExpect(redirectedUrl("/")): リダイレクト先のURLが/であることを確認する。
+
+@Test
+public void testGenerateAISuggestion() throws Exception {
+    Map<String, String> request = new HashMap<>();
+    request.put("cause", "Wet floor");
+
+    Map<String, String> response = new HashMap<>();
+    response.put("suggestion", "Use wet floor signs.");
+
+    when(incidentController.generateAISuggestion(request)).thenReturn(response);
+
+    mockMvc.perform(post("/generateAISuggestion")
+                    .contentType("application/json")
+                    .content("{\"cause\": \"Wet floor\"}"))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("suggestion"))
+            .andExpect(jsonPath("$.suggestion").value("Use wet floor signs."));
+}
+
+目的: AIの提案を生成する機能のテスト。
+      when(incidentController.generateAISuggestion(request)).thenReturn(response): モックのメソッドが呼ばれたときに、特定のレスポンスを返すように設定する。
+      mockMvc.perform(post("/generateAISuggestion")...: AI提案生成エンドポイントにPOSTリクエストを送信。
+      jsonPath("$.suggestion").value("Use wet floor signs."): レスポンスのJSONの中に、指定した提案が含まれていることを検証する。
+
+その他のテストケース
+他のテストケースも同様の方法で、コントローラの各エンドポイントの正しい動作を検証している。
+
+testShowIncidents(): インシデント一覧表示のテスト。
+testSearchIncidents(): インシデント検索のテスト。
+testIncidentDetail(): インシデント詳細表示のテスト。
+testDeleteIncident(): インシデント削除のテスト。
+
+## まとめ
+このテストクラスは、IncidentControllerの各メソッドが期待通りに動作するかどうかを検証するために設計されている。
+MockMvcを使用してWebリクエストをシミュレーションし、Mockitoを使用して依存関係をモックしている。
+テストコードは、コードが意図した通りに機能することを確認し、予期しない動作を防ぐために非常に重要となる。
