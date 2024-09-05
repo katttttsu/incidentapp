@@ -1,0 +1,60 @@
+# Repositoryクラスのユニットテストの復習を行った。
+IncidentRepositoryTest クラスを使って IncidentRepository の各機能（挿入、取得、更新、削除、検索）をテストするもの。
+@SpringBootTest アノテーションにより、Spring Boot コンテキストを使って完全なテストを行います。各テストメソッドは、データベース操作のユニットテストです。以下に各部分を詳細に説明する。
+
+## アノテーションの説明
+@SpringBootTest: Spring Boot アプリケーションコンテキストを読み込み、統合テストを実行する。
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE): テスト中にデフォルトのインメモリデータベースではなく、設定されたデータベースを使用する。
+@Transactional: テストメソッドをトランザクション内で実行し、テストが終了するとロールバックすることで、データベースに変更が残らないようにする。
+@Rollback(true): テスト終了時にデータベースの変更をロールバックする（デフォルトで true ）。
+
+## フィールド
+@Autowired private IncidentRepository incidentRepository: テスト対象のリポジトリ。IncidentRepository をテストに自動的に注入する。
+
+## 各テストメソッドの説明
+1. testInsertAndFindById()
+このメソッドは、インシデント（事故）情報の挿入とIDによる取得をテストする。
+IncidentEntity オブジェクトを作成し、各フィールドにデータをセットする。
+incidentRepository.insert(...) メソッドを呼び出して、データベースにインシデントを挿入する。
+incidentRepository.findById(1) でIDを基にインシデントを取得し、Optional<IncidentEntity> で存在を確認する。
+挿入したデータの name が期待した値と一致するかを assertEquals() で確認する。
+
+2. testFindAll()
+すべてのインシデントを取得するメソッドをテストする。
+incidentRepository.findAll() を呼び出し、すべてのインシデントデータを取得する。
+リストが空でないことを assertFalse(incidents.isEmpty()) で確認する。
+
+3. testUpdate()
+既存のインシデントを更新するテスト。
+incidentRepository.findById(1) で既存のインシデントを取得する。
+incident.setPlace("Updated Place") で場所の情報を更新する。
+incidentRepository.update(incident) でデータベースに更新を反映させる。
+更新後のデータを再取得し、場所が変更されているかを assertEquals() で確認する。
+
+4. testDelete()
+インシデントを削除するテスト。
+incidentRepository.delete(1) でIDが 1 のインシデントを削除する。
+削除後、IDが 1 のインシデントが存在しないことを assertTrue(deletedIncident.isEmpty()) で確認する。
+
+5. testFindByCriteria()
+検索条件に基づいてインシデントを取得するテスト。
+incidentRepository.findByCriteria(startDate, endDate, "Cardiology", "Nurse") で指定された期間や部門、職業に基づいてインシデントを検索する。
+検索結果が空でないことを assertFalse(incidents.isEmpty()) で確認する。
+
+## テストの役割
+データ挿入 (insert)
+インシデント情報が正しくデータベースに挿入されるか確認。
+
+データ取得 (findById, findAll)
+データベースから特定のIDや全体のデータが正しく取得できるか確認。
+
+データ更新 (update)
+特定のインシデント情報が正しく更新されるか確認。
+
+データ削除 (delete)
+指定したIDのインシデントが削除され、再度取得できないことを確認。
+
+検索機能 (findByCriteria)
+検索条件に基づいてデータが正しくフィルタリングされるかを確認。
+
+これにより、データベースとやり取りするリポジトリ層が正しく機能しているかの検証が行われる。
