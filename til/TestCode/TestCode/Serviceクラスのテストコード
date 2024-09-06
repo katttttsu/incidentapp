@@ -1,0 +1,47 @@
+# Serviceクラスのテストコード
+IncidentServiceTest クラスは、IncidentService のロジックが正しく動作しているかをテストするための単体テスト。
+このテストでは Mockito を使用して、IncidentRepository をモックし、サービスクラスが依存するリポジトリの実際の実装を使わずにテストしている。
+
+## アノテーションの説明
+@Mock: IncidentRepository をモック（仮のオブジェクト）として定義する。実際のデータベースにアクセスするのではなく、テスト用に定義された動作を返すリポジトリ。
+@InjectMocks: モックされた IncidentRepository を IncidentService に注入する。これにより、テスト用の IncidentService が作成される。
+@BeforeEach: 各テストメソッドが実行される前に MockitoAnnotations.openMocks(this) を呼び出して、モックオブジェクトを初期化する。
+
+## メソッドの説明
+1. setUp()
+@BeforeEach により、すべてのテストの前に実行される。
+MockitoAnnotations.openMocks(this) を呼び出し、すべての @Mock アノテーションが付いたフィールド（incidentRepository）を初期化する。
+2. testFindAll()
+このメソッドは、IncidentService の findAll() メソッドをテストする。
+
+テストデータとして、IncidentData のリスト mockData を作成している。このデータはリポジトリから取得されるデータのモック。
+when(incidentRepository.findAll()).thenReturn(mockData) によって、incidentRepository.findAll() が呼ばれたときに mockData を返すように設定している。
+incidentService.findAll() を呼び出し、結果が期待通りかを assertEquals で確認する。ここでは、リストのサイズや IncidentData のフィールドが正しいかを検証している。
+
+3. testGetLevelCounts()
+このメソッドは、インシデントのレベルごとのカウントを集計する getLevelCounts() メソッドをテストする。
+mockIncidents というテスト用のインシデントリストを作成し、それぞれのインシデントに異なるレベルを設定する（例: "1"、"2"）。
+incidentService.getLevelCounts(mockIncidents) を呼び出し、レベルごとのカウントが期待通り（"1" が 2 件、"2" が 1 件）かを確認する。
+
+4. testGetDepartmentCounts()
+このメソッドは、インシデントの部署ごとのカウントを集計する getDepartmentCounts() メソッドをテストする。
+mockIncidents というインシデントのリストを作成し、それぞれのインシデントに異なる部署を設定します（例: "5階病棟"、"脳神経外科"）。
+incidentService.getDepartmentCounts(mockIncidents) を呼び出し、部署ごとのカウントが期待通りかを確認する。例えば、"脳神経外科" が 2 件、"5階病棟" が 1 件となれば正しい。
+
+5. testGetJobCounts()
+このメソッドは、インシデントの職業ごとのカウントを集計する getJobCounts() メソッドをテストする。
+インシデントリストに異なる職業（例: "看護師"、"医師"）を設定し、incidentService.getJobCounts(mockIncidents) を呼び出してカウントが正しいかを確認する。
+例えば、"看護師" が 2 件、"医師" が 1 件となることを期待する。
+
+ヘルパーメソッド
+createIncidentEntityWithLevel(String level): IncidentEntity を作成し、level を設定するヘルパーメソッド。これにより、テスト用に簡単にインシデントエンティティを作成できる。
+createIncidentEntityWithDepartment(String department): department を設定するインシデントエンティティを作成するためのヘルパーメソッド。
+createIncidentEntityWithJob(String job): job を設定するインシデントエンティティを作成するためのヘルパーメソッド。
+
+テストの役割
+このクラス全体の役割は、IncidentService の主要な機能が正しく動作しているかを確認すること。特に、以下の点に焦点を当てている：
+全てのインシデントデータを取得 (findAll)：リポジトリから取得したデータが正しくサービス経由で返されるかを確認。
+レベルごとの集計 (getLevelCounts)：レベル（深刻度など）ごとのインシデントの数が正しくカウントされるかを確認。
+部署ごとの集計 (getDepartmentCounts)：インシデントを部署ごとに集計する機能のテスト。
+職業ごとの集計 (getJobCounts)：インシデントを職業ごとに集計する機能のテスト。
+モックを使うことで、データベースに依存せずに純粋なロジック部分を効率のよくテストができる。
