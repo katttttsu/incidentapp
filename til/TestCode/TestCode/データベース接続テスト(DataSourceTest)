@@ -1,0 +1,35 @@
+# データベース接続テスト(DataSourceTest) の復習を行った。
+Spring Boot アプリケーションでデータベース接続をテストするためのシンプルなユニットテストクラス。このテストクラスを使って、Spring が設定した DataSource が正しく機能しているかを確認する。
+
+## 1. クラスの概要
+クラス名: DataSourceTest
+Spring Boot アプリケーションで設定されているデータソース（データベース接続）が有効かどうかをテストする。
+@SpringBootTest: Spring Boot アプリケーション全体のコンテキストを使用してテストを実行する。
+アプリケーションの設定や依存関係が実際に読み込まれ、コンポーネントの自動設定が有効になる。
+
+## 2. フィールド
+@Autowired private DataSource dataSource;:
+Spring が提供するデータソース（DataSource）を自動的に注入（依存性注入）する。
+データソースとは、アプリケーションがデータベースに接続するための設定情報を持ったオブジェクト。
+Spring Boot は、通常 application.properties または application.yml に記述された設定に基づいてデータソースを構成する。
+
+## 3. メソッド
+testDataSourceConnection()
+
+### 目的: 
+DataSource を使ってデータベースに接続できるかどうかを確認するテスト。
+
+### メソッドの内容:
+try (Connection connection = dataSource.getConnection()) { ... }
+dataSource.getConnection() メソッドを使って、データベースとの接続を取得する。
+Connection オブジェクトは、データベースとの通信を行うためのもの。
+try-with-resources 構文を使用しているため、Connection が使い終わった後、自動的にクローズされる。これにより、リソースリーク（接続が開きっぱなしになること）を防ぐことが出来る。
+
+assertNotNull(connection);
+取得した Connection オブジェクトが null でないことを確認する。もし null ならば、データベースへの接続に失敗していることになる。
+このチェックが成功すれば、DataSource が正しく構成され、データベースへの接続が確立されたことが証明される。
+
+## まとめ
+このテストは、Spring Boot が適切にデータソースを構成し、データベースに接続できるかどうかを確認するためのもの。
+テストの流れは、データベース接続用の DataSource が有効か確認し、その接続から Connection オブジェクトを取得して、それが null ではないことを確認する。
+データベースとの接続が機能しているかどうかを確認する重要なテストで、このテストが成功すれば、データベースとの接続が問題ないことが確認できる。
