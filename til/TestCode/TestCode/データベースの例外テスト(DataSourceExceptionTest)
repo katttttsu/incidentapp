@@ -1,0 +1,45 @@
+# データベースの例外テスト(DataSourceExceptionTest)
+Spring Boot アプリケーションにおいて、データベース接続が失敗した場合に正しく例外をキャッチし、処理できるかどうかを確認するためのテスト。
+
+## 1. クラスの概要
+クラス名: DataSourceExceptionTest
+Spring Boot アプリケーションで、データベース接続エラーが発生する場合に、その例外が正しくスローされるかどうかを確認するためのユニットテストクラス。
+
+@SpringBootTest: Spring Boot のアプリケーションコンテキスト全体を使用してテストを実行します。これにより、アプリケーションの設定や依存関係が実際に読み込まれる。
+
+## 2. フィールド
+@Autowired private DataSource dataSource;:
+Spring が自動で注入するデータソースオブジェクト。このオブジェクトを通じて、データベースへの接続を試みる。
+DataSource は、データベース接続のための設定やリソースを管理するオブジェクト。
+
+## 3. メソッド
+testDataSourceConnectionFailure()
+目的: データベースへの接続が失敗することをシミュレートし、その際に DataAccessResourceFailureException が正しくスローされるかを確認するテスト。
+
+### メソッドの内容:
+assertThrows(DataAccessResourceFailureException.class, () -> { ... })
+assertThrows メソッドは、指定した例外がスローされるかどうかをテストするためのもの。この場合、DataAccessResourceFailureException がスローされることを期待する。
+ラムダ式内で接続処理を行い、例外が発生するかどうかを確認する。
+
+try (Connection connection = dataSource.getConnection()) { ... }
+dataSource.getConnection() でデータベースに接続を試みる。接続が成功すれば Connection オブジェクトが返されますが、ここでは接続に失敗することを期待する。
+try-with-resources 構文を使用しているため、接続が使い終わった後は自動的にクローズされる。
+
+catch (SQLException e)
+SQLException はデータベース接続に関連する例外です。接続が失敗した場合、この例外がスローされる。
+この例外をキャッチし、次に DataAccessResourceFailureException にラップしてスローする。
+これにより、データベース接続エラーを DataAccessResourceFailureException として処理することができる。
+
+throw new DataAccessResourceFailureException("Failed to connect to the database", e);
+SQLException を DataAccessResourceFailureException に変換して再スローする。
+この例外は、Spring がデータアクセスリソースの問題を表現するために使用する一般的な例外。
+メッセージとして「Failed to connect to the database」（データベースへの接続に失敗しました）を指定する。
+
+## 4. テストの目的
+期待される結果: データベース接続が失敗した場合に、SQLException が発生し、それを DataAccessResourceFailureException として再スローすることを確認する。
+このテストにより、データベース接続エラーが適切にハンドリングされ、予期した例外がスローされるかを確認できる。
+
+## まとめ
+このテストは、データベース接続が失敗した際に、Spring の標準例外である DataAccessResourceFailureException がスローされることを確認するためのもの。
+SQLException は低レベルのデータベース接続エラーを表すが、それをよりアプリケーション全体で管理しやすい形式である DataAccessResourceFailureException に変換して処理している。
+このテストが成功すると、データベース接続の問題が発生した場合にアプリケーションが適切にエラーハンドリングできることが保証される。
