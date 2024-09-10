@@ -1,0 +1,105 @@
+# build.garadleについての復習を行った。
+build.gradle ファイルは、Gradleを使ったSpring Bootプロジェクトの設定ファイルで、プロジェクトの依存関係やビルド方法を定義しています。以下に、各セクションの詳細をかみ砕いて説明する。
+
+1. プラグインセクション
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.2'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+id 'java': Java プロジェクトとして扱うことを指定します。基本的なコンパイルや実行に必要な設定。
+id 'org.springframework.boot' version '3.3.2': Spring Boot を使用するためのプラグイン。バージョンは 3.3.2。
+id 'io.spring.dependency-management' version '1.1.6': Springプロジェクトに依存関係管理を追加するプラグイン。Spring Bootの依存ライブラリのバージョン管理を一元化する。
+id 'org.openjfx.javafxplugin' version '0.0.13': JavaFX を使用するためのプラグイン。GUIアプリケーションを構築するために JavaFX モジュールを管理する。
+
+2. プロジェクト情報
+group = 'in.original'
+version = '0.0.1-SNAPSHOT'
+
+group = 'in.original': プロジェクトのグループID。通常、プロジェクトのパッケージ名やドメイン名を使う。
+version = '0.0.1-SNAPSHOT': プロジェクトのバージョン。SNAPSHOT は開発中のバージョンを示する。
+
+3. Javaバージョンの設定
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+sourceCompatibility = JavaVersion.VERSION_17: プロジェクトのソースコードが Java 17 で書かれていることを指定する。
+targetCompatibility = JavaVersion.VERSION_17: コンパイル後に Java 17 で動作するようにバイトコードを生成することを指定する。
+
+4. リポジトリセクション
+repositories {
+	mavenCentral()
+	gradlePluginPortal()
+}
+
+mavenCentral(): Maven Central からライブラリをダウンロードする設定。
+多くのJavaライブラリがここでホストされている。
+gradlePluginPortal(): Gradleのプラグインを管理するためのリポジトリ。
+
+5. Spring Boot設定
+springBoot {
+	mainClass = 'in.original.incidentapp.IncidentAppApplication'
+}
+
+mainClass = 'in.original.incidentapp.IncidentAppApplication': アプリケーションのエントリーポイント（メインクラス）を指定している。このクラスからアプリケーションが起動する。
+
+6. 依存関係セクション
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+	// 省略
+}
+implementation: プロジェクトのビルド時に必要なライブラリ。これらのライブラリはコンパイルと実行に使用される。
+
+spring-boot-starter-web: Webアプリケーションを構築するためのSpring Bootのスターターパッケージ。MVC構造やREST APIをサポート。
+spring-boot-starter-thymeleaf: Thymeleafを使用したテンプレートエンジンをサポートします。HTMLベースのビューをレンダリングするために使う。
+mybatis-spring-boot-starter: MyBatisのSpring Boot用スターターパッケージ。データベース操作を行うためのマッピングフレームワーク。
+compileOnly: コンパイル時にのみ必要な依存関係。
+
+org.projectlombok:lombok: Javaのコードを簡略化するためのライブラリ。例えば、ゲッターやセッターの自動生成に使われます。実行時には必要ない。
+runtimeOnly: 実行時にのみ必要な依存関係。
+
+com.mysql:mysql-connector-j: MySQLデータベースに接続するためのJDBCドライバ。
+testImplementation: テスト時にのみ必要な依存関係。
+
+spring-boot-starter-test: Spring Boot のテストに必要なライブラリ一式を含んでいる。
+junit-jupiter-api, junit-jupiter-engine: JUnit5（Jupiter）を使って単体テストを実行するためのライブラリ。
+annotationProcessor: コンパイル時にアノテーション処理を行うためのライブラリ。
+
+org.projectlombok:lombok: Lombokのアノテーションを処理するための依存関係。
+
+7. JavaFX設定
+javafx {
+	version = "17.0.12"
+	modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+version = "17.0.12": JavaFXのバージョンを指定している。
+modules: JavaFXモジュールのリスト。ここでは javafx.controls（GUIコントロール）と javafx.fxml（FXMLサポート）を使用している。
+
+8. Javaコンパイル設定
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-Xlint:deprecation"
+	options.encoding = 'UTF-8'
+}
+
+-Xlint:deprecation: 非推奨のメソッドやクラスの使用を警告として表示する。
+options.encoding = 'UTF-8': ソースコードの文字エンコーディングをUTF-8に設定する。
+
+9. テスト設定
+test {
+	enabled = false
+	useJUnitPlatform()
+}
+
+enabled = false: テストを無効化している。テストは実行されない。
+useJUnitPlatform(): JUnit5（Jupiter）のテストプラットフォームを使用する。
+
+まとめ
+この build.gradle ファイルでは、Spring BootとJavaFXを統合したプロジェクトの依存関係やビルドの設定が定義される。
+主にWebアプリケーションを構築し、ThymeleafやMyBatisでテンプレートとデータベース操作を管理し、JDBC経由でMySQLと接続する。
