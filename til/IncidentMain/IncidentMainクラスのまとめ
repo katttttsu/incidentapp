@@ -1,0 +1,66 @@
+JavaFX を使用してデータベースから取得したインシデントデータを円グラフ (PieChart) で表示する Java アプリケーション。
+また、Spring の ApplicationContext を使用して IncidentRepository というデータアクセス層を取得し、データベースと連携している。
+
+1. クラス宣言
+public class IncidentMain extends Application {
+IncidentMain クラスは Application クラスを拡張している。これは JavaFX アプリケーションの基本的なクラスで、GUIアプリケーションを作成するために使われる。
+Application クラスには、start() メソッドが必須で、JavaFX アプリケーションのエントリーポイントとして機能する。
+
+2. フィールド宣言
+private IncidentRepository incidentRepository;
+incidentRepository は、インシデントデータを取得するためのリポジトリ (データアクセス層) です。このリポジトリを使用してデータベースとやりとりを行う。
+Spring のコンテキストから IncidentRepository のインスタンスを取得する。
+
+3. init() メソッド
+@Override
+public void init() throws Exception {
+    ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    incidentRepository = context.getBean(IncidentRepository.class);
+}
+init() メソッドは、JavaFX アプリケーションが起動する前に呼び出され、ここで初期化作業を行う。
+ApplicationContext を使用して、Spring の設定クラス AppConfig を元にコンテキストを作成する。
+incidentRepository に Spring のコンテナから IncidentRepository のインスタンスを取得し、後のデータベース操作で利用する。
+
+4. start() メソッド
+@Override
+public void start(Stage primaryStage) {
+    List<IncidentData> dataList = incidentRepository.findAll();
+    
+    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+    for (IncidentData data : dataList) {
+        pieChartData.add(new PieChart.Data(data.getSegment(), data.getCount()));
+    }
+
+    PieChart pieChart = new PieChart(pieChartData);
+    pieChart.setTitle("インシデントデータの集計");
+
+    VBox vbox = new VBox(pieChart);
+
+    Scene scene = new Scene(vbox, 800, 600);
+
+    primaryStage.setScene(scene);
+    primaryStage.setTitle("インシデントデータの集計");
+    primaryStage.show();
+}
+start() メソッドは JavaFX アプリケーションのメインの UI がセットアップされる場所。
+incidentRepository.findAll() を使用してデータベースから全てのインシデントデータを取得し、そのデータをリスト (dataList) に格納する。
+ObservableList<PieChart.Data> に、取得したデータをもとに PieChart.Data のオブジェクトを作成し、追加する。
+PieChart.Data(data.getSegment(), data.getCount()) では、データのセグメントとカウント（データの数量）を使用して、円グラフのセグメントを作成する。。
+PieChart は円グラフを表示するためのコンポーネント。このグラフには、pieChartData というデータを設定し、グラフのタイトルも指定している。
+VBox はレイアウトコンテナで、UIコンポーネントを垂直方向に並べる。この場合、VBox に pieChart を追加している。
+Scene はウィンドウの中に描画する領域を定義するもので、幅 800 ピクセル、高さ 600 ピクセルで設定している。
+最後に、primaryStage（メインウィンドウ）にシーンを設定し、ウィンドウタイトルを "インシデントデータの集計" にして、ウィンドウを表示する。
+
+5. main() メソッド
+public static void main(String[] args) {
+    launch(args);
+}
+main() メソッドは、JavaFX アプリケーションのエントリーポイント。
+launch(args) は JavaFX アプリケーションを起動するために呼び出される。このメソッドは内部で init() と start() を順に呼び出し、アプリケーションのライフサイクルを開始する。
+
+まとめ
+Spring Framework と JavaFX を組み合わせて作られたアプリケーション。IncidentRepository を使用してデータベースからデータを取得し、そのデータを JavaFX の円グラフで可視化する。
+IncidentRepository は Spring によって管理され、AppConfig という設定クラスから ApplicationContext を通じて依存性注入が行われる。
+JavaFX を用いて、グラフの表示や UI のレイアウトを作成し、視覚的にインシデントデータを集計表示するアプリケーションを実装している。
+
+このアプローチにより、バックエンド (データベース) とフロントエンド (グラフ表示) が分離され、メンテナンスがしやすい構造になっている。
